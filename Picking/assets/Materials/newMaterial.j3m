@@ -1,0 +1,12 @@
+Material My Material : Common/MatDefs/Post/Fog.j3md {
+     MaterialParameters {
+        NumSamples : 2
+        NumSamplesDepth : -3
+        FogDensity; : 1.3000001
+        FogDistance; : 1.1
+        Texture : Models/frachter/frachter.001.png
+        DepthTexture : Models/frachter/frachter.001.png
+     }
+    AdditionalRenderState {
+    }
+}
