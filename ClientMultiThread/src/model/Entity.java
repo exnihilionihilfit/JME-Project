@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mygame;
+package model;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
@@ -17,6 +17,7 @@ import com.jme3.scene.shape.Box;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import main.Main;
 
 /**
  *
@@ -25,26 +26,26 @@ import java.util.concurrent.Future;
 public class Entity {
     //The vector to store the desired location in:
 
-    Vector3f desiredLocation = new Vector3f();
+    private Vector3f desiredLocation = new Vector3f();
 //The MyWayList object that contains the result waylist:
-    MyWayList wayList = null;
+     private MyWayList wayList = null;
 //The future that is used to check the execution status:
-    Future future = null;
+    private Future future = null;
     private long lastTime;
 
-    Main mainApp = null;
+    private Main mainApp = null;
     private final Vector3f translation;
     private String name = null;
     private final AssetManager assetManager;
     private Node node;
 
-    Vector3f nextPosition;
-    boolean couldMove = false;
-    boolean recevedNewPositionMessage = false;
-    boolean sendNewPositionMessage = false;
+    private Vector3f nextPosition;
+    private boolean couldMove = false;
+    private boolean recevedNewPositionMessage = false;
+    private boolean sendNewPositionMessage = false;
     private static int entityID;
 
-    Entity(Main mainApp, AssetManager assetManager, String name) {
+    public Entity(Main mainApp, AssetManager assetManager, String name) {
         this.mainApp = mainApp;
         this.translation = new Vector3f();
         this.name = name;
@@ -56,6 +57,42 @@ public class Entity {
 
     public String getName() {
         return this.name;
+    }
+    
+    public void sendNewPositionMessage(boolean b)
+    {
+        this.sendNewPositionMessage  = b;
+    }
+    
+    public boolean isRecevedNewPositionMessage()
+    {
+        return this.recevedNewPositionMessage;
+    }
+    
+    public void setRecevedNewPositionMessage(boolean b)
+    {
+        this.recevedNewPositionMessage = b;
+    }
+  
+    
+    public Vector3f getNextPosition()
+    {
+        return this.nextPosition;
+    }
+    
+    public void setNextPosition(Vector3f nextPosition)
+    {
+        this.nextPosition = nextPosition;
+    }
+    
+    public boolean isSendNewPositionMessage()
+    {
+        return this.sendNewPositionMessage;
+    }
+    
+    public void setSendNewPositionMessage(boolean b)
+    {
+        this.sendNewPositionMessage = b;
     }
 
     public void setNextPosition(String nextPosition) {
@@ -91,7 +128,7 @@ public class Entity {
         return entityID;
     }
 
-    public String getNextPosition() {
+    public String getNextPositionAsString() {
         return nextPosition.toString();
     }
 

@@ -1,5 +1,7 @@
-package mygame;
+package main;
 
+import model.MyWayList;
+import model.Entity;
 import Control.ServerConection;
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.KeyInput;
@@ -38,9 +40,12 @@ public class Main extends SimpleApplication {
 
     MyWayList wayList = null;
     Future future = null;
-    Client myClient = null;
+    public Client myClient = null;
     long lastTime = System.currentTimeMillis();
-    
+      private static List<Entity> entities = null;
+    /* This constructor creates a new executor with a core pool size of 4. */
+    public ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(50);
+
 
 
     public static void main(String[] args) {
@@ -55,10 +60,7 @@ public class Main extends SimpleApplication {
 
     }
 
-    private static List<Entity> entities = null;
-    /* This constructor creates a new executor with a core pool size of 4. */
-    ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(50);
-
+  
     @Override
     public void simpleInitApp() {
 
@@ -172,22 +174,22 @@ public class Main extends SimpleApplication {
                 // entity.couldMove = true;
 
                 if ("LeftMouse".equals(name) && pressed) {
-                    entity.sendNewPositionMessage = true;
-                    entity.nextPosition = entity.getEntity().getLocalTranslation().addLocal(1f, 0, 0);
+                    entity.sendNewPositionMessage(true);
+                    entity.setNextPosition( entity.getEntity().getLocalTranslation().addLocal(1f, 0, 0));
                     if (myClient != null) {
                         System.out.println(name + " = " + pressed);
-                        PositionMessage message = new PositionMessage("" + entity.getID(), (entity.nextPosition).toString());
+                        PositionMessage message = new PositionMessage("" + entity.getID(), (entity.getNextPosition()).toString());
                         myClient.send(message);
                         System.out.println("send new Position Message" + message.toString());
                     }
                 }
                 if ("RightMouse".equals(name) && pressed) {
-                    entity.sendNewPositionMessage = true;
-                    entity.nextPosition = entity.getEntity().getLocalTranslation().addLocal(-1f, 0, 0);
+                     entity.setSendNewPositionMessage(true);
+                    entity.setNextPosition(entity.getEntity().getLocalTranslation().addLocal(-1f, 0, 0));
                     System.out.println(name + " = " + pressed);
 
                     if (myClient != null) {
-                        PositionMessage message = new PositionMessage("" + entity.getID(), (entity.nextPosition).toString());
+                        PositionMessage message = new PositionMessage("" + entity.getID(), (entity.getNextPositionAsString()));
                         myClient.send(message);
                         System.out.println("send new Position Message" + message.toString());
                     }
@@ -273,7 +275,7 @@ public class Main extends SimpleApplication {
 
                 for (Entity entity : entities) {
                     if (entity.getID() == Integer.parseInt(positionMessage.entityID)) {
-                        entity.recevedNewPositionMessage = true;
+                        entity.setRecevedNewPositionMessage(true);
                         entity.setNextPosition(positionMessage.position);
                         System.out.println("reseved new Position" + positionMessage.position);
                     }

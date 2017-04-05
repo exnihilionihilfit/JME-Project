@@ -1,4 +1,4 @@
-package mygame;
+package main;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.network.AbstractMessage;
@@ -11,8 +11,12 @@ import com.jme3.network.serializing.Serializable;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.system.JmeContext;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Client;
+import control.GameOptions;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -25,12 +29,18 @@ public class Main extends SimpleApplication {
     Server myServer = null;
     long lastTime = 0;
     long timeInterval = 5000;
+    List<HostedConnection> connectedClients;
+    List<Client> clientList;
+  
 
     public static void main(String[] args) {
 
         Main app = new Main();
         app.start(JmeContext.Type.Headless); // headless type for servers!
+        
+        
     }
+  
 
     @Override
     public void simpleInitApp() {
@@ -56,6 +66,13 @@ public class Main extends SimpleApplication {
         }
 
         System.out.println(myServer.isRunning());
+        
+        /*
+        Init Game-Elements
+        */
+    
+        this.connectedClients = new ArrayList<>();
+        this.clientList = new ArrayList<>();
 
     }
 
@@ -130,9 +147,17 @@ public class Main extends SimpleApplication {
                 // do something with the message
                 PingMessage pingMessage = (PingMessage) message;
                 System.out.println("Server received '" + pingMessage.hello + "' from client #" + source.getId());
+            
+                if( !connectedClients.contains(source) )
+                {
+                    connectedClients.add(source);
+                    createClientContainer(source);
+                }
             } // else....
 
         }
+
+     
     }
 
     public class ServerListener implements MessageListener<HostedConnection> {
@@ -154,4 +179,11 @@ public class Main extends SimpleApplication {
             }
         }
     }
+    
+       private void createClientContainer(HostedConnection source) 
+       {
+           Client newClient = new Client(GameOptions.clientStartCredits);
+           newClient.addHostedConnection(source);
+           this.clientList.add(newClient);
+        }
 }
