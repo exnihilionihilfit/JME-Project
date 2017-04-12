@@ -11,14 +11,14 @@ import java.util.Scanner;
  *
  * @author chasma
  */
-public final class ServerConection {
+public final class InputServerData {
     
-    private static int SERVER_IP_PORT;
-    private static int SERVER_UDP_PORT;
-    private static String SERVER_ADRESS = "";
-    private static boolean IS_VALID_SERVER_DATA;
+    public static int SERVER_IP_PORT;
+    public static int SERVER_UDP_PORT;
+    public static String SERVER_ADRESS = "";
+    public static boolean IS_VALID_SERVER_DATA;
 
-    public ServerConection(String[] args) {
+    public InputServerData(String[] args) {
         checkInputOnStartUp(args);
     }
 
@@ -38,7 +38,7 @@ public final class ServerConection {
 
             IS_VALID_SERVER_DATA = true;
         } else {
-            System.out.println("Please insert SERVER and PORT");
+            System.out.println("Please enter SERVER and PORT");
 
             Scanner reader = new Scanner(System.in);  // Reading from System.in
             System.out.print("Enter Adress: ");

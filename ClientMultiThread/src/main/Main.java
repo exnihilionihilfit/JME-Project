@@ -1,13 +1,14 @@
 package main;
 
+import Control.InputListener;
 import model.MyWayList;
 import model.Entity;
-import Control.ServerConection;
+import Control.InputServerData;
+import Control.ServerConnection;
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 
-import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
@@ -15,11 +16,9 @@ import com.jme3.network.AbstractMessage;
 import com.jme3.network.Client;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
-import com.jme3.network.Network;
 import com.jme3.network.serializing.Serializable;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.JmeContext;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
@@ -36,31 +35,29 @@ import java.util.logging.Logger;
 public class Main extends SimpleApplication {
 
     private static Main app = null;
-    private static ServerConection serverConection;
+    private static InputServerData serverConection;
 
     MyWayList wayList = null;
     Future future = null;
     public Client myClient = null;
     long lastTime = System.currentTimeMillis();
-      private static List<Entity> entities = null;
+    private static List<Entity> entities = null;
     /* This constructor creates a new executor with a core pool size of 4. */
     public ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(50);
 
-
+    private static String[] args;
 
     public static void main(String[] args) {
 
-        serverConection = new ServerConection(args);
+        Main.args = args;
 
-        if (serverConection.isValidServerData()) {
             System.out.println("Starting Client");
             app = new Main();
             app.start(JmeContext.Type.Display); // standard display type
-        }
+      
 
     }
 
-  
     @Override
     public void simpleInitApp() {
 
@@ -69,19 +66,19 @@ public class Main extends SimpleApplication {
         createEntity();
         initKeys();
         connectToServer();
+        addMessageListener();
+        startClient();
 
-   
     }
-    
-        @Override
+
+    @Override
     public void simpleUpdate(float tpf) {
 
         entities.forEach((entity) -> {
             entity.update(tpf);
         });
-        
-        if(!myClient.isConnected())
-        {
+
+        if (!myClient.isConnected()) {
             try {
                 System.out.println(" ... disconnected from Server try reconect in 5 Seconds ...");
                 connectToServer();
@@ -91,22 +88,33 @@ public class Main extends SimpleApplication {
             }
         }
 
+        System.out.println(InputListener.IS_ROTATE_PRESSED);
+        InputListener.resetInput();
+
     }
 
     private void initKeys() {
-        inputManager.addMapping("LeftMouse",
-                new KeyTrigger(KeyInput.KEY_SPACE), // trigger 1: spacebar
-                new MouseButtonTrigger(MouseInput.BUTTON_LEFT)); // trigger 2: left-button click
-        inputManager.addListener(actionListener, "LeftMouse");
+        // You can map one or several inputs to one named action
+        inputManager.addMapping("Pause", new KeyTrigger(KeyInput.KEY_P));
+        inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_J));
+        inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_K));
+        inputManager.addMapping("Rotate", new KeyTrigger(KeyInput.KEY_SPACE),
+                new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        // Add the names to the action listener.   
+        inputManager.addListener(InputListener.KEY_INPUT_LISTENER, "Left", "Right", "Rotate", "Pause");
+
+        inputManager.addMapping("LeftMouse", new MouseButtonTrigger(MouseInput.BUTTON_LEFT)); // trigger 2: left-button click
+        inputManager.addListener(InputListener.MOUSE_INPUT_LISTENER, "LeftMouse");
 
         inputManager.addMapping("RightMouse", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
-        inputManager.addListener(actionListener, "RightMouse");
+        inputManager.addListener(InputListener.MOUSE_INPUT_LISTENER, "RightMouse");
 
         inputManager.addMapping("MouseWheelForward", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
-        inputManager.addListener(analogListener, "MouseWheelForward");
+        inputManager.addListener(InputListener.MOUSE_INPUT_LISTENER, "MouseWheelForward");
 
         inputManager.addMapping("MouseWheelBackward", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
-        inputManager.addListener(analogListener, "MouseWheelBackward");
+        inputManager.addListener(InputListener.MOUSE_INPUT_LISTENER, "MouseWheelBackward");
+
     }
 
     private void createEntity() {
@@ -126,89 +134,35 @@ public class Main extends SimpleApplication {
     @Override
     public void destroy() {
 
-        if(myClient != null)
-        {
+        if (myClient != null) {
             myClient.close();
         }
-        
+
         super.destroy();
         executor.shutdown();
     }
 
+    private void addMessageListener() {
+        myClient.addMessageListener(new ClientListener(), PingMessage.class);
+        myClient.addMessageListener(new ClientListener(), createEntityMessage.class);
+        myClient.addMessageListener(new ClientListener(), PositionMessage.class);
+    }
+
     private void connectToServer() {
 
-        try {
-            myClient = Network.connectToServer(serverConection.getAdress(), serverConection.getIpPort(), serverConection.getUdpPort());
+        serverConection = new InputServerData(Main.args);
+        ServerConnection serverConnection = new ServerConnection(this);
+        serverConnection.connectToServer();
+        
 
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    }
 
-        addListener();
-
+    private void startClient() {
         if (myClient != null) {
             myClient.start();
 
         }
     }
-
-
-
-    private void addListener() {
-        myClient.addMessageListener(new ClientListener(), PingMessage.class);
-        myClient.addMessageListener(new ClientListener(), createEntityMessage.class);
-        myClient.addMessageListener(new ClientListener(), PositionMessage.class);
-    }
-    /**
-     * Use ActionListener to respond to pressed/released inputs (key presses,
-     * mouse clicks)
-     */
-    private final com.jme3.input.controls.ActionListener actionListener = new com.jme3.input.controls.ActionListener() {
-        @Override
-        public void onAction(String name, boolean pressed, float tpf) {
-
-            if(myClient.isConnected())
-            {
-            
-            for (Entity entity : entities) {
-                // entity.couldMove = true;
-
-                if ("LeftMouse".equals(name) && pressed) {
-                    entity.sendNewPositionMessage(true);
-                    entity.setNextPosition( entity.getEntity().getLocalTranslation().addLocal(1f, 0, 0));
-                    if (myClient != null) {
-                        System.out.println(name + " = " + pressed);
-                        PositionMessage message = new PositionMessage("" + entity.getID(), (entity.getNextPosition()).toString());
-                        myClient.send(message);
-                        System.out.println("send new Position Message" + message.toString());
-                    }
-                }
-                if ("RightMouse".equals(name) && pressed) {
-                     entity.setSendNewPositionMessage(true);
-                    entity.setNextPosition(entity.getEntity().getLocalTranslation().addLocal(-1f, 0, 0));
-                    System.out.println(name + " = " + pressed);
-
-                    if (myClient != null) {
-                        PositionMessage message = new PositionMessage("" + entity.getID(), (entity.getNextPositionAsString()));
-                        myClient.send(message);
-                        System.out.println("send new Position Message" + message.toString());
-                    }
-                }
-            }
-
-        }
-        }
-    };
-    /**
-     * Use AnalogListener to respond to continuous inputs (key presses, mouse
-     * clicks)
-     */
-    private AnalogListener analogListener = new AnalogListener() {
-        @Override
-        public void onAnalog(String name, float value, float tpf) {
-            System.out.println(name + " = " + value);
-        }
-    };
 
     @Serializable
     public static class PingMessage extends AbstractMessage {
