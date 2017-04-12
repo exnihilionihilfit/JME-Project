@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Control;
+package control;
 
+import main.Main;
 import com.jme3.network.Network;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import main.Main;
 
 /**
  *

@@ -1,10 +1,16 @@
 package main;
 
-import Control.InputListener;
+import control.InputListener;
+import control.InputListener;
 import model.MyWayList;
 import model.Entity;
-import Control.InputServerData;
-import Control.ServerConnection;
+import control.InputServerData;
+import control.InputServerData;
+import control.NetworkMessageListener;
+import control.NetworkMessages;
+import control.NetworkMessages;
+import control.ServerConnection;
+import control.ServerConnection;
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -143,17 +149,18 @@ public class Main extends SimpleApplication {
     }
 
     private void addMessageListener() {
-        myClient.addMessageListener(new ClientListener(), PingMessage.class);
-        myClient.addMessageListener(new ClientListener(), createEntityMessage.class);
-        myClient.addMessageListener(new ClientListener(), PositionMessage.class);
+        
+        NetworkMessageListener networkMessageListener = new NetworkMessageListener();
+        myClient.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.PingMessage.class);
+        myClient.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.createEntityMessage.class);
+        myClient.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.PositionMessage.class);
     }
 
     private void connectToServer() {
 
         serverConection = new InputServerData(Main.args);
         ServerConnection serverConnection = new ServerConnection(this);
-        serverConnection.connectToServer();
-        
+        serverConnection.connectToServer();        
 
     }
 
@@ -164,80 +171,7 @@ public class Main extends SimpleApplication {
         }
     }
 
-    @Serializable
-    public static class PingMessage extends AbstractMessage {
 
-        private String hello;       // custom message data
-        private long time;
-
-        public PingMessage() {
-        }    // empty constructor
-
-        public PingMessage(String s, long t) {
-            hello = s;
-            time = t;
-        } // custom constructor
-    }
-
-    @Serializable
-    public static class PositionMessage extends AbstractMessage {
-
-        private String position;
-        private String entityID;
-
-        public PositionMessage() {
-
-        }
-
-        public PositionMessage(String position, String entityID) {
-            this.position = position;
-            this.entityID = entityID;
-        }
-    }
-
-    @Serializable
-    public static class createEntityMessage extends AbstractMessage {
-
-        private boolean isNewEntity = false;
-
-        public createEntityMessage() {
-
-        }
-
-        public createEntityMessage(boolean isNewEntity) {
-            this.isNewEntity = isNewEntity;
-        }
-    }
-
-    public class ClientListener implements MessageListener<Client> {
-
-        @Override
-        public void messageReceived(Client source, Message message) {
-            if (message instanceof PingMessage) {
-                // do something with the message
-                PingMessage helloMessage = (PingMessage) message;
-                System.out.println("Client #" + source.getId() + " received: '" + helloMessage.hello + "'");
-            }
-
-            if (message instanceof createEntityMessage) {
-                createEntityMessage createEntityMessage = (createEntityMessage) message;
-                System.out.println(createEntityMessage.isNewEntity);
-            }
-
-            if (message instanceof PositionMessage) {
-                PositionMessage positionMessage = (PositionMessage) message;
-
-                for (Entity entity : entities) {
-                    if (entity.getID() == Integer.parseInt(positionMessage.entityID)) {
-                        entity.setRecevedNewPositionMessage(true);
-                        entity.setNextPosition(positionMessage.position);
-                        System.out.println("reseved new Position" + positionMessage.position);
-                    }
-                }
-
-            }
-
-        }
-    }
+    
 
 }
