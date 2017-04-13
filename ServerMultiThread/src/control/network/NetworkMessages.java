@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package control;
+package control.network;
 
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
@@ -33,16 +33,16 @@ public class NetworkMessages {
     }
 
     @Serializable
-    public static class PositionMessage extends AbstractMessage {
+    public static class EntityPositionMessage extends AbstractMessage {
 
         String position;
         String entityID;
 
-        public PositionMessage() {
+        public EntityPositionMessage() {
 
         }
 
-        public PositionMessage(String position, String entityID) {
+        public EntityPositionMessage(String position, String entityID) {
             this.position = position;
             this.entityID = entityID;
         }

@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Client;
-import control.NetworkMessageListener;
-import control.NetworkMessages;
-import control.NetworkMessages.PingMessage;
+import control.network.NetworkMessageListener;
+import control.network.NetworkMessages;
+
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -45,7 +45,7 @@ public class Main extends SimpleApplication {
             myServer = Network.createServer(6143, 6142);
 
             Serializer.registerClass(NetworkMessages.PingMessage.class);
-            Serializer.registerClass(NetworkMessages.PositionMessage.class);
+            Serializer.registerClass(NetworkMessages.EntityPositionMessage.class);
             Serializer.registerClass(NetworkMessages.createEntityMessage.class);
 
         } catch (IOException ex) {
@@ -55,7 +55,7 @@ public class Main extends SimpleApplication {
 
         myServer.addMessageListener(networkMessageListener.new ServerMessageListener(), NetworkMessages.PingMessage.class);
         myServer.addMessageListener(networkMessageListener.new ServerListener(), NetworkMessages.createEntityMessage.class);
-        myServer.addMessageListener(networkMessageListener.new ServerListener(), NetworkMessages.PositionMessage.class);
+        myServer.addMessageListener(networkMessageListener.new ServerListener(), NetworkMessages.EntityPositionMessage.class);
 
         if (myServer != null) {
             myServer.start();
@@ -81,7 +81,7 @@ public class Main extends SimpleApplication {
             myServer.broadcast(message);
 
             for (HostedConnection connection : myServer.getConnections()) {
-                message = new PingMessage("to you", 0L);
+                message = new NetworkMessages.PingMessage("to you", 0L);
                 connection.send(message);
             }
         }

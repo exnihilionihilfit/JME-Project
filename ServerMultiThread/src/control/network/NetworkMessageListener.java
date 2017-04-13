@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package control;
+package control.network;
 
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
-import control.NetworkMessages.PositionMessage;
+import control.GameOptions;
+import control.network.NetworkMessages.EntityPositionMessage;
 import java.util.List;
 import model.Client;
 
@@ -49,8 +50,8 @@ public class NetworkMessageListener {
         @Override
         public void messageReceived(HostedConnection source, Message message) {
 
-            if (message instanceof NetworkMessages.PositionMessage) {
-                NetworkMessages.PositionMessage positionMessage = (NetworkMessages.PositionMessage) message;
+            if (message instanceof NetworkMessages.EntityPositionMessage) {
+                NetworkMessages.EntityPositionMessage positionMessage = (NetworkMessages.EntityPositionMessage) message;
 
                 // just send the position back without check ... for now ...
                 String newPositonVector = positionMessage.position;
@@ -58,7 +59,7 @@ public class NetworkMessageListener {
 
                 System.out.println("Client [" + source.getId() + "] Validate position: " + newPositonVector);
 
-                PositionMessage newPositionMessage = new PositionMessage(entityID, newPositonVector);
+                EntityPositionMessage newPositionMessage = new EntityPositionMessage(entityID, newPositonVector);
                 source.send(newPositionMessage);
             }
         }
