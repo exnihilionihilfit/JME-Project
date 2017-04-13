@@ -59,7 +59,7 @@ public class NetworkMessageListener {
             if (message instanceof NetworkMessages.EntityPositionMessage) {
                 NetworkMessages.EntityPositionMessage positionMessage = (NetworkMessages.EntityPositionMessage) message;
                 ENTITY_POSITION_MESSAGE.add(positionMessage);
-         
+                //System.out.println("--> NewPositionReseaved "+positionMessage.entityID);
             }
 
         }

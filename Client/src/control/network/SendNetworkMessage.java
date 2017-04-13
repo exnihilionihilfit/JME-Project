@@ -5,35 +5,47 @@
  */
 package control.network;
 
-import main.Main;
+import com.jme3.math.Vector3f;
+import com.jme3.network.Client;
 import model.Entity;
 
 /**
  *
  * @author novo
  */
-public class SendMessage {
+public class SendNetworkMessage {
     
-    public void sendEntityPositionMessage(Entity entity)
+    Client client;
+    
+    public SendNetworkMessage(Client client)
     {
-        /*
-       entity.sendNewPositionMessage(true);
+        this.client = client;
+    }
+    
+    public void sendEntityPositionMessage(Entity entity, Vector3f newPosition)
+    {
+        
+         NetworkMessages.EntityPositionMessage message = new NetworkMessages.EntityPositionMessage("" + entity.getID(), newPosition.toString());
+         client.send(message);
+         //System.out.println("--> send EntityPositionMessage" + message.toString());
+        
+       /*
+         entity.sendNewPositionMessage(true);
                     entity.setNextPosition( entity.getEntity().getLocalTranslation().addLocal(1f, 0, 0));
-                    if (myClient != null) {
+                    if (client != null) {
                     
-                        NetworkMessages.EntityPositionMessage message = new NetworkMessages.EntityPositionMessage("" + entity.getID(), (entity.getNextPosition()).toString());
-                        myClient.send(message);
-                        System.out.println("send new Position Message" + message.toString());
+                       
                     }
                       entity.setSendNewPositionMessage(true);
                     entity.setNextPosition(entity.getEntity().getLocalTranslation().addLocal(-1f, 0, 0));
-                    System.out.println(name + " = " + pressed);
+         
 
-                    if (myClient != null) {
-                        Main.PositionMessage message = new Main.PositionMessage("" + entity.getID(), (entity.getNextPositionAsString()));
-                        myClient.send(message);
+                    if (client != null) {
+                        NetworkMessages.EntityPositionMessage message = new NetworkMessages.EntityPositionMessage("" + entity.getID(), (entity.getNextPositionAsString()));
+                        client.send(message);
                         System.out.println("send new Position Message" + message.toString());
-                    }  */
+                    }  
+         */
     }
    
                

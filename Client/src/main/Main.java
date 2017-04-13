@@ -6,6 +6,7 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.math.Vector3f;
 import com.jme3.network.Client;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.JmeContext;
@@ -15,6 +16,7 @@ import control.UpdateEntity;
 import control.network.NetworkMessageHandling;
 import control.network.NetworkMessageListener;
 import control.network.NetworkMessages;
+import control.network.SendNetworkMessage;
 
 import control.network.ServerConnection;
 import java.util.ArrayList;
@@ -45,6 +47,8 @@ public class Main extends SimpleApplication {
     private static final List<Entity> ENTITIES = new ArrayList();
     /* This constructor creates a new executor with a core pool size of 4. */
     public ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(50);
+    
+    private SendNetworkMessage sendNetworkMessage;
 
     private static String[] args;
 
@@ -56,6 +60,7 @@ public class Main extends SimpleApplication {
         mainApplication.start(JmeContext.Type.Display); // standard display type
 
     }
+    
 
     @Override
     public void simpleInitApp() {
@@ -66,6 +71,7 @@ public class Main extends SimpleApplication {
         initKeys();
         connectToServer();
         addMessageListener();
+        initSendNetworkMessage();
         startClient();
         initHUD();
 
@@ -90,6 +96,11 @@ public class Main extends SimpleApplication {
         InputListener.resetInput();
         
         NetworkMessageHandling.handlePingMessage();
+        NetworkMessageHandling.handleEntityPositionMessage();
+        
+        if(ENTITIES != null && ENTITIES.get(0) != null)
+        this.sendNetworkMessage.sendEntityPositionMessage(ENTITIES.get(0), new Vector3f((float) (Math.random() *20), 0, 0));
+       
 
     }
 
@@ -174,5 +185,10 @@ public class Main extends SimpleApplication {
     {
         return ENTITIES;
     }
+
+    private void initSendNetworkMessage() {
+        sendNetworkMessage = new SendNetworkMessage(myClient);
+    }
+      
 
 }
