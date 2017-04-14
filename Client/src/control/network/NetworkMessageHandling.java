@@ -48,7 +48,7 @@ public class NetworkMessageHandling {
               {
                         entity.setRecevedNewPositionMessage(true);
                         entity.setNextPosition(entityPositionMessage.position);
-                        System.out.println("set new position"+entityPositionMessage.position);
+                      
               }
           }
 

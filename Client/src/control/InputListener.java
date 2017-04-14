@@ -8,8 +8,6 @@
 package control;
 
 import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.AnalogListener;
-import com.jme3.math.Vector2f;
 
 /**
  *

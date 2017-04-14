@@ -41,6 +41,7 @@ public class Entity {
     private boolean reseavedNewPositionMessage = false;
     private static int entityID;
     private boolean isMoveable = true;
+    private Node ship;
 
     public Entity(Main mainApp, AssetManager assetManager, String name) {
         this.mainApp = mainApp;
@@ -214,10 +215,10 @@ public class Entity {
 
         }
 */
-        if (recevedNewPositionMessage) {
+        if (nextPosition != null) {
             getEntity().setLocalTranslation(nextPosition);
 
-            recevedNewPositionMessage = false;
+           // recevedNewPositionMessage = false;
         }
     }
 
@@ -227,11 +228,12 @@ public class Entity {
 
     public Node getEntity() {
        
+        if(ship == null)
+        {
             // load a character from jme3test-test-data
-        Spatial ship = assetManager.loadModel("Models/battleship5/battleship5.j3o");
+        ship = (Node) assetManager.loadModel("Models/battleship5/battleship5.j3o");
         ship.setName("ship");
-        ship.setUserData("id", Entity.entityID);      
-        ship.setLocalTranslation(0, 0, 0);
+        ship.setUserData("id", Entity.entityID);          
         
         
 
@@ -239,8 +241,8 @@ public class Entity {
        // CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(ship);
        // RigidBodyControl shipBody = new RigidBodyControl(sceneShape, 0);
 
-      
-        return (Node) ship;
+        }
+        return  ship;
 
     }
 

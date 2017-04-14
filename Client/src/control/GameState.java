@@ -82,14 +82,14 @@ public class GameState {
 
                                 Action.highlight(selectedEntity);
                                 IS_ENTITY_SELECTED = true;
-                                isDone = true;
+                               
 
-                                System.out.println("Entity selected");
+                                System.out.println("Entity selected"+selectedEntity.getName()+" "+entityID);
                             } 
                         }
                     }
 
-                    if (IS_ENTITY_SELECTED && !isDone) {
+                    if (IS_ENTITY_SELECTED) {
 
                         /**
                          * try to get an target we need the target center point
@@ -132,11 +132,14 @@ public class GameState {
                         SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
                         selectedEntity = null;
                         target = null;
+                        entityID = -1;
                         InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
+                        InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
+                        System.out.println("deselect");
                     }
 
  
-                    isDone = false;
+                   
                 }
             }
         }
