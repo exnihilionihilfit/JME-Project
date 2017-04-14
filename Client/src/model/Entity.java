@@ -6,19 +6,12 @@
 package model;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.bullet.util.CollisionShapeFactory;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import main.Main;
 
@@ -47,6 +40,7 @@ public class Entity {
     private boolean recevedNewPositionMessage = false;
     private boolean reseavedNewPositionMessage = false;
     private static int entityID;
+    private boolean isMoveable = true;
 
     public Entity(Main mainApp, AssetManager assetManager, String name) {
         this.mainApp = mainApp;
@@ -56,6 +50,16 @@ public class Entity {
 
         Entity.entityID++;
 
+    }
+    
+    public boolean isMoveable()
+    {
+        return isMoveable;
+    }
+    
+    public void setMoveable(boolean value)
+    {
+        this.isMoveable = value;
     }
 
     public String getName() {

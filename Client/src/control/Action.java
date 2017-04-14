@@ -7,13 +7,12 @@ package control;
 
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
-import com.jme3.math.Ray;
-import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import control.network.SendNetworkMessage;
 import model.Entity;
+import model.Target;
 
 /**
  *
@@ -21,39 +20,70 @@ import model.Entity;
  */
 public class Action {
 
-    public static void selectEntity(InputManager inputManager, Camera cam, Node rootNode) {
-        if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
-            // Reset results list.
-            CollisionResults results = new CollisionResults();
-            // Convert screen click to 3d position
-            Vector2f click2d = inputManager.getCursorPosition();
-            Vector3f click3d = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-            Vector3f dir = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-            // Aim the ray from the clicked spot forwards.
-            Ray ray = new Ray(click3d, dir);
-            // Collect intersections between ray and all nodes in results list.
-            rootNode.collideWith(ray, results);
-            // (Print the results so we see what is going on:)
-            for (int i = 0; i < results.size(); i++) {
-                // (For each "hit", we know distance, impact point, geometry.)
-                float dist = results.getCollision(i).getDistance();
-                Vector3f pt = results.getCollision(i).getContactPoint();
-                String target = results.getCollision(i).getGeometry().getName();
-                System.out.println("Selection #" + i + ": " + target + " at " + pt + ", " + dist + " WU away.");
-            }
-            // Use the results -- we rotate the selected geometry.
-            if (results.size() > 0) {
-                System.out.println("SHIP ID: " + results.getCollision(0).getGeometry().getParent().getParent().getParent().getUserData("id").toString());
-            }
-        }
+    
+
+    public static int selectEntity(InputManager inputManager, Camera cam, Node rootNode) 
+    {     
+        CollisionResults results = PickCollision.getCollisionResults(inputManager, cam, rootNode);      
+        return getEntityIDFromSelection(results);
     }
 
-    public static void entityMoveAction(SendNetworkMessage sendNetworkMessage, Entity entity, Vector3f position) {
-        if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
-            sendNetworkMessage.sendEntityPositionMessage(entity, position);
-        } else if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
-            GameState.IS_ENTITY_MOVE_ACTION = false;
+    public static void sendEntityMoveAction(SendNetworkMessage sendNetworkMessage, Entity entity, Vector3f position)
+    {        
+        sendNetworkMessage.sendEntityPositionMessage(entity, position);     
+    }
+
+    public static Target selectTargetPosition(InputManager inputManager, Camera cam, Node rootNode) {
+        Target target = null;
+        
+        CollisionResults results = PickCollision.getCollisionResults(inputManager, cam, rootNode);
+        
+        
+        if (results.size() > 0) {
+            Vector3f contactPoint = results.getClosestCollision().getContactPoint();
+            
+            if(contactPoint != null)
+            {
+            target = new Target();
+            target.setPickPoint(contactPoint);
+            }
+        
         }
+        
+      
+        
+        return target;
+    }
+
+    
+    private static int getEntityIDFromSelection(CollisionResults results)
+    {
+        // -1 is floor
+        int selectedEntityID = -1;
+        
+            if (results.size() > 0) {
+                // strange but work
+                Node node = results.getClosestCollision().getGeometry().getParent();
+                if(node != null)
+                {
+                    node = node.getParent();
+                    if(node != null)
+                    {
+                        node = node.getParent();
+                        String name = node.getName();
+                        
+                        if(name != null && name.equals("ship"))
+                        {
+                          selectedEntityID = node.getUserData("id");
+                        }                            
+                    }                
+                }                
+            }            
+         return selectedEntityID;
+    }
+
+    static void highlight(Entity selectedEntity) {
+
     }
 
 }

@@ -18,6 +18,7 @@ import com.jme3.system.JmeContext;
 import control.GameState;
 import control.InputListener;
 import control.InputServerData;
+import control.Map;
 import control.UpdateEntity;
 import control.network.NetworkMessageHandling;
 import control.network.NetworkMessageListener;
@@ -54,6 +55,7 @@ public class Main extends SimpleApplication {
     /* This constructor creates a new executor with a core pool size of 4. */
     public ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(50);
 
+    
     public SendNetworkMessage sendNetworkMessage;
 
     private static String[] args;
@@ -72,6 +74,7 @@ public class Main extends SimpleApplication {
         mainApplication.start(JmeContext.Type.Display); // standard display type
 
     }
+    private Map map;
 
     @Override
     public void simpleInitApp() {
@@ -79,7 +82,7 @@ public class Main extends SimpleApplication {
         /**
          * Set up Physics
          */
-      //  BulletAppState bulletAppState = new BulletAppState();
+        BulletAppState bulletAppState = new BulletAppState();
       //  stateManager.attach(bulletAppState);
         //bulletAppState.setDebugEnabled(true);
      //   bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, 0, 0));
@@ -94,6 +97,8 @@ public class Main extends SimpleApplication {
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
         rootNode.addLight(sun);
+        
+        bulletAppState.setDebugEnabled(true);
 
         connectToServer();
         addMessageListener();
@@ -102,6 +107,7 @@ public class Main extends SimpleApplication {
         initKeys();
         initGameState();
         initHUD();
+        initMap();
         createEntity();
 
         isRunning = true;
@@ -235,5 +241,12 @@ public class Main extends SimpleApplication {
     private void initGameState() {
         gameState = new GameState(this, inputManager, rootNode, cam);
     }
+
+    private void initMap() {
+        map = new Map();
+        rootNode.attachChild(map.makeFloor(assetManager));
+    }
+    
+ 
 
 }

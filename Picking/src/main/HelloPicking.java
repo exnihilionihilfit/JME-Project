@@ -58,6 +58,7 @@ public class HelloPicking extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
 
+
         if (shootables != null && shootables.getChildren() != null && shootables.getChildren().size() > 0) {
             for (Spatial spatial : shootables.getChildren()) {
 

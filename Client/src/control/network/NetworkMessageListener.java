@@ -47,19 +47,19 @@ public class NetworkMessageListener {
                 // do something with the message
                 NetworkMessages.PingMessage helloMessage = (NetworkMessages.PingMessage) message;
                 PING_MESSAGES.add(helloMessage);
-                //  System.out.println("Client #" + source.getId() + " received: '" + helloMessage.hello + "'");
+                  System.out.println("Client #" + source.getId() + " received: '" + helloMessage.hello + "'");
             }
 
             if (message instanceof NetworkMessages.CreateEntityMessage) {
                 NetworkMessages.CreateEntityMessage createEntityMessage = (NetworkMessages.CreateEntityMessage) message;
                 CREATE_ENTITY_MESSAGES.add(createEntityMessage);
-                //System.out.println(createEntityMessage.isNewEntity);
+                System.out.println(createEntityMessage.isNewEntity);
             }
 
             if (message instanceof NetworkMessages.EntityPositionMessage) {
                 NetworkMessages.EntityPositionMessage positionMessage = (NetworkMessages.EntityPositionMessage) message;
                 ENTITY_POSITION_MESSAGE.add(positionMessage);
-                //System.out.println("--> NewPositionReseaved "+positionMessage.entityID);
+                System.out.println("--> NewPositionReseaved "+positionMessage.entityID);
             }
 
         }

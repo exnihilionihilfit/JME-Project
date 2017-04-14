@@ -1,7 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * To prevent problems with multi-pressed keys 
+ * and massive typing we set each key stroke to a field
+ * and reset it after a time. 
+ * Also it should be timed (not yet) so only each time intervall
+ * the keys will be set
  */
 package control;
 
