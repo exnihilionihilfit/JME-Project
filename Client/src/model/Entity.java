@@ -6,6 +6,9 @@
 package model;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
@@ -219,25 +222,21 @@ public class Entity {
     }
 
     public Node getEntity() {
-        if (node == null) {
-            node = new Node();
-            Box b = new Box(10f, 10f, 10f);
-            Geometry geom = new Geometry("Box", b);
+       
+            // load a character from jme3test-test-data
+        Spatial ship = assetManager.loadModel("Models/battleship5/battleship5.j3o");
+        ship.setName("ship");
+        ship.setUserData("id", Entity.entityID);      
+        ship.setLocalTranslation(0, 0, 0);
+        
+        
 
-            Vector3f newLocation = new Vector3f();
-            newLocation.x = (float) (Math.random() * 2);
-            newLocation.y = (float) (Math.random() * 2);
-            newLocation.z = (float) (Math.random() * 2);
-            node.setLocalTranslation(newLocation);
+        //rootNode.attachChild(ship);
+       // CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(ship);
+       // RigidBodyControl shipBody = new RigidBodyControl(sceneShape, 0);
 
-            Material mat = new Material(this.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            mat.setColor("Color", ColorRGBA.randomColor());
-
-            geom.setMaterial(mat);
-
-            node.attachChild(geom);
-        }
-        return node;
+      
+        return (Node) ship;
 
     }
 

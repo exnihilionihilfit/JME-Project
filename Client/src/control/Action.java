@@ -20,49 +20,40 @@ import model.Entity;
  * @author novo
  */
 public class Action {
-    
-    public static void selectEntity(InputManager inputManager, Camera cam, Node rootNode)
-    {
- 
-       // Reset results list.
-       CollisionResults results = new CollisionResults();
-       // Convert screen click to 3d position
-       Vector2f click2d = inputManager.getCursorPosition();
-       Vector3f click3d = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-       Vector3f dir = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-       // Aim the ray from the clicked spot forwards.
-       Ray ray = new Ray(click3d, dir);
-       // Collect intersections between ray and all nodes in results list.
-       rootNode.collideWith(ray, results);
-       // (Print the results so we see what is going on:)
-       for (int i = 0; i < results.size(); i++) {
-         // (For each "hit", we know distance, impact point, geometry.)
-         float dist = results.getCollision(i).getDistance();
-         Vector3f pt = results.getCollision(i).getContactPoint();
-         String target = results.getCollision(i).getGeometry().getName();
-         System.out.println("Selection #" + i + ": " + target + " at " + pt + ", " + dist + " WU away.");
-       }
-       // Use the results -- we rotate the selected geometry.
-       if (results.size() > 0) {
-         
-       }
-       
-     }
 
-    
-    
-    public static void entityMoveAction(SendNetworkMessage sendNetworkMessage, Entity entity, Vector3f position)
-    {
-        if(InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED)
-        {
-             sendNetworkMessage.sendEntityPositionMessage(entity, position);
+    public static void selectEntity(InputManager inputManager, Camera cam, Node rootNode) {
+        if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
+            // Reset results list.
+            CollisionResults results = new CollisionResults();
+            // Convert screen click to 3d position
+            Vector2f click2d = inputManager.getCursorPosition();
+            Vector3f click3d = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+            Vector3f dir = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
+            // Aim the ray from the clicked spot forwards.
+            Ray ray = new Ray(click3d, dir);
+            // Collect intersections between ray and all nodes in results list.
+            rootNode.collideWith(ray, results);
+            // (Print the results so we see what is going on:)
+            for (int i = 0; i < results.size(); i++) {
+                // (For each "hit", we know distance, impact point, geometry.)
+                float dist = results.getCollision(i).getDistance();
+                Vector3f pt = results.getCollision(i).getContactPoint();
+                String target = results.getCollision(i).getGeometry().getName();
+                System.out.println("Selection #" + i + ": " + target + " at " + pt + ", " + dist + " WU away.");
+            }
+            // Use the results -- we rotate the selected geometry.
+            if (results.size() > 0) {
+                System.out.println("SHIP ID: " + results.getCollision(0).getGeometry().getParent().getParent().getParent().getUserData("id").toString());
+            }
         }
-        else if(InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED)
-        {
+    }
+
+    public static void entityMoveAction(SendNetworkMessage sendNetworkMessage, Entity entity, Vector3f position) {
+        if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
+            sendNetworkMessage.sendEntityPositionMessage(entity, position);
+        } else if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
             GameState.IS_ENTITY_MOVE_ACTION = false;
         }
     }
-    
- 
-    
+
 }

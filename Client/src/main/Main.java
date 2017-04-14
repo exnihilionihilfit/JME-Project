@@ -1,5 +1,6 @@
 package main;
 
+import com.jme3.app.FlyCamAppState;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.input.KeyInput;
@@ -7,6 +8,9 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.network.Client;
 import com.jme3.renderer.RenderManager;
@@ -49,16 +53,16 @@ public class Main extends SimpleApplication {
     private static final List<Entity> ENTITIES = new ArrayList();
     /* This constructor creates a new executor with a core pool size of 4. */
     public ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(50);
-    
+
     public SendNetworkMessage sendNetworkMessage;
 
     private static String[] args;
-    
-     private boolean isRunning;
-     
-      private GameState gameState;
-      
-        private final Vector3f camerPosition = new Vector3f(0, 100, -50);
+
+    private boolean isRunning;
+
+    private GameState gameState;
+
+    private final Vector3f camerPosition = new Vector3f(0, 50, -30);
 
     public static void main(String[] args) {
 
@@ -68,38 +72,38 @@ public class Main extends SimpleApplication {
         mainApplication.start(JmeContext.Type.Display); // standard display type
 
     }
-  
-   
-   
-    
 
     @Override
     public void simpleInitApp() {
-
+//stateManager.detach( stateManager.getState(FlyCamAppState.class) );
         /**
          * Set up Physics
          */
-        BulletAppState bulletAppState = new BulletAppState();
-        stateManager.attach(bulletAppState);
+      //  BulletAppState bulletAppState = new BulletAppState();
+      //  stateManager.attach(bulletAppState);
         //bulletAppState.setDebugEnabled(true);
-        bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, 0, 0));
+     //   bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, 0, 0));
 
-        getCamera().lookAtDirection(new Vector3f(0, -1, 0.5f), Vector3f.UNIT_Z);
+        getCamera().lookAtDirection(new Vector3f(0, -1, 0.70f), Vector3f.UNIT_Z);
         getCamera().setLocation(this.camerPosition);
 
         inputManager.setCursorVisible(true);
         flyCam.setEnabled(false);
         
-        
+              // We must add a light to make the model visible
+        DirectionalLight sun = new DirectionalLight();
+        sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
+        rootNode.addLight(sun);
+
         connectToServer();
         addMessageListener();
         initSendNetworkMessage();
-        startClient();        
+        startClient();
         initKeys();
         initGameState();
         initHUD();
         createEntity();
-        
+
         isRunning = true;
 
     }
@@ -109,20 +113,18 @@ public class Main extends SimpleApplication {
 
         UpdateEntity.update(ENTITIES, tpf);
 
-        checkServerConnection();  
-        
+        checkServerConnection();
+
         // update current gamestate
         gameState.updateGameState();
         // check Action on gameState
         gameState.checkAction();
-        
+
         // Reset all Key and Mouse Inputstatets
         InputListener.resetInput();
         // Server response
         NetworkMessageHandling.handlePingMessage();
         NetworkMessageHandling.handleEntityPositionMessage();
-    
-       
 
     }
 
@@ -153,7 +155,7 @@ public class Main extends SimpleApplication {
     private void createEntity() {
 
         Entity man = new Entity(this, this.assetManager, "carl");
-       
+
         rootNode.attachChild(man.getEntity());
 
         ENTITIES.add(man);
@@ -188,12 +190,10 @@ public class Main extends SimpleApplication {
 
         inputServerConection = new InputServerData(Main.args);
         ServerConnection serverConnection = new ServerConnection(this);
-        
-        if(inputServerConection.isValidServerData())
-        {
+
+        if (inputServerConection.isValidServerData()) {
             serverConnection.connectToServer();
         }
-        
 
     }
 
@@ -207,9 +207,8 @@ public class Main extends SimpleApplication {
     private void initHUD() {
         HUD hud = new HUD(mainApplication.guiNode, mainApplication.guiFont, mainApplication.assetManager);
     }
-    
-    public static List<Entity> getEntities()
-    {
+
+    public static List<Entity> getEntities() {
         return ENTITIES;
     }
 
@@ -218,7 +217,7 @@ public class Main extends SimpleApplication {
     }
 
     private void checkServerConnection() {
-                if (!client.isConnected()) {
+        if (!client.isConnected()) {
             try {
                 System.out.println(" ... disconnected from Server try reconect in 5 Seconds ...");
                 connectToServer();
@@ -228,15 +227,13 @@ public class Main extends SimpleApplication {
             }
         }
     }
-    
-    public boolean isRunning()
-    {
+
+    public boolean isRunning() {
         return isRunning;
     }
 
     private void initGameState() {
-       gameState = new GameState(this, inputManager, rootNode, cam);
+        gameState = new GameState(this, inputManager, rootNode, cam);
     }
-      
 
 }

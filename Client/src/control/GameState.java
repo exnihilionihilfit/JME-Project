@@ -88,7 +88,11 @@ public class GameState {
         
         if(selectedEntity != null && entityPositionTarget != null)
         {
-            
+            IS_ENTITY_MOVE_ACTION = true;
+        }
+        else
+        {
+            IS_ENTITY_MOVE_ACTION = false;
         }
        
          
