@@ -115,10 +115,12 @@ public class GameState {
 
                                 System.out.println("target found!" + target.getPickPoint());
 
+                                /*
                                 IS_ENTITY_SELECTED = false;
                                 SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
                                 selectedEntity = null;
                                 target = null;
+*/
 
                             } else {
                                 // System.out.println("no target found"); 

@@ -31,7 +31,7 @@ public class Map {
         floor.setLocalTranslation(0, -5, 0);
         Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat1.setColor("Color", ColorRGBA.Gray);
-        mat1.setTransparent(false);
+        mat1.setTransparent(true);
         mat1.setTexture("ColorMap", assetManager.loadTexture("Textures/transparent.png"));
 
         floor.setMaterial(mat1);
