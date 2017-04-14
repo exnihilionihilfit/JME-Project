@@ -19,7 +19,7 @@ public class NetworkMessageListener {
 
     static final Queue<NetworkMessages.PingMessage> PING_MESSAGES = new LinkedList<>();
 
-    static final Queue<NetworkMessages.createEntityMessage> CREATE_ENTITY_MESSAGES = new LinkedList<>();
+    static final Queue<NetworkMessages.CreateEntityMessage> CREATE_ENTITY_MESSAGES = new LinkedList<>();
     static final Queue<NetworkMessages.EntityPositionMessage> ENTITY_POSITION_MESSAGE = new LinkedList<>();
 
  
@@ -29,7 +29,7 @@ public class NetworkMessageListener {
         return PING_MESSAGES;
     }
     
-    public Queue<NetworkMessages.createEntityMessage>  getCreateEntityMessage()
+    public Queue<NetworkMessages.CreateEntityMessage>  getCreateEntityMessage()
     {
         return CREATE_ENTITY_MESSAGES;
     }
@@ -50,8 +50,8 @@ public class NetworkMessageListener {
                 //  System.out.println("Client #" + source.getId() + " received: '" + helloMessage.hello + "'");
             }
 
-            if (message instanceof NetworkMessages.createEntityMessage) {
-                NetworkMessages.createEntityMessage createEntityMessage = (NetworkMessages.createEntityMessage) message;
+            if (message instanceof NetworkMessages.CreateEntityMessage) {
+                NetworkMessages.CreateEntityMessage createEntityMessage = (NetworkMessages.CreateEntityMessage) message;
                 CREATE_ENTITY_MESSAGES.add(createEntityMessage);
                 //System.out.println(createEntityMessage.isNewEntity);
             }

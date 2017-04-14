@@ -49,15 +49,15 @@ public class NetworkMessages {
     }
 
     @Serializable
-    public static class createEntityMessage extends AbstractMessage {
+    public static class CreateEntityMessage extends AbstractMessage {
 
          boolean isNewEntity = false;
 
-        public createEntityMessage() {
+        public CreateEntityMessage() {
 
         }
 
-        public createEntityMessage(boolean isNewEntity) {
+        public CreateEntityMessage(boolean isNewEntity) {
             this.isNewEntity = isNewEntity;
         }
     }

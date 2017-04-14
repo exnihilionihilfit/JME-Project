@@ -42,7 +42,7 @@ public class Entity {
     private Vector3f nextPosition;
     private boolean couldMove = false;
     private boolean recevedNewPositionMessage = false;
-    private boolean sendNewPositionMessage = false;
+    private boolean reseavedNewPositionMessage = false;
     private static int entityID;
 
     public Entity(Main mainApp, AssetManager assetManager, String name) {
@@ -61,7 +61,7 @@ public class Entity {
     
     public void sendNewPositionMessage(boolean b)
     {
-        this.sendNewPositionMessage  = b;
+        this.reseavedNewPositionMessage  = b;
     }
     
     public boolean isRecevedNewPositionMessage()
@@ -87,12 +87,12 @@ public class Entity {
     
     public boolean isSendNewPositionMessage()
     {
-        return this.sendNewPositionMessage;
+        return this.reseavedNewPositionMessage;
     }
     
     public void setSendNewPositionMessage(boolean b)
     {
-        this.sendNewPositionMessage = b;
+        this.reseavedNewPositionMessage = b;
     }
 
     public void setNextPosition(String nextPosition) {
@@ -153,17 +153,8 @@ public class Entity {
             //Data data = myWorld.getData();
             //... Now process data and find the way ...
             Thread.sleep(2);
+           
 
-            lastTime = System.currentTimeMillis();
-
-            if (mainApp.myClient.isConnected() && mainApp.myClient.isStarted()) {
-
-                // newLocation = convertPositionAsStringIntoVector(getNextPosition());
-            }
-
-            if (wayList == null) {
-                wayList = new MyWayList();
-            }
             //wayList.setNewLocation(nextPosition);
             //  System.out.println("get new Location"+wayList.getNewLocation()+" "+newLocation);
 
@@ -174,19 +165,12 @@ public class Entity {
     };
 
     public void update(float tpf) {
-        
-        
-    //   if (mainApp.myClient != null && mainApp.myClient.isConnected()) {
-      //      System.out.println(mainApp.myClient.isConnected());
-
-        //    PingMessage message = new Main.PingMessage("connected",System.currentTimeMillis());
-         //   mainApp.myClient.send(message);
-      //}
-        // System.out.println(""+getName()+" "+mainApp.executor.getPoolSize()+" "+future+" "+wayList);
-        if (sendNewPositionMessage) {
+                
+    /*
+        if (reseavedNewPositionMessage) {
             try {
-                //If we have no waylist and not started a callable yet, do so!
-                if (wayList == null && future == null) {
+                
+                if (future == null) {
                     //set the desired location vector, after that we should not modify it anymore
                     //because it's being accessed on the other thread!
                     desiredLocation.set(getGoodNextLocation());
@@ -196,7 +180,7 @@ public class Entity {
                     // System.out.println(findWay);
                 } //If we have started a callable already, we check the status
                 else if (future != null) {
-                    //Get the waylist when its done
+                   
 
                     if (future.isDone()) {
                         wayList = (MyWayList) future.get();
@@ -210,7 +194,7 @@ public class Entity {
             } catch (InterruptedException | ExecutionException e) {
                 System.out.println("Exception" + e);
             }
-            sendNewPositionMessage = false;
+            reseavedNewPositionMessage = false;
         }
 
         if (wayList != null) {
@@ -222,7 +206,7 @@ public class Entity {
             }
 
         }
-
+*/
         if (recevedNewPositionMessage) {
             getEntity().setLocalTranslation(nextPosition);
 
@@ -237,7 +221,7 @@ public class Entity {
     public Node getEntity() {
         if (node == null) {
             node = new Node();
-            Box b = new Box(0.2f, 0.2f, 0.2f);
+            Box b = new Box(10f, 10f, 10f);
             Geometry geom = new Geometry("Box", b);
 
             Vector3f newLocation = new Vector3f();

@@ -1,6 +1,7 @@
 package main;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.bullet.BulletAppState;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
@@ -10,6 +11,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.network.Client;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.JmeContext;
+import control.GameState;
 import control.InputListener;
 import control.InputServerData;
 import control.UpdateEntity;
@@ -38,19 +40,25 @@ import view.HUD;
 public class Main extends SimpleApplication {
 
     private static Main mainApplication = null;
-    private static InputServerData serverConection;
+    private static InputServerData inputServerConection;
 
     MyWayList wayList = null;
     Future future = null;
-    public Client myClient = null;
+    public Client client = null;
     long lastTime = System.currentTimeMillis();
     private static final List<Entity> ENTITIES = new ArrayList();
     /* This constructor creates a new executor with a core pool size of 4. */
     public ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(50);
     
-    private SendNetworkMessage sendNetworkMessage;
+    public SendNetworkMessage sendNetworkMessage;
 
     private static String[] args;
+    
+     private boolean isRunning;
+     
+      private GameState gameState;
+      
+        private final Vector3f camerPosition = new Vector3f(0, 100, -50);
 
     public static void main(String[] args) {
 
@@ -60,20 +68,39 @@ public class Main extends SimpleApplication {
         mainApplication.start(JmeContext.Type.Display); // standard display type
 
     }
+  
+   
+   
     
 
     @Override
     public void simpleInitApp() {
 
-        
+        /**
+         * Set up Physics
+         */
+        BulletAppState bulletAppState = new BulletAppState();
+        stateManager.attach(bulletAppState);
+        //bulletAppState.setDebugEnabled(true);
+        bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, 0, 0));
 
-        createEntity();
-        initKeys();
+        getCamera().lookAtDirection(new Vector3f(0, -1, 0.5f), Vector3f.UNIT_Z);
+        getCamera().setLocation(this.camerPosition);
+
+        inputManager.setCursorVisible(true);
+        flyCam.setEnabled(false);
+        
+        
         connectToServer();
         addMessageListener();
         initSendNetworkMessage();
-        startClient();
+        startClient();        
+        initKeys();
+        initGameState();
         initHUD();
+        createEntity();
+        
+        isRunning = true;
 
     }
 
@@ -82,24 +109,19 @@ public class Main extends SimpleApplication {
 
         UpdateEntity.update(ENTITIES, tpf);
 
-        if (!myClient.isConnected()) {
-            try {
-                System.out.println(" ... disconnected from Server try reconect in 5 Seconds ...");
-                connectToServer();
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-       // System.out.println(InputListener.IS_ROTATE_PRESSED);
-        InputListener.resetInput();
+        checkServerConnection();  
         
+        // update current gamestate
+        gameState.updateGameState();
+        // check Action on gameState
+        gameState.checkAction();
+        
+        // Reset all Key and Mouse Inputstatets
+        InputListener.resetInput();
+        // Server response
         NetworkMessageHandling.handlePingMessage();
         NetworkMessageHandling.handleEntityPositionMessage();
-        
-        if(ENTITIES != null && ENTITIES.get(0) != null)
-        this.sendNetworkMessage.sendEntityPositionMessage(ENTITIES.get(0), new Vector3f((float) (Math.random() *20), 0, 0));
+    
        
 
     }
@@ -112,7 +134,7 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("Rotate", new KeyTrigger(KeyInput.KEY_SPACE),
                 new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         // Add the names to the action listener.   
-        inputManager.addListener(InputListener.KEY_INPUT_LISTENER, "Left", "Right", "Rotate", "Pause");
+        inputManager.addListener(InputListener.ACTION_LISTENER, "Left", "Right", "Rotate", "Pause");
 
         inputManager.addMapping("LeftMouse", new MouseButtonTrigger(MouseInput.BUTTON_LEFT)); // trigger 2: left-button click
         inputManager.addListener(InputListener.MOUSE_INPUT_LISTENER, "LeftMouse");
@@ -146,8 +168,8 @@ public class Main extends SimpleApplication {
     @Override
     public void destroy() {
 
-        if (myClient != null) {
-            myClient.close();
+        if (client != null) {
+            client.close();
         }
 
         super.destroy();
@@ -157,22 +179,27 @@ public class Main extends SimpleApplication {
     private void addMessageListener() {
 
         NetworkMessageListener networkMessageListener = new NetworkMessageListener();
-        myClient.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.PingMessage.class);
-        myClient.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.createEntityMessage.class);
-        myClient.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.EntityPositionMessage.class);
+        client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.PingMessage.class);
+        client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.CreateEntityMessage.class);
+        client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.EntityPositionMessage.class);
     }
 
     private void connectToServer() {
 
-        serverConection = new InputServerData(Main.args);
+        inputServerConection = new InputServerData(Main.args);
         ServerConnection serverConnection = new ServerConnection(this);
-        serverConnection.connectToServer();
+        
+        if(inputServerConection.isValidServerData())
+        {
+            serverConnection.connectToServer();
+        }
+        
 
     }
 
     private void startClient() {
-        if (myClient != null) {
-            myClient.start();
+        if (client != null) {
+            client.start();
 
         }
     }
@@ -187,7 +214,28 @@ public class Main extends SimpleApplication {
     }
 
     private void initSendNetworkMessage() {
-        sendNetworkMessage = new SendNetworkMessage(myClient);
+        sendNetworkMessage = new SendNetworkMessage(client);
+    }
+
+    private void checkServerConnection() {
+                if (!client.isConnected()) {
+            try {
+                System.out.println(" ... disconnected from Server try reconect in 5 Seconds ...");
+                connectToServer();
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public boolean isRunning()
+    {
+        return isRunning;
+    }
+
+    private void initGameState() {
+       gameState = new GameState(this, inputManager, rootNode, cam);
     }
       
 

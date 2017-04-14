@@ -46,7 +46,7 @@ public class Main extends SimpleApplication {
 
             Serializer.registerClass(NetworkMessages.PingMessage.class);
             Serializer.registerClass(NetworkMessages.EntityPositionMessage.class);
-            Serializer.registerClass(NetworkMessages.createEntityMessage.class);
+            Serializer.registerClass(NetworkMessages.CreateEntityMessage.class);
 
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -54,7 +54,7 @@ public class Main extends SimpleApplication {
         NetworkMessageListener networkMessageListener = new NetworkMessageListener();
 
         myServer.addMessageListener(networkMessageListener.new ServerMessageListener(), NetworkMessages.PingMessage.class);
-        myServer.addMessageListener(networkMessageListener.new ServerListener(), NetworkMessages.createEntityMessage.class);
+        myServer.addMessageListener(networkMessageListener.new ServerListener(), NetworkMessages.CreateEntityMessage.class);
         myServer.addMessageListener(networkMessageListener.new ServerListener(), NetworkMessages.EntityPositionMessage.class);
 
         if (myServer != null) {

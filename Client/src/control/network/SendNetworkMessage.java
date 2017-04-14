@@ -23,29 +23,23 @@ public class SendNetworkMessage {
     }
     
     public void sendEntityPositionMessage(Entity entity, Vector3f newPosition)
-    {
-        
+    {        
          NetworkMessages.EntityPositionMessage message = new NetworkMessages.EntityPositionMessage("" + entity.getID(), newPosition.toString());
-         client.send(message);
-         //System.out.println("--> send EntityPositionMessage" + message.toString());
-        
-       /*
-         entity.sendNewPositionMessage(true);
-                    entity.setNextPosition( entity.getEntity().getLocalTranslation().addLocal(1f, 0, 0));
-                    if (client != null) {
-                    
-                       
-                    }
-                      entity.setSendNewPositionMessage(true);
-                    entity.setNextPosition(entity.getEntity().getLocalTranslation().addLocal(-1f, 0, 0));
-         
-
-                    if (client != null) {
-                        NetworkMessages.EntityPositionMessage message = new NetworkMessages.EntityPositionMessage("" + entity.getID(), (entity.getNextPositionAsString()));
-                        client.send(message);
-                        System.out.println("send new Position Message" + message.toString());
-                    }  
-         */
+         client.send(message);   
+      
+    }
+    
+    public void sendPingMessage(String message)
+    {
+        long time = System.currentTimeMillis();
+        NetworkMessages.PingMessage pingMessage = new NetworkMessages.PingMessage(message,time);
+        client.send(pingMessage);
+    }
+    
+    public void sendCreateEntityMessage()
+    {
+        NetworkMessages.CreateEntityMessage createEntityMessage = new NetworkMessages.CreateEntityMessage();
+        client.send(createEntityMessage);
     }
    
                
