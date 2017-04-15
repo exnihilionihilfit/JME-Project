@@ -16,6 +16,7 @@ import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.Label;
 import com.simsilica.lemur.style.BaseStyles;
 import main.Main;
+import org.lwjgl.opengl.Display;
 
 /**
  *
@@ -50,13 +51,13 @@ public class HUD {
         Container myWindow = new Container();
         guiNode.attachChild(myWindow);
             
-        // Put it somewhere that we will see it
-        // Note: Lemur GUI elements grow down from the upper left corner.
-        myWindow.setLocalTranslation(300, 300, 0);
+        
+        myWindow.setLocalTranslation(main.getScreenWidth()-100, 100, 0);
+        
     
  // Add some elements
-        myWindow.addChild(new Label("Hello, World."));
-        Button clickMe = myWindow.addChild(new Button("Click Me"));
+        myWindow.addChild(new Label("Menu"));
+        Button clickMe = myWindow.addChild(new Button("Create Ship"));
         clickMe.addClickCommands(new Command<Button>() {
                 @Override
                 public void execute( Button source ) {

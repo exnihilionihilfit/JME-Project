@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Entity;
 import model.MyWayList;
+import org.lwjgl.opengl.Display;
 import view.HUD;
 
 /**
@@ -62,6 +63,11 @@ public class Main extends SimpleApplication {
     private GameState gameState;
 
     private final Vector3f camerPosition = new Vector3f(0, 50, -30);
+    
+    private Map map;
+    private int screenWidth;
+    private int screenHeight;
+
 
     public static void main(String[] args) {
 
@@ -71,7 +77,16 @@ public class Main extends SimpleApplication {
         mainApplication.start(JmeContext.Type.Display); // standard display type
 
     }
-    private Map map;
+    
+    public int getScreenWidth()
+    {
+        return screenWidth;
+    }
+    
+    public int getScreenHeight()
+    {
+        return screenHeight;
+    }
 
     @Override
     public void simpleInitApp() {
@@ -86,6 +101,12 @@ public class Main extends SimpleApplication {
 
         getCamera().lookAtDirection(new Vector3f(0, -1, 0.70f), Vector3f.UNIT_Z);
         getCamera().setLocation(this.camerPosition);
+        
+          // Make the main window resizable
+    Display.setResizable(true);
+    // Prevent the flycam from grabbing the mouse
+    // This is necessary because otherwise we couldn't resize the window.
+    flyCam.setDragToRotate(true);
 
         inputManager.setCursorVisible(true);
         flyCam.setEnabled(false);
@@ -130,6 +151,14 @@ public class Main extends SimpleApplication {
         // Server response
         NetworkMessageHandling.handlePingMessage();
         NetworkMessageHandling.handleEntityPositionMessage();
+        
+          
+       if (Display.wasResized()) {
+        screenWidth = Math.max(Display.getWidth(), 1);
+        screenHeight = Math.max(Display.getHeight(), 1);
+        initHUD();
+        reshape(screenWidth, screenHeight);
+    }
 
     }
 
@@ -185,10 +214,14 @@ public class Main extends SimpleApplication {
 
     private void addMessageListener() {
 
-        NetworkMessageListener networkMessageListener = new NetworkMessageListener();
+        if(client != null)
+        {
+            NetworkMessageListener networkMessageListener = new NetworkMessageListener();
         client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.PingMessage.class);
         client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.CreateEntityMessage.class);
         client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.EntityPositionMessage.class);
+        }
+        
     }
 
     private void connectToServer() {
@@ -222,9 +255,14 @@ public class Main extends SimpleApplication {
     }
 
     private void checkServerConnection() {
-        if (!client.isConnected()) {
+        
+        if(client == null )
+        {
+             System.out.println(" can't connect to server (offline?) ");
+        }
+        else if ( !client.isConnected()) {
             try {
-                System.out.println(" ... disconnected from Server try reconect in 5 Seconds ...");
+                System.out.println(" ... disconnected from Server try reconect in 5 Seconds");
                 connectToServer();
                 Thread.sleep(5000);
             } catch (InterruptedException ex) {

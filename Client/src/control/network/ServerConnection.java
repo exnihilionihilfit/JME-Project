@@ -38,7 +38,7 @@ public class ServerConnection {
                         main.client = Network.connectToServer(InputServerData.SERVER_ADRESS, InputServerData.SERVER_IP_PORT, InputServerData.SERVER_UDP_PORT);
 
                     } catch (IOException ex) {
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                       // Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
