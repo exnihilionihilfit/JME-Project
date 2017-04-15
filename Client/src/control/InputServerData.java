@@ -1,7 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * This is for console input for server data.
+ * default adress is 'localhost' port udp: 6142 tcp:6143
+ * after starting the client you can hit 'n' to use default 
+ * or you would like to change things then hit 'y'
  */
 package control;
 

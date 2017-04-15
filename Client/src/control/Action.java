@@ -1,7 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Action are GamesState actions in particular and will be called only from 
+ * GameState class
+ * 
  */
 package control;
 
@@ -20,19 +20,28 @@ import model.Target;
  */
 public class Action {
 
-    
+    /*
+    get the pick point and the geometry if one is there (-1 indicates that the transparent floor is hit)
+    */
 
     public static int selectEntity(InputManager inputManager, Camera cam, Node rootNode) 
     {     
         CollisionResults results = PickCollision.getCollisionResults(inputManager, cam, rootNode);      
         return getEntityIDFromSelection(results);
     }
+    /*
+    sends the entity and the picked position to the server to validate it and the server will send it back
+    */
 
     public static void sendEntityMoveAction(SendNetworkMessage sendNetworkMessage, Entity entity, Vector3f position)
     {        
         sendNetworkMessage.sendEntityPositionMessage(entity, position);     
     }
 
+    /*
+     a taret could the 'floor' or a other ship. The pick point on the ship could be needed in particular 
+    and other information about the target
+    */
     public static Target selectTargetPosition(InputManager inputManager, Camera cam, Node rootNode) {
         Target target = null;
         

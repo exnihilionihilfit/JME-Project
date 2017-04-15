@@ -106,6 +106,8 @@ public class Main extends SimpleApplication {
         initHUD();
         initMap();
         createEntity();
+        
+        
 
         isRunning = true;
 
@@ -121,7 +123,7 @@ public class Main extends SimpleApplication {
         // update current gamestate
         gameState.updateGameState();
         // check Action on gameState
-        gameState.checkAction();
+        gameState.entityInteraction();
 
         // Reset all Key and Mouse Inputstatets
         InputListener.resetInput();
@@ -208,7 +210,7 @@ public class Main extends SimpleApplication {
     }
 
     private void initHUD() {
-        HUD hud = new HUD(mainApplication.guiNode, mainApplication.guiFont, mainApplication.assetManager);
+        HUD hud = new HUD(mainApplication,mainApplication.guiNode, mainApplication.guiFont, mainApplication.assetManager);
     }
 
     public static List<Entity> getEntities() {

@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * This is the map and all components are set and stored 
  */
 package control;
 
@@ -24,6 +22,7 @@ public class Map {
         /**
      * To create a target-point for movement
      * 
+     * @param assetManager
      */
     public Geometry makeFloor(AssetManager assetManager) {
         Box box = new Box(1500, .02f, 1500);

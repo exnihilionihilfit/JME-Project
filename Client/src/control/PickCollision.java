@@ -1,7 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * The 2d pick with mouse is transformed into an 3d ray
+ * with an direction equal to the view port normal
  */
 package control;
 
@@ -29,15 +28,7 @@ public class PickCollision {
             Ray ray = new Ray(click3d, dir);
             // Collect intersections between ray and all nodes in results list.
             rootNode.collideWith(ray, results);
-            // (Print the results so we see what is going on:)
-          /*  for (int i = 0; i < results.size(); i++) {
-                // (For each "hit", we know distance, impact point, geometry.)
-                float dist = results.getCollision(i).getDistance();
-                Vector3f pt = results.getCollision(i).getContactPoint();
-                String target = results.getCollision(i).getGeometry().getName();
-                System.out.println("Selection #" + i + ": " + target + " at " + pt + ", " + dist + " WU away.");
-            }*/
-          //System.out.println(results.getClosestCollision().getGeometry().getName());
+           
             return results;
     }
 }

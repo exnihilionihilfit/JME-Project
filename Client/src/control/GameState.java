@@ -1,7 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * To decide in which situation the game is. 
+ * So we can pick an object and e.g. move it
  */
 package control;
 
@@ -9,7 +8,6 @@ import com.jme3.input.InputManager;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-import javax.swing.JInternalFrame;
 import main.Main;
 import model.Entity;
 import model.Target;
@@ -36,7 +34,7 @@ public class GameState {
     private static Entity selectedEntity;
     private static Target target;
     private int entityID;
-    private boolean isDone;
+   
 
     public GameState(Main main, InputManager inputManager, Node rootNode, Camera cam) {
         GameState.main = main;
@@ -45,7 +43,7 @@ public class GameState {
         GameState.rootNode = rootNode;
     }
 
-    public void checkAction() {
+    public void entityInteraction() {
 
         if (IS_CLIENT_CONNECTED) {
 
@@ -147,6 +145,9 @@ public class GameState {
         }
     }
 
+    /*
+    to check the basics game states seperate from the interaction states
+    */
     public void updateGameState() {
 
         if (main.client != null) {
