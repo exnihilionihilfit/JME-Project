@@ -65,6 +65,10 @@ public class NetworkMessageHandling {
 
             Player player = Players.checkListOfPlayersContains(playerId);
 
+            EntityContainer entityContainer = Entities.getEntityById(entityPositionMessage.entityID);
+            
+            entityContainer.position = Helper.convertStringToVector3f(newPositionMessage.position);
+                    
             player.getConnection().send(newPositionMessage);
             //source.send(newPositionMessage);
 

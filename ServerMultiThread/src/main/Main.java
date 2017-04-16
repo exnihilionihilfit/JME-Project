@@ -78,10 +78,8 @@ public class Main extends SimpleApplication {
             System.out.println("server started ");
         }
 
-        players = new Players();
-        
+        players = new Players();       
        
-
     }
 
     @Override
@@ -97,13 +95,11 @@ public class Main extends SimpleApplication {
                NetworkMessages.PingMessage message = new NetworkMessages.PingMessage(" ... server message ", 0L);
                 connection.send(message);
             }
-             */
-            
+             */            
            // String[] entitesAsString = Helper.prepareEntitiesList(Players.getPlayerList());
             
             NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(Entities.all);
-           
-            
+                       
             for(Player player:Players.getPlayerList())
             {
                 if(player.getConnection() != null)

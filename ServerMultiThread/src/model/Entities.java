@@ -22,4 +22,17 @@ public class Entities {
          entityId++;
          return entityId;
      }
+     
+     public static EntityContainer getEntityById(int entityId){
+         
+         for(EntityContainer entity:all)
+         {
+             if(entityId == entity.entityId)
+             {
+                 return entity;
+             }
+         }
+         
+         return null;
+     }
 }
