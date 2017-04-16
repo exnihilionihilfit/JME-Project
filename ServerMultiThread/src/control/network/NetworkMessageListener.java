@@ -11,6 +11,7 @@ import com.jme3.network.MessageListener;
 import control.GameOptions;
 import control.network.NetworkMessages.EntityPositionMessage;
 import java.util.List;
+import java.util.UUID;
 import model.Client;
 
 /**
@@ -28,17 +29,7 @@ public class NetworkMessageListener {
 
         @Override
         public void messageReceived(HostedConnection source, Message message) {
-            if (message instanceof NetworkMessages.PingMessage) {
-                // do something with the message
-                NetworkMessages.PingMessage pingMessage = (NetworkMessages.PingMessage) message;
-                System.out.println("Server received '" + pingMessage.hello + "' from client #" + source.getId());
-            
-                if( !connectedClients.contains(source) )
-                {
-                    connectedClients.add(source);
-                    createClientContainer(source);
-                }
-            } // else....
+           // else....
 
         }
 
@@ -49,6 +40,30 @@ public class NetworkMessageListener {
 
         @Override
         public void messageReceived(HostedConnection source, Message message) {
+            
+            if(message instanceof NetworkMessages.RegisterOnServer)
+            {
+                // should used only once at registration
+                NetworkMessages.RegisterOnServer registerOnServerMessage = (NetworkMessages.RegisterOnServer) message;
+               
+                UUID uuid = UUID.randomUUID();
+                registerOnServerMessage.clientID = uuid.getLeastSignificantBits();
+                source.send(registerOnServerMessage);
+                
+                System.out.println(" register client name: "+registerOnServerMessage.clienUserName+" id: "+registerOnServerMessage.clientID);
+            }
+              if (message instanceof NetworkMessages.PingMessage) {
+                // do something with the message
+                NetworkMessages.PingMessage pingMessage = (NetworkMessages.PingMessage) message;
+                System.out.println("Server received '" + pingMessage.hello + "' from client #" + source.getId());
+            
+               
+                if( !connectedClients.contains(source) )
+                {
+                    connectedClients.add(source);
+                    createClientContainer(source);
+                }
+            }
 
             if (message instanceof NetworkMessages.EntityPositionMessage) {
                 NetworkMessages.EntityPositionMessage positionMessage = (NetworkMessages.EntityPositionMessage) message;

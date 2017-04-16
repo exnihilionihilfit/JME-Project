@@ -10,6 +10,7 @@ import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import java.util.LinkedList;
 import java.util.Queue;
+import model.Player;
 
 /**
  *
@@ -18,12 +19,10 @@ import java.util.Queue;
 public class NetworkMessageListener {
 
     static final Queue<NetworkMessages.PingMessage> PING_MESSAGES = new LinkedList<>();
-
     static final Queue<NetworkMessages.CreateEntityMessage> CREATE_ENTITY_MESSAGES = new LinkedList<>();
     static final Queue<NetworkMessages.EntityPositionMessage> ENTITY_POSITION_MESSAGE = new LinkedList<>();
 
- 
-    
+       
     public Queue<NetworkMessages.PingMessage> getPingMessages()
     {
         return PING_MESSAGES;
@@ -43,11 +42,26 @@ public class NetworkMessageListener {
 
         @Override
         public void messageReceived(Client source, Message message) {
+            
+            if(message instanceof NetworkMessages.RegisterOnServer)
+            {
+                // should used only once at registration
+                NetworkMessages.RegisterOnServer registerOnServerMessage = (NetworkMessages.RegisterOnServer) message;
+               
+                // 0L is default value and idicates no registration yet
+                if(Player.getClientID() == 0L)
+                {
+                    Player.setClientID(registerOnServerMessage.clientID);
+                     System.out.println(" client is registerd with name: "+registerOnServerMessage.clienUserName+" id: "+registerOnServerMessage.clientID);
+                }
+                
+            }
+            
             if (message instanceof NetworkMessages.PingMessage) {
                 // do something with the message
-                NetworkMessages.PingMessage helloMessage = (NetworkMessages.PingMessage) message;
-                PING_MESSAGES.add(helloMessage);
-                  System.out.println("Client #" + source.getId() + " received: '" + helloMessage.hello + "'");
+                NetworkMessages.PingMessage pingMessage = (NetworkMessages.PingMessage) message;
+                PING_MESSAGES.add(pingMessage);
+                  System.out.println("Client #" + source.getId() + " received: '" + pingMessage.hello + "'");
             }
 
             if (message instanceof NetworkMessages.CreateEntityMessage) {
@@ -61,6 +75,8 @@ public class NetworkMessageListener {
                 ENTITY_POSITION_MESSAGE.add(positionMessage);
                 System.out.println("--> NewPositionReseaved "+positionMessage.entityID);
             }
+            
+            
 
         }
     }

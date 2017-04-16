@@ -11,6 +11,7 @@ import com.jme3.scene.Node;
 import main.Main;
 import model.Entity;
 import model.Target;
+import view.HUD;
 
 /**
  *
@@ -34,7 +35,7 @@ public class GameState {
     private static Entity selectedEntity;
     private static Target target;
     private int entityID;
-    private String mapFloor = "floor";
+  
    
 
     public GameState(Main main, InputManager inputManager, Node rootNode, Camera cam) {
@@ -160,5 +161,14 @@ public class GameState {
 
         IS_RUNNING = main.isRunning();
 
+    }
+
+    public void hudInput() {
+        
+        if(HUD.IS_CREATE_ENTITY_BUTTON_PRESSED)
+        {
+            Action.sendCreateEntity(main.sendNetworkMessage);
+        }
+        
     }
 }

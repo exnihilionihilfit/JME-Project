@@ -38,9 +38,14 @@ public class Action {
     public static void sendEntityMoveAction(SendNetworkMessage sendNetworkMessage, Entity entity, Vector3f position) {
         sendNetworkMessage.sendEntityPositionMessage(entity, position);
     }
+    
+    public static void sendCreateEntity(SendNetworkMessage sendNetworkMessage)
+    {
+        
+    }
 
     /*
-     a taret could the 'floor' or a other ship. The pick point on the ship could be needed in particular 
+     a target could the 'floor' or a other ship. The pick point on the ship could be needed in particular 
     and other information about the target
      */
     public static Target selectTargetPositionOnFloor(InputManager inputManager, Camera cam, Node rootNode) {
@@ -58,6 +63,8 @@ public class Action {
               /**
                  * we use the plane to project the pick point to it because the
                  * pick point could be on top of an entity 
+                 * TODO: use the entity to create a plane as base so 3d movement is possible 
+                 * but not now ;)
                  *
                  */
             Vector3f pointOnFloor = floorPlane.getClosestPoint(contactPoint);

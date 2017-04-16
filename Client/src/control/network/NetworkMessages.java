@@ -1,33 +1,55 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * This are the message classes to send data to server and back
+ *
+ * IMPORTANT: The class structor and its location must be the same on client
+ * and server side!
  */
 package control.network;
 
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
+import java.util.UUID;
 
 /**
  *
  * @author novo
  */
 public class NetworkMessages {
-    
-    
+
+    @Serializable
+    public static class RegisterOnServer extends AbstractMessage {
+
+        String clienUserName;
+        long clientID;
+
+        public RegisterOnServer() {
+            // empty constructor
+        }
+
+        public RegisterOnServer(String userName) {
+            this.clienUserName = userName;
+        }
+
+        public RegisterOnServer(String clientUserName, long uuid) {
+            this.clienUserName = clientUserName;
+            this.clientID = uuid;
+        }
+    }
+
     @Serializable
     public static class PingMessage extends AbstractMessage {
 
-         String hello;       // custom message data
-         long time;
+        String hello;       // custom message data
+        long time;
 
         public PingMessage() {
-        }    // empty constructor
+            // empty constructor
+        }
 
         public PingMessage(String s, long t) {
             hello = s;
             time = t;
-        } // custom constructor
+        }
     }
 
     @Serializable
@@ -49,7 +71,7 @@ public class NetworkMessages {
     @Serializable
     public static class CreateEntityMessage extends AbstractMessage {
 
-         boolean isNewEntity = false;
+        boolean isNewEntity = false;
 
         public CreateEntityMessage() {
 
@@ -59,6 +81,5 @@ public class NetworkMessages {
             this.isNewEntity = isNewEntity;
         }
     }
-
 
 }

@@ -8,6 +8,7 @@ package view;
 import com.jme3.asset.AssetManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
@@ -16,18 +17,25 @@ import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.Label;
 import com.simsilica.lemur.style.BaseStyles;
 import main.Main;
-import org.lwjgl.opengl.Display;
 
 /**
  *
  * @author novo
  */
 public class HUD {
+
+    private final Container menuContainer;
+    private Main main;
     
+    public static boolean IS_CREATE_ENTITY_BUTTON_PRESSED;
+       
 
 
     public HUD(Main main,Node guiNode, BitmapFont guiFont, AssetManager assetManager) {
-                               /** Write text on the screen (HUD) */
+        
+        this.main = main;
+        
+        /** Write text on the screen (HUD) */
         guiNode.detachAllChildren();
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         BitmapText helloText = new BitmapText(guiFont, false);
@@ -48,22 +56,45 @@ public class HUD {
         GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
     
         // Create a simple container for our elements
-        Container myWindow = new Container();
-        guiNode.attachChild(myWindow);
+        menuContainer = new Container();
+        guiNode.attachChild(menuContainer);
             
         
-        myWindow.setLocalTranslation(main.getScreenWidth()-100, 100, 0);
+         menuContainer.setLocalTranslation(main.getScreenWidth()-100, main.getScreenHeight() - 100, 0);
         
     
  // Add some elements
-        myWindow.addChild(new Label("Menu"));
-        Button clickMe = myWindow.addChild(new Button("Create Ship"));
-        clickMe.addClickCommands(new Command<Button>() {
+        menuContainer.addChild(new Label("Menu"));
+        Button createEntityButton = menuContainer.addChild(new Button("Create Ship"));
+        
+        createEntityButton.addClickCommands(new Command<Button>() {
+           
                 @Override
                 public void execute( Button source ) {
+                    IS_CREATE_ENTITY_BUTTON_PRESSED = true;
                     System.out.println("The world is yours.");
                 }
             });            
     }    
+    
+    public void updateMenu()
+    {
+         menuContainer.setLocalTranslation(main.getScreenWidth()-100, main.getScreenHeight() - 100, 0);
+    }
+    
+    public boolean isCreateEntityButtonIsPressed()
+    {
+        return IS_CREATE_ENTITY_BUTTON_PRESSED;
+    }
+    
+    private void resetIsCreateEntityButtonPressed()
+    {
+        IS_CREATE_ENTITY_BUTTON_PRESSED = false;
+    }
+   
+    public void  resetInput()
+    {
+        resetIsCreateEntityButtonPressed();
+    }
     
 }

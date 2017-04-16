@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Entity;
 import model.MyWayList;
+import model.Player;
 import org.lwjgl.opengl.Display;
 import view.HUD;
 
@@ -67,6 +68,9 @@ public class Main extends SimpleApplication {
     // get width and height from OpenGl directly in init
     private int screenWidth = 0;
     private int screenHeight = 0;
+    
+        private HUD hud;
+    private long REGISTER_ON_SERVER_DELAY = 1000;
 
     public static void main(String[] args) {
 
@@ -76,7 +80,7 @@ public class Main extends SimpleApplication {
         mainApplication.start(JmeContext.Type.Display); // standard display type
 
     }
-    private HUD hud;
+
 
     public int getScreenWidth() {
         return screenWidth;
@@ -114,12 +118,30 @@ public class Main extends SimpleApplication {
         sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
         rootNode.addLight(sun);
 
+        screenWidth = Math.max(Display.getWidth(), 1);
+        screenHeight = Math.max(Display.getHeight(), 1);
+
         bulletAppState.setDebugEnabled(true);
 
         connectToServer();
         addMessageListener();
         initSendNetworkMessage();
         startClient();
+
+        // wait as long a id is given by server
+        while (Player.getClientID() == 0L) {
+            registerOnServer();
+            System.out.println("try to register on server");
+            try {
+                Thread.sleep(REGISTER_ON_SERVER_DELAY);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        System.out.println(" client registered ");
+        
+       
         initKeys();
         initGameState();
         initHUD();
@@ -141,19 +163,18 @@ public class Main extends SimpleApplication {
         gameState.updateGameState();
         // check Action on gameState
         gameState.entityInteraction();
+        // check HUD input action
+        gameState.hudInput();
 
         // Reset all Key and Mouse Inputstatets
         InputListener.resetInput();
-        // Server response
+        // HUD reset e.g. buttons
+        hud.resetInput();
+        // Handle messages from server 
         NetworkMessageHandling.handlePingMessage();
         NetworkMessageHandling.handleEntityPositionMessage();
 
-        if (Display.wasResized() || screenWidth == 0 || screenHeight == 0) {
-            screenWidth = Math.max(Display.getWidth(), 1);
-            screenHeight = Math.max(Display.getHeight(), 1);
-            initHUD();
-            reshape(screenWidth, screenHeight);
-        }
+        checkIfDisplayIsResized();
 
     }
 
@@ -188,7 +209,6 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(man.getEntity());
 
         ENTITIES.add(man);
-     
 
     }
 
@@ -212,9 +232,12 @@ public class Main extends SimpleApplication {
 
         if (client != null) {
             NetworkMessageListener networkMessageListener = new NetworkMessageListener();
-            client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.PingMessage.class);
-            client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.CreateEntityMessage.class);
-            client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.EntityPositionMessage.class);
+            client.addMessageListener(networkMessageListener.new ClientListener(),
+                    NetworkMessages.PingMessage.class,
+                    NetworkMessages.CreateEntityMessage.class,
+                    NetworkMessages.EntityPositionMessage.class,
+                    NetworkMessages.RegisterOnServer.class);
+
         }
 
     }
@@ -275,6 +298,25 @@ public class Main extends SimpleApplication {
     private void initMap() {
         map = new Map();
         rootNode.attachChild(map.makeFloor(assetManager));
+    }
+
+    private void checkIfDisplayIsResized() {
+        if (Display.wasResized() || screenWidth == 0 || screenHeight == 0) {
+            screenWidth = Math.max(Display.getWidth(), 1);
+            screenHeight = Math.max(Display.getHeight(), 1);
+            hud.updateMenu();
+            reshape(screenWidth, screenHeight);
+        }
+    }
+
+    private void registerOnServer() {
+        try{
+            client.send(new NetworkMessages.RegisterOnServer("Bob"));
+        }catch(Exception e)
+        {
+            System.out.println(" client is not ready ");
+        }
+        
     }
 
 }

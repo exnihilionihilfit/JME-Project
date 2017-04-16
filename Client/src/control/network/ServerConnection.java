@@ -9,8 +9,6 @@ import main.Main;
 import com.jme3.network.Network;
 import control.InputServerData;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

@@ -39,7 +39,8 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
 
-        System.out.println("start server...");
+        System.out.println("start server ... ");
+        System.out.println(" register network messages ");
 
         try {
             myServer = Network.createServer(6143, 6142);
@@ -47,21 +48,32 @@ public class Main extends SimpleApplication {
             Serializer.registerClass(NetworkMessages.PingMessage.class);
             Serializer.registerClass(NetworkMessages.EntityPositionMessage.class);
             Serializer.registerClass(NetworkMessages.CreateEntityMessage.class);
+            Serializer.registerClass(NetworkMessages.RegisterOnServer.class);
 
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        System.out.println(" add network message listener");
         NetworkMessageListener networkMessageListener = new NetworkMessageListener();
 
-        myServer.addMessageListener(networkMessageListener.new ServerMessageListener(), NetworkMessages.PingMessage.class);
-        myServer.addMessageListener(networkMessageListener.new ServerListener(), NetworkMessages.CreateEntityMessage.class);
-        myServer.addMessageListener(networkMessageListener.new ServerListener(), NetworkMessages.EntityPositionMessage.class);
+      //  myServer.addMessageListener(networkMessageListener.new ServerMessageListener(), ... );
+        myServer.addMessageListener(networkMessageListener.new ServerListener(), 
+                NetworkMessages.CreateEntityMessage.class, 
+                NetworkMessages.EntityPositionMessage.class,
+                 NetworkMessages.PingMessage.class,
+                 NetworkMessages.RegisterOnServer.class);
 
+        
         if (myServer != null) {
             myServer.start();
         }
 
-        System.out.println(myServer.isRunning());
+        if(myServer.isRunning())
+        {
+            System.out.println("server started ");
+        }
+        
 
         /*
         Init Game-Elements
@@ -77,11 +89,11 @@ public class Main extends SimpleApplication {
         if ((lastTime + timeInterval) < System.currentTimeMillis()) {
             lastTime = System.currentTimeMillis();
 
-            NetworkMessages.PingMessage message = new NetworkMessages.PingMessage("to all clients", 0L);
-            myServer.broadcast(message);
+            //NetworkMessages.PingMessage message = new NetworkMessages.PingMessage(" ", 0L);
+            //myServer.broadcast(message);
 
             for (HostedConnection connection : myServer.getConnections()) {
-                message = new NetworkMessages.PingMessage("to you", 0L);
+               NetworkMessages.PingMessage message = new NetworkMessages.PingMessage(" ... server message ", 0L);
                 connection.send(message);
             }
         }
