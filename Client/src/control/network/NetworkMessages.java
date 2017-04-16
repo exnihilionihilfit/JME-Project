@@ -8,7 +8,8 @@ package control.network;
 
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
-import java.util.UUID;
+import java.util.ArrayList;
+import model.EntityContainer;
 
 /**
  *
@@ -20,7 +21,7 @@ public class NetworkMessages {
     public static class RegisterOnServer extends AbstractMessage {
 
         String clienUserName;
-        long clientID;
+        long playerId;
 
         public RegisterOnServer() {
             // empty constructor
@@ -32,7 +33,7 @@ public class NetworkMessages {
 
         public RegisterOnServer(String clientUserName, long uuid) {
             this.clienUserName = clientUserName;
-            this.clientID = uuid;
+            this.playerId = uuid;
         }
     }
 
@@ -41,14 +42,16 @@ public class NetworkMessages {
 
         String hello;       // custom message data
         long time;
+        long playerId;
 
         public PingMessage() {
             // empty constructor
         }
 
-        public PingMessage(String s, long t) {
-            hello = s;
-            time = t;
+        public PingMessage(long playerId,String s, long t) {
+            this.playerId = playerId;
+            this.hello = s;
+            this.time = t;
         }
     }
 
@@ -56,13 +59,15 @@ public class NetworkMessages {
     public static class EntityPositionMessage extends AbstractMessage {
 
         String position;
-        String entityID;
-
+        int entityID;
+        long payerId;
+        
         public EntityPositionMessage() {
 
         }
 
-        public EntityPositionMessage(String position, String entityID) {
+        public EntityPositionMessage(long playerId, int entityID, String position) {
+            this.payerId = playerId;
             this.position = position;
             this.entityID = entityID;
         }
@@ -72,14 +77,33 @@ public class NetworkMessages {
     public static class CreateEntityMessage extends AbstractMessage {
 
         boolean isNewEntity = false;
+        long playerId;
 
         public CreateEntityMessage() {
 
         }
 
-        public CreateEntityMessage(boolean isNewEntity) {
+        public CreateEntityMessage(long playerId,boolean isNewEntity) {
+            this.playerId = playerId;
             this.isNewEntity = isNewEntity;
         }
+    }
+    
+    @Serializable
+    public static class EntitiesListMessage extends AbstractMessage{
+        
+        //contains shipId, type, position
+       ArrayList<EntityContainer> entities;
+        
+        public EntitiesListMessage()
+        {
+            
+        }
+        public EntitiesListMessage(ArrayList<EntityContainer> entities)
+        {
+            this.entities = entities;
+        }
+        
     }
 
 }

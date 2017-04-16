@@ -12,15 +12,15 @@ package model;
 public class Player {
     
    
-    private static long clientID = 0L;
+    private static long playerId = 0L;
     
-    public static void setClientID(long clientID)
+    public static void setPlayerId(long clientID)
     {
-        Player.clientID = clientID;
+        Player.playerId = clientID;
     }
     
-    public static long getClientID()
+    public static long getPlayerId()
     {
-        return Player.clientID;
+        return Player.playerId;
     }
 }

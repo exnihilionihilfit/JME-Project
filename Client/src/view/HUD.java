@@ -16,6 +16,7 @@ import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.Label;
 import com.simsilica.lemur.style.BaseStyles;
+import control.Action;
 import main.Main;
 
 /**
@@ -72,7 +73,9 @@ public class HUD {
                 @Override
                 public void execute( Button source ) {
                     IS_CREATE_ENTITY_BUTTON_PRESSED = true;
-                    System.out.println("The world is yours.");
+                    
+                  
+                    System.out.println("Create Entity");
                 }
             });            
     }    

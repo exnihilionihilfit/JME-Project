@@ -6,15 +6,18 @@ import com.jme3.network.Network;
 import com.jme3.network.Server;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.system.JmeContext;
+import control.Helper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Client;
+import model.Player;
 import control.network.NetworkMessageListener;
 import control.network.NetworkMessages;
-
+import model.Entities;
+import model.EntityContainer;
+import model.Players;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -24,11 +27,14 @@ import control.network.NetworkMessages;
  */
 public class Main extends SimpleApplication {
 
-    Server myServer = null;
+    Server server = null;
     long lastTime = 0;
     long timeInterval = 5000;
-    List<HostedConnection> connectedClients;
-    List<Client> clientList;
+    int PORT_IP = 6143;
+    int PORT_UDP = 6142;
+    private static Players players;
+   
+    
 
     public static void main(String[] args) {
 
@@ -43,43 +49,42 @@ public class Main extends SimpleApplication {
         System.out.println(" register network messages ");
 
         try {
-            myServer = Network.createServer(6143, 6142);
+             server = Network.createServer(PORT_IP, PORT_UDP);
 
             Serializer.registerClass(NetworkMessages.PingMessage.class);
             Serializer.registerClass(NetworkMessages.EntityPositionMessage.class);
             Serializer.registerClass(NetworkMessages.CreateEntityMessage.class);
             Serializer.registerClass(NetworkMessages.RegisterOnServer.class);
+            Serializer.registerClass(NetworkMessages.EntitiesListMessage.class);
+            Serializer.registerClass(EntityContainer.class);
 
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         System.out.println(" add network message listener");
         NetworkMessageListener networkMessageListener = new NetworkMessageListener();
 
-      //  myServer.addMessageListener(networkMessageListener.new ServerMessageListener(), ... );
-        myServer.addMessageListener(networkMessageListener.new ServerListener(), 
-                NetworkMessages.CreateEntityMessage.class, 
+        //  myServer.addMessageListener(networkMessageListener.new ServerMessageListener(), ... );
+        server.addMessageListener(networkMessageListener.new ServerListener(),
+                NetworkMessages.CreateEntityMessage.class,
                 NetworkMessages.EntityPositionMessage.class,
-                 NetworkMessages.PingMessage.class,
-                 NetworkMessages.RegisterOnServer.class);
+                NetworkMessages.PingMessage.class,
+                NetworkMessages.RegisterOnServer.class,
+                NetworkMessages.EntitiesListMessage.class,
+                EntityContainer.class);
 
-        
-        if (myServer != null) {
-            myServer.start();
+        if (server != null) {
+            server.start();
         }
 
-        if(myServer.isRunning())
-        {
+        if (server.isRunning()) {
             System.out.println("server started ");
         }
-        
 
-        /*
-        Init Game-Elements
-         */
-        this.connectedClients = new ArrayList<>();
-        this.clientList = new ArrayList<>();
+        players = new Players();
+        
+       
 
     }
 
@@ -91,10 +96,26 @@ public class Main extends SimpleApplication {
 
             //NetworkMessages.PingMessage message = new NetworkMessages.PingMessage(" ", 0L);
             //myServer.broadcast(message);
-
+            /*
             for (HostedConnection connection : myServer.getConnections()) {
                NetworkMessages.PingMessage message = new NetworkMessages.PingMessage(" ... server message ", 0L);
                 connection.send(message);
+            }
+             */
+            
+           // String[] entitesAsString = Helper.prepareEntitiesList(Players.getPlayerList());
+            
+            NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(Entities.all);
+           
+            
+            for(Player player:Players.getPlayerList())
+            {
+                if(player.getConnection() != null)
+                {
+                      player.getConnection().send(entitiesListMessage);
+                      System.out.println("send entity list ... ");
+                }
+              
             }
         }
 

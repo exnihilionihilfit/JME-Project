@@ -30,13 +30,13 @@ public class Entity {
     private long lastTime;
 
     private Main mainApp = null;
-    private final Vector3f translation;
+  
     private String name = null;
     private final AssetManager assetManager;
     private Node node;
 
     private Vector3f nextPosition;
-    private boolean couldMove = false;
+
     private boolean recevedNewPositionMessage = false;
     private boolean reseavedNewPositionMessage = false;
     private static int entityID;
@@ -44,8 +44,7 @@ public class Entity {
     private Node ship;
 
     public Entity(Main mainApp, AssetManager assetManager, String name) {
-        this.mainApp = mainApp;
-        this.translation = new Vector3f();
+        this.mainApp = mainApp;  
         this.name = name;
         this.assetManager = assetManager;
 
@@ -103,21 +102,7 @@ public class Entity {
         this.reseavedNewPositionMessage = b;
     }
 
-    public void setNextPosition(String nextPosition) {
 
-        String replace = nextPosition.replace("(", "");
-        replace = replace.replace(")", "");
-        replace = replace.trim();
-        String[] values = replace.split(",");
-
-        Vector3f nextPositionAsVector = new Vector3f();
-        if (values.length == 3) {
-            nextPositionAsVector = new Vector3f(Float.parseFloat(values[0]), Float.parseFloat(values[1]), Float.parseFloat(values[2]));
-        }
-
-        this.nextPosition = nextPositionAsVector;
-
-    }
 
     public void rotateGeometry(final Geometry geo, final Quaternion rot) {
         mainApp.enqueue(new Callable<Spatial>() {
@@ -140,9 +125,7 @@ public class Entity {
         return nextPosition.toString();
     }
 
-    private Vector3f convertPositionAsStringIntoVector(String positionAsString) {
-        return null;
-    }
+  
 
     Callable<MyWayList> newPosition = new Callable<MyWayList>() {
 
@@ -244,6 +227,10 @@ public class Entity {
         }
         return  ship;
 
+    }
+
+    public boolean getPosition() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

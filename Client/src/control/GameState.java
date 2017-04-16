@@ -161,6 +161,8 @@ public class GameState {
 
         IS_RUNNING = main.isRunning();
 
+        
+         hudInput();
     }
 
     public void hudInput() {
@@ -168,6 +170,7 @@ public class GameState {
         if(HUD.IS_CREATE_ENTITY_BUTTON_PRESSED)
         {
             Action.sendCreateEntity(main.sendNetworkMessage);
+            HUD.IS_CREATE_ENTITY_BUTTON_PRESSED = false;
         }
         
     }

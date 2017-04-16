@@ -21,7 +21,7 @@ import model.Target;
  */
 public class Action {
 
-    private static Plane floorPlane = new Plane(Vector3f.UNIT_Y, 0);
+    private static final Plane FLOOR_PLANE = new Plane(Vector3f.UNIT_Y, 0);
 
     /*
     get the pick point and the geometry if one is there (-1 indicates that the transparent floor is hit)
@@ -41,7 +41,7 @@ public class Action {
     
     public static void sendCreateEntity(SendNetworkMessage sendNetworkMessage)
     {
-        
+        sendNetworkMessage.sendCreateEntityMessage();
     }
 
     /*
@@ -67,7 +67,7 @@ public class Action {
                  * but not now ;)
                  *
                  */
-            Vector3f pointOnFloor = floorPlane.getClosestPoint(contactPoint);
+            Vector3f pointOnFloor = FLOOR_PLANE.getClosestPoint(contactPoint);
 
             if (contactPoint != null) {
               

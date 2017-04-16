@@ -5,9 +5,12 @@
  */
 package control.network;
 
-import java.util.List;
+import com.jme3.network.HostedConnection;
+import com.jme3.network.Message;
+import control.Helper;
 import main.Main;
 import model.Entity;
+import model.EntityContainer;
 
 /**
  *
@@ -44,10 +47,10 @@ public class NetworkMessageHandling {
             
           for(Entity entity:Main.getEntities())
           {
-              if(Integer.parseInt(entityPositionMessage.entityID) == entity.getID())
+              if(entityPositionMessage.entityID == entity.getID())
               {
                         entity.setRecevedNewPositionMessage(true);
-                        entity.setNextPosition(entityPositionMessage.position);
+                        entity.setNextPosition(Helper.convertStringToVector3f(entityPositionMessage.position));
                       
               }
           }
@@ -57,6 +60,16 @@ public class NetworkMessageHandling {
             return false;
         }
 
+    }
+    
+        static void handleEntitiesListMessage(HostedConnection source, Message message) {
+      NetworkMessages.EntitiesListMessage entitiesListMessage = (NetworkMessages.EntitiesListMessage) message;
+      
+      for(EntityContainer entity:entitiesListMessage.entities)
+      {
+          System.out.println(entity.position);   
+      }
+      
     }
 
 }

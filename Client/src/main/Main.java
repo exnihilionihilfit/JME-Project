@@ -30,6 +30,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Entity;
+import model.EntityContainer;
 import model.MyWayList;
 import model.Player;
 import org.lwjgl.opengl.Display;
@@ -129,7 +130,7 @@ public class Main extends SimpleApplication {
         startClient();
 
         // wait as long a id is given by server
-        while (Player.getClientID() == 0L) {
+        while (Player.getPlayerId() == 0L) {
             registerOnServer();
             System.out.println("try to register on server");
             try {
@@ -236,7 +237,9 @@ public class Main extends SimpleApplication {
                     NetworkMessages.PingMessage.class,
                     NetworkMessages.CreateEntityMessage.class,
                     NetworkMessages.EntityPositionMessage.class,
-                    NetworkMessages.RegisterOnServer.class);
+                    NetworkMessages.RegisterOnServer.class,
+                    NetworkMessages.EntitiesListMessage.class,
+                    EntityContainer.class);
 
         }
 

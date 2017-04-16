@@ -43,16 +43,17 @@ public class NetworkMessageListener {
         @Override
         public void messageReceived(Client source, Message message) {
             
+             // should used only once at registration
             if(message instanceof NetworkMessages.RegisterOnServer)
             {
-                // should used only once at registration
+               
                 NetworkMessages.RegisterOnServer registerOnServerMessage = (NetworkMessages.RegisterOnServer) message;
                
                 // 0L is default value and idicates no registration yet
-                if(Player.getClientID() == 0L)
+                if(Player.getPlayerId() == 0L)
                 {
-                    Player.setClientID(registerOnServerMessage.clientID);
-                     System.out.println(" client is registerd with name: "+registerOnServerMessage.clienUserName+" id: "+registerOnServerMessage.clientID);
+                    Player.setPlayerId(registerOnServerMessage.playerId);
+                     System.out.println(" client is registerd with name: "+registerOnServerMessage.clienUserName+" id: "+registerOnServerMessage.playerId);
                 }
                 
             }
@@ -67,14 +68,21 @@ public class NetworkMessageListener {
             if (message instanceof NetworkMessages.CreateEntityMessage) {
                 NetworkMessages.CreateEntityMessage createEntityMessage = (NetworkMessages.CreateEntityMessage) message;
                 CREATE_ENTITY_MESSAGES.add(createEntityMessage);
-                System.out.println(createEntityMessage.isNewEntity);
+                System.out.println(" reseaved create of entity successfull "+createEntityMessage.isNewEntity);
             }
 
             if (message instanceof NetworkMessages.EntityPositionMessage) {
                 NetworkMessages.EntityPositionMessage positionMessage = (NetworkMessages.EntityPositionMessage) message;
                 ENTITY_POSITION_MESSAGE.add(positionMessage);
-                System.out.println("--> NewPositionReseaved "+positionMessage.entityID);
+                System.out.println("--> NewPositionReseaved "+positionMessage.position);
             }
+            
+           if (message instanceof NetworkMessages.EntitiesListMessage) {
+                NetworkMessages.EntitiesListMessage entitiesListMessage = ( NetworkMessages.EntitiesListMessage ) message;
+               
+               System.out.println(" reseaved entity list \n size:"+entitiesListMessage.entities.size());
+           }
+            
             
             
 
