@@ -69,8 +69,8 @@ public class Main extends SimpleApplication {
     // get width and height from OpenGl directly in init
     private int screenWidth = 0;
     private int screenHeight = 0;
-    
-        private HUD hud;
+
+    private HUD hud;
     private long REGISTER_ON_SERVER_DELAY = 1000;
 
     public static void main(String[] args) {
@@ -81,7 +81,6 @@ public class Main extends SimpleApplication {
         mainApplication.start(JmeContext.Type.Display); // standard display type
 
     }
-
 
     public int getScreenWidth() {
         return screenWidth;
@@ -141,13 +140,11 @@ public class Main extends SimpleApplication {
         }
 
         System.out.println(" client registered ");
-        
-       
+
         initKeys();
         initGameState();
         initHUD();
         initMap();
-        createEntity();
 
         isRunning = true;
 
@@ -174,6 +171,7 @@ public class Main extends SimpleApplication {
         // Handle messages from server 
         NetworkMessageHandling.handlePingMessage();
         NetworkMessageHandling.handleEntityPositionMessage();
+        NetworkMessageHandling.handleEntitiesListMessage(this);
 
         checkIfDisplayIsResized();
 
@@ -200,16 +198,6 @@ public class Main extends SimpleApplication {
 
         inputManager.addMapping("MouseWheelBackward", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
         inputManager.addListener(InputListener.MOUSE_INPUT_LISTENER, "MouseWheelBackward");
-
-    }
-
-    private void createEntity() {
-
-        Entity man = new Entity(this, this.assetManager, "carl");
-
-        rootNode.attachChild(man.getEntity());
-
-        ENTITIES.add(man);
 
     }
 
@@ -253,7 +241,6 @@ public class Main extends SimpleApplication {
         if (inputServerConection.isValidServerData()) {
             serverConnection.connectToServer();
         }
-
     }
 
     private void startClient() {
@@ -269,6 +256,40 @@ public class Main extends SimpleApplication {
 
     public static List<Entity> getEntities() {
         return ENTITIES;
+    }
+
+    public void setEntities(ArrayList<EntityContainer> containerEntities) {
+
+        boolean found = false;
+
+        for (EntityContainer entityContainer : containerEntities) {
+            for (Entity entity : Main.ENTITIES) {
+                found = false;
+
+                if (entity.getID() == entityContainer.entityId) {
+                    System.out.println("create new Entity geometry ");
+                    entity.setNextPosition(entityContainer.position);
+                    found = true;
+                    break;
+                }
+            }
+                 if (!found) {
+            createEntity(entityContainer.entityId);
+        }
+
+        }
+
+   
+    }
+
+    private void createEntity(int entityId) {
+
+        Entity man = new Entity(mainApplication, assetManager, "USS Bob",entityId);
+
+        rootNode.attachChild(man.getEntity());
+
+        ENTITIES.add(man);
+
     }
 
     private void initSendNetworkMessage() {
@@ -313,13 +334,12 @@ public class Main extends SimpleApplication {
     }
 
     private void registerOnServer() {
-        try{
+        try {
             client.send(new NetworkMessages.RegisterOnServer("Bob"));
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(" client is not ready ");
         }
-        
+
     }
 
 }

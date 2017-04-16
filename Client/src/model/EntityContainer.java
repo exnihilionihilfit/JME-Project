@@ -13,16 +13,19 @@ import com.jme3.network.serializing.Serializable;
     
     
     public Vector3f position;
-    String type = "battleship";
-    long playerId = 0;
+    public String type = "battleship";
+    public int entityId;
+    public long playerId = 0;
     
     public EntityContainer()
     {
         
     }
     
-    public EntityContainer(long playerId,String type, Vector3f position)
+    public EntityContainer(long playerId, int entityId, String type, Vector3f position)
     {
+        this.playerId = playerId;
+        this.entityId = entityId;
         this.position = position;
         this.type = type;
     }

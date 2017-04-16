@@ -39,16 +39,17 @@ public class Entity {
 
     private boolean recevedNewPositionMessage = false;
     private boolean reseavedNewPositionMessage = false;
-    private static int entityID;
+    private  int entityID;
     private boolean isMoveable = true;
     private Node ship;
 
-    public Entity(Main mainApp, AssetManager assetManager, String name) {
+    public Entity(Main mainApp, AssetManager assetManager, String name, int entityId) {
         this.mainApp = mainApp;  
         this.name = name;
         this.assetManager = assetManager;
+        this.entityID = entityId;
 
-        Entity.entityID++;
+        
 
     }
     
@@ -216,7 +217,8 @@ public class Entity {
             // load a character from jme3test-test-data
         ship = (Node) assetManager.loadModel("Models/battleship5/battleship5.j3o");
         ship.setName("ship");
-        ship.setUserData("id", Entity.entityID);          
+        ship.setUserData("id", entityID);   
+        ship.setLocalTranslation((float) (Math.random() * 5), 0, (float) (Math.random() * 5));
         
         
 

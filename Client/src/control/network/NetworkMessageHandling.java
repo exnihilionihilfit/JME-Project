@@ -44,16 +44,14 @@ public class NetworkMessageHandling {
         NetworkMessages.EntityPositionMessage entityPositionMessage = NetworkMessageListener.ENTITY_POSITION_MESSAGE.poll();
 
         if (entityPositionMessage != null) {
-            
-          for(Entity entity:Main.getEntities())
-          {
-              if(entityPositionMessage.entityID == entity.getID())
-              {
-                        entity.setRecevedNewPositionMessage(true);
-                        entity.setNextPosition(Helper.convertStringToVector3f(entityPositionMessage.position));
-                      
-              }
-          }
+
+            for (Entity entity : Main.getEntities()) {
+                if (entityPositionMessage.entityID == entity.getID()) {
+                    entity.setRecevedNewPositionMessage(true);
+                    entity.setNextPosition(Helper.convertStringToVector3f(entityPositionMessage.position));
+
+                }
+            }
 
             return true;
         } else {
@@ -61,15 +59,14 @@ public class NetworkMessageHandling {
         }
 
     }
-    
-        static void handleEntitiesListMessage(HostedConnection source, Message message) {
-      NetworkMessages.EntitiesListMessage entitiesListMessage = (NetworkMessages.EntitiesListMessage) message;
-      
-      for(EntityContainer entity:entitiesListMessage.entities)
-      {
-          System.out.println(entity.position);   
-      }
-      
+
+    public static void handleEntitiesListMessage(Main main) {
+        NetworkMessages.EntitiesListMessage entityPositionMessage = NetworkMessageListener.ENTITY_LIST_MESSAGE.poll();
+
+        if (entityPositionMessage != null) {
+            main.setEntities(entityPositionMessage.entities);
+        }
+
     }
 
 }

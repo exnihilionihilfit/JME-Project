@@ -1,15 +1,11 @@
 package main;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.network.HostedConnection;
 import com.jme3.network.Network;
 import com.jme3.network.Server;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.system.JmeContext;
-import control.Helper;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Player;
@@ -113,7 +109,7 @@ public class Main extends SimpleApplication {
                 if(player.getConnection() != null)
                 {
                       player.getConnection().send(entitiesListMessage);
-                      System.out.println("send entity list ... ");
+                    
                 }
               
             }

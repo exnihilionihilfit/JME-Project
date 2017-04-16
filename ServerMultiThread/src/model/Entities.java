@@ -12,5 +12,14 @@ import java.util.ArrayList;
  * @author novo
  */
 public class Entities {
+    
+    private static int entityId = 0;
+    
      public static ArrayList<EntityContainer> all = new ArrayList<>();
+
+     public static int getNewEntityId()
+     {
+         entityId++;
+         return entityId;
+     }
 }

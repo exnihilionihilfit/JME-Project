@@ -21,8 +21,9 @@ public class NetworkMessageListener {
     static final Queue<NetworkMessages.PingMessage> PING_MESSAGES = new LinkedList<>();
     static final Queue<NetworkMessages.CreateEntityMessage> CREATE_ENTITY_MESSAGES = new LinkedList<>();
     static final Queue<NetworkMessages.EntityPositionMessage> ENTITY_POSITION_MESSAGE = new LinkedList<>();
+    static final Queue<NetworkMessages.EntitiesListMessage> ENTITY_LIST_MESSAGE = new LinkedList<>();
 
-       
+      
     public Queue<NetworkMessages.PingMessage> getPingMessages()
     {
         return PING_MESSAGES;
@@ -37,8 +38,15 @@ public class NetworkMessageListener {
     {
         return ENTITY_POSITION_MESSAGE;
     }
+    
+     public Queue<NetworkMessages.EntitiesListMessage> getEntityListMessage()
+    {
+        return ENTITY_LIST_MESSAGE;
+    }
 
     public class ClientListener implements MessageListener<Client> {
+
+       
 
         @Override
         public void messageReceived(Client source, Message message) {
@@ -79,8 +87,8 @@ public class NetworkMessageListener {
             
            if (message instanceof NetworkMessages.EntitiesListMessage) {
                 NetworkMessages.EntitiesListMessage entitiesListMessage = ( NetworkMessages.EntitiesListMessage ) message;
-               
-               System.out.println(" reseaved entity list \n size:"+entitiesListMessage.entities.size());
+                ENTITY_LIST_MESSAGE.add(entitiesListMessage);
+            
            }
             
             
