@@ -53,7 +53,6 @@ public class Main extends SimpleApplication {
     /* This constructor creates a new executor with a core pool size of 4. */
     public ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(50);
 
-    
     public SendNetworkMessage sendNetworkMessage;
 
     private static String[] args;
@@ -63,11 +62,11 @@ public class Main extends SimpleApplication {
     private GameState gameState;
 
     private final Vector3f camerPosition = new Vector3f(0, 50, -30);
-    
-    private Map map;
-    private int screenWidth;
-    private int screenHeight;
 
+    private Map map;
+    // get width and height from OpenGl directly in init
+    private int screenWidth = 0;
+    private int screenHeight = 0;
 
     public static void main(String[] args) {
 
@@ -77,14 +76,13 @@ public class Main extends SimpleApplication {
         mainApplication.start(JmeContext.Type.Display); // standard display type
 
     }
-    
-    public int getScreenWidth()
-    {
+    private HUD hud;
+
+    public int getScreenWidth() {
         return screenWidth;
     }
-    
-    public int getScreenHeight()
-    {
+
+    public int getScreenHeight() {
         return screenHeight;
     }
 
@@ -95,27 +93,27 @@ public class Main extends SimpleApplication {
          * Set up Physics
          */
         BulletAppState bulletAppState = new BulletAppState();
-      //  stateManager.attach(bulletAppState);
+        //  stateManager.attach(bulletAppState);
         //bulletAppState.setDebugEnabled(true);
-     //   bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, 0, 0));
+        //   bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, 0, 0));
 
         getCamera().lookAtDirection(new Vector3f(0, -1, 0.70f), Vector3f.UNIT_Z);
         getCamera().setLocation(this.camerPosition);
-        
-          // Make the main window resizable
-    Display.setResizable(true);
-    // Prevent the flycam from grabbing the mouse
-    // This is necessary because otherwise we couldn't resize the window.
-    flyCam.setDragToRotate(true);
+
+        // Make the main window resizable
+        Display.setResizable(true);
+        // Prevent the flycam from grabbing the mouse
+        // This is necessary because otherwise we couldn't resize the window.
+        flyCam.setDragToRotate(true);
 
         inputManager.setCursorVisible(true);
         flyCam.setEnabled(false);
-        
-              // We must add a light to make the model visible
+
+        // We must add a light to make the model visible
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
         rootNode.addLight(sun);
-        
+
         bulletAppState.setDebugEnabled(true);
 
         connectToServer();
@@ -127,8 +125,6 @@ public class Main extends SimpleApplication {
         initHUD();
         initMap();
         createEntity();
-        
-        
 
         isRunning = true;
 
@@ -151,14 +147,13 @@ public class Main extends SimpleApplication {
         // Server response
         NetworkMessageHandling.handlePingMessage();
         NetworkMessageHandling.handleEntityPositionMessage();
-        
-          
-       if (Display.wasResized()) {
-        screenWidth = Math.max(Display.getWidth(), 1);
-        screenHeight = Math.max(Display.getHeight(), 1);
-        initHUD();
-        reshape(screenWidth, screenHeight);
-    }
+
+        if (Display.wasResized() || screenWidth == 0 || screenHeight == 0) {
+            screenWidth = Math.max(Display.getWidth(), 1);
+            screenHeight = Math.max(Display.getHeight(), 1);
+            initHUD();
+            reshape(screenWidth, screenHeight);
+        }
 
     }
 
@@ -193,6 +188,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(man.getEntity());
 
         ENTITIES.add(man);
+     
 
     }
 
@@ -214,14 +210,13 @@ public class Main extends SimpleApplication {
 
     private void addMessageListener() {
 
-        if(client != null)
-        {
+        if (client != null) {
             NetworkMessageListener networkMessageListener = new NetworkMessageListener();
-        client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.PingMessage.class);
-        client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.CreateEntityMessage.class);
-        client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.EntityPositionMessage.class);
+            client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.PingMessage.class);
+            client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.CreateEntityMessage.class);
+            client.addMessageListener(networkMessageListener.new ClientListener(), NetworkMessages.EntityPositionMessage.class);
         }
-        
+
     }
 
     private void connectToServer() {
@@ -243,7 +238,7 @@ public class Main extends SimpleApplication {
     }
 
     private void initHUD() {
-        HUD hud = new HUD(mainApplication,mainApplication.guiNode, mainApplication.guiFont, mainApplication.assetManager);
+        hud = new HUD(mainApplication, mainApplication.guiNode, mainApplication.guiFont, mainApplication.assetManager);
     }
 
     public static List<Entity> getEntities() {
@@ -255,12 +250,10 @@ public class Main extends SimpleApplication {
     }
 
     private void checkServerConnection() {
-        
-        if(client == null )
-        {
-             System.out.println(" can't connect to server (offline?) ");
-        }
-        else if ( !client.isConnected()) {
+
+        if (client == null) {
+            System.out.println(" can't connect to server (offline?) ");
+        } else if (!client.isConnected()) {
             try {
                 System.out.println(" ... disconnected from Server try reconect in 5 Seconds");
                 connectToServer();
@@ -283,7 +276,5 @@ public class Main extends SimpleApplication {
         map = new Map();
         rootNode.attachChild(map.makeFloor(assetManager));
     }
-    
- 
 
 }

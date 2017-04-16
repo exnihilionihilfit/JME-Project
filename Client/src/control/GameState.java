@@ -34,6 +34,7 @@ public class GameState {
     private static Entity selectedEntity;
     private static Target target;
     private int entityID;
+    private String mapFloor = "floor";
    
 
     public GameState(Main main, InputManager inputManager, Node rootNode, Camera cam) {
@@ -78,11 +79,12 @@ public class GameState {
 
                             if (selectedEntity != null) {
 
+                                
                                 Action.highlight(selectedEntity);
                                 IS_ENTITY_SELECTED = true;
                                
 
-                                System.out.println("Entity selected"+selectedEntity.getName()+" "+entityID);
+                                System.out.println("Entity selected "+selectedEntity.getName()+" "+entityID);
                             } 
                         }
                     }
@@ -96,7 +98,7 @@ public class GameState {
                          * info
                          */
                         if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
-                            target = Action.selectTargetPosition(inputManager, cam, rootNode);
+                            target = Action.selectTargetPositionOnFloor(inputManager, cam, rootNode);
                             InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
 
                             if (target != null) {
@@ -105,20 +107,20 @@ public class GameState {
                             }
                             if (SEND_ENTITY_MOVE_ACTION_TO_SERVER) {
 
-                                Vector3f entityPositionTarget = target.getPickPoint();
+                                Vector3f entityPositionTarget = target.getPointOnFloor();
 
                                 System.out.println("ENTIY " + selectedEntity);
 
                                 Action.sendEntityMoveAction(main.sendNetworkMessage, selectedEntity, entityPositionTarget);
 
-                                System.out.println("target found!" + target.getPickPoint());
+                                System.out.println("target found!" + target.getContactPoint());
 
-                                /*
-                                IS_ENTITY_SELECTED = false;
+                                
+                               // IS_ENTITY_SELECTED = false;
                                 SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
-                                selectedEntity = null;
+                              //  selectedEntity = null;
                                 target = null;
-*/
+
 
                             } else {
                                 // System.out.println("no target found"); 
