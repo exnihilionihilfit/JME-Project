@@ -5,6 +5,8 @@ import com.jme3.network.Network;
 import com.jme3.network.Server;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.system.JmeContext;
+import control.Entity;
+import control.EntityAction;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -99,11 +101,18 @@ public class Main extends SimpleApplication {
            // String[] entitesAsString = Helper.prepareEntitiesList(Players.getPlayerList());
             
             NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(Entities.all);
-                       
+               
+            for(EntityContainer entityContainer:Entities.all)
+            {
+                EntityAction.moveEntityToPosition(entityContainer);
+            }
+            
+            
             for(Player player:Players.getPlayerList())
             {
                 if(player.getConnection() != null)
                 {
+                        
                       player.getConnection().send(entitiesListMessage);
                     
                 }
@@ -114,3 +123,4 @@ public class Main extends SimpleApplication {
     }
 
 }
+  

@@ -8,6 +8,7 @@ package control.network;
 import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
+import control.EntityAction;
 import control.GameOptions;
 import control.Helper;
 import java.util.UUID;
@@ -67,10 +68,14 @@ public class NetworkMessageHandling {
 
             EntityContainer entityContainer = Entities.getEntityById(entityPositionMessage.entityID);
             
-            entityContainer.position = Helper.convertStringToVector3f(newPositionMessage.position);
-                    
-            player.getConnection().send(newPositionMessage);
-            //source.send(newPositionMessage);
+            entityContainer.destination = Helper.convertStringToVector3f(newPositionMessage.position);
+            entityContainer.lastMoveUpdate = System.currentTimeMillis();
+            entityContainer.moveToPositon = true;
+            
+         
+        
+            //player.getConnection().send(newPositionMessage);
+            // source.send(newPositionMessage);
 
             return true;
         } else {
