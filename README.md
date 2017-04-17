@@ -1,5 +1,7 @@
 JME-Project
 
+This is only a test case yet. You could create a server and connect with a client. Then you be able to create an ship and move it around. 
+
 In the next version it will be a gui login 
 now you need your console
 
