@@ -13,6 +13,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.network.Client;
 import com.jme3.renderer.RenderManager;
+import com.jme3.system.AppSettings;
 import com.jme3.system.JmeContext;
 import control.GameState;
 import control.InputListener;
@@ -72,13 +73,20 @@ public class Main extends SimpleApplication {
 
     private HUD hud;
     private long REGISTER_ON_SERVER_DELAY = 1000;
-    
+
     public static AmbientLight entityHighLightLight = new AmbientLight(ColorRGBA.Blue);
 
     public static void main(String[] args) {
 
         Main.args = args;
         mainApplication = new Main();
+
+        AppSettings newSetting = new AppSettings(true);
+
+        newSetting.setFrameRate(30);
+
+        mainApplication.setSettings(newSetting);
+
         mainApplication.start(JmeContext.Type.Display); // standard display type
 
     }
@@ -236,7 +244,9 @@ public class Main extends SimpleApplication {
     private void connectToServer() {
 
         inputServerConection = new InputServerData(Main.args);
-        ServerConnection serverConnection = new ServerConnection(this);
+        
+       
+       ServerConnection serverConnection = new ServerConnection(this);
 
         if (inputServerConection.isValidServerData()) {
             serverConnection.connectToServer();
@@ -256,14 +266,14 @@ public class Main extends SimpleApplication {
     public static List<Entity> getEntities() {
         return ENTITIES;
     }
-    
+
     /**
      * Get ContainerEntities as a List and search firstly for entities to update
-     * if an entity is not found its a new entity and will be added to the local 
+     * if an entity is not found its a new entity and will be added to the local
      * entity list
-     * @param containerEntities 
+     *
+     * @param containerEntities
      */
-
     public void setEntitiesPositionFromServerList(ArrayList<EntityContainer> containerEntities) {
 
         boolean found = false;
@@ -281,7 +291,7 @@ public class Main extends SimpleApplication {
                 }
             }
             if (!found) {
-                createEntity(entityContainer.playerId,entityContainer.entityId);
+                createEntity(entityContainer.playerId, entityContainer.entityId);
                 System.out.println("create new Entity geometry ");
             }
 
@@ -289,9 +299,9 @@ public class Main extends SimpleApplication {
 
     }
 
-    private void createEntity(long playerId,int entityId) {
+    private void createEntity(long playerId, int entityId) {
 
-        Entity man = new Entity(mainApplication, assetManager, "USS Bob", entityId,playerId);
+        Entity man = new Entity(mainApplication, assetManager, "USS Bob", entityId, playerId);
 
         rootNode.attachChild(man.getEntityNode());
 

@@ -20,6 +20,8 @@ public final class InputServerData {
     public static boolean IS_VALID_SERVER_DATA;
 
     public InputServerData(String[] args) {
+        
+        
         checkInputOnStartUp(args);
     }
 

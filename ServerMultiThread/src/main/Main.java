@@ -98,7 +98,10 @@ public class Main extends SimpleApplication {
              * for now only movement will do so
              * Also all other playerId's should set to -1 so nobody could mess with all
              * id's around ;)
+             * PROBLEM: java.util.ConcurrentModificationException ^^ should be realy multy-threaded ;)
+             * AND: A reconnected player would get the whole list of entities !
              */
+            
             ArrayList<EntityContainer> filteredEntityContainers = new ArrayList<>();
             for(EntityContainer entityContainer:Entities.entityContainers)
             {

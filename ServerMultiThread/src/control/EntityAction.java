@@ -8,57 +8,52 @@ package control;
 import com.jme3.math.Vector3f;
 import model.EntityContainer;
 
-
 /**
  *
  * @author novo
  */
 public class EntityAction {
-    
-    
-    
+
     public static void moveEntityToPosition(EntityContainer entity) {
 
-        // get node data
-        Vector3f destination = entity.destination;
-        float speed = entity.speed;
-        long updateTime = entity.lastMoveUpdate;
-        
-        if(destination != null && speed != 0f){
+        if (entity.moveToPositon) {
+            // get node data
+            Vector3f destination = entity.destination;
+            float speed = entity.speed;
+            long updateTime = entity.lastMoveUpdate;
 
-        // convert passed time since last update to seconds (speed is length per second)
-        float timePassedInSeconds = ((float) (System.currentTimeMillis() - updateTime)) / 1000.0f;
+            if (destination != null && speed != 0f) {
 
-        // rotate to new direction
-        Vector3f distanceToTarget = destination.subtract(entity.position);
-        Vector3f directionToTarget = distanceToTarget.normalize();
+                // convert passed time since last update to seconds (speed is length per second)
+                float timePassedInSeconds = ((float) (System.currentTimeMillis() - updateTime)) / 1000.0f;
 
-        float distanceToTargetAsNumber = distanceToTarget.length();
+                // rotate to new direction
+                Vector3f distanceToTarget = destination.subtract(entity.position);
+                Vector3f directionToTarget = distanceToTarget.normalize();
 
-        //calculate posible fly length this tick            
-        float flyedLengthSinceLastUpdate = speed * timePassedInSeconds;
+                float distanceToTargetAsNumber = distanceToTarget.length();
 
-        Vector3f newPositionOnTheWay = directionToTarget.mult(flyedLengthSinceLastUpdate);
+                //calculate posible fly length this tick            
+                float flyedLengthSinceLastUpdate = speed * timePassedInSeconds;
 
-        // check if near and check if next step goes further then the target, because length is allways positiv
-        if (0.01 > distanceToTargetAsNumber || distanceToTargetAsNumber - flyedLengthSinceLastUpdate < 0) {
-            entity.position = destination;
-            entity.moveToPositon = false;
+                Vector3f newPositionOnTheWay = directionToTarget.mult(flyedLengthSinceLastUpdate);
 
-          
-            System.out.println(" arrived ");
-        } else {
-            entity.position = entity.position.add(newPositionOnTheWay);
-            entity.lookAt = destination;
+                // check if near and check if next step goes further then the target, because length is allways positiv
+                if (0.01 > distanceToTargetAsNumber || distanceToTargetAsNumber - flyedLengthSinceLastUpdate < 0) {
+                    entity.position = destination;
+                    entity.moveToPositon = false;
 
+                    System.out.println(" arrived ");
+                } else {
+                    entity.position = entity.position.add(newPositionOnTheWay);
+                    entity.lookAt = destination;
 
-        }
+                }
 
-       entity.lastMoveUpdate = System.currentTimeMillis();
-        }
-        else
-        {
-            System.out.println("destination: "+destination);
+                entity.lastMoveUpdate = System.currentTimeMillis();
+            } else {
+                System.out.println("destination: " + destination);
+            }
         }
     }
 }
