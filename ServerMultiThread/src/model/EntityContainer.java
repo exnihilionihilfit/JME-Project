@@ -20,7 +20,8 @@ import com.jme3.network.serializing.Serializable;
     public float speed = 5.0f;
     public long lastMoveUpdate;
     public boolean moveToPositon;
-    public Vector3f lookAt = new Vector3f(0, 0, 0);;
+    public Vector3f lookAt = new Vector3f(0, 0, 0);
+    public boolean isNewCreated = true;
     
     public EntityContainer()
     {

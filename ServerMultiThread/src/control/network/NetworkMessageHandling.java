@@ -143,7 +143,7 @@ public class NetworkMessageHandling {
          {
              int tmp = Entities.getNewEntityId();
             EntityContainer entity = new EntityContainer(playerId ,tmp ,"battleship",Vector3f.ZERO);
-            Entities.all.add(entity);  
+            Entities.entityContainers.add(entity);  
             System.out.println( " new entity created ");
             //player.getEntityList().add(ship);
          }

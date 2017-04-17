@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import model.Player;
 import control.network.NetworkMessageListener;
 import control.network.NetworkMessages;
+import java.util.ArrayList;
 import model.Entities;
 import model.EntityContainer;
 import model.Players;
@@ -27,7 +28,7 @@ public class Main extends SimpleApplication {
 
     Server server = null;
     long lastTime = 0;
-    long timeInterval = 100;
+    long timeInterval = 20;
     int PORT_IP = 6143;
     int PORT_UDP = 6142;
     private static Players players;
@@ -90,24 +91,28 @@ public class Main extends SimpleApplication {
         if ((lastTime + timeInterval) < System.currentTimeMillis()) {
             lastTime = System.currentTimeMillis();
 
-            //NetworkMessages.PingMessage message = new NetworkMessages.PingMessage(" ", 0L);
-            //myServer.broadcast(message);
-            /*
-            for (HostedConnection connection : myServer.getConnections()) {
-               NetworkMessages.PingMessage message = new NetworkMessages.PingMessage(" ... server message ", 0L);
-                connection.send(message);
-            }
-             */            
-           // String[] entitesAsString = Helper.prepareEntitiesList(Players.getPlayerList());
-            
-            NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(Entities.all);
-               
-            for(EntityContainer entityContainer:Entities.all)
+     
+            /**
+             * move each entity and only the entities which are moved will be send
+             * to reduce traffic. After all any change should set a flag to send it
+             * for now only movement will do so
+             * Also all other playerId's should set to -1 so nobody could mess with all
+             * id's around ;)
+             */
+            ArrayList<EntityContainer> filteredEntityContainers = new ArrayList<>();
+            for(EntityContainer entityContainer:Entities.entityContainers)
             {
                 EntityAction.moveEntityToPosition(entityContainer);
+                
+                if(entityContainer.moveToPositon || entityContainer.isNewCreated)
+                {
+                    filteredEntityContainers.add(entityContainer);
+                    entityContainer.isNewCreated = false;
+                }
             }
             
-            
+             NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(filteredEntityContainers);
+           
             for(Player player:Players.getPlayerList())
             {
                 if(player.getConnection() != null)

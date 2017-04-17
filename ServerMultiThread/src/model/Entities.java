@@ -15,7 +15,7 @@ public class Entities {
     
     private static int entityId = 0;
     
-     public static ArrayList<EntityContainer> all = new ArrayList<>();
+     public static ArrayList<EntityContainer> entityContainers = new ArrayList<>();
 
      public static int getNewEntityId()
      {
@@ -25,7 +25,7 @@ public class Entities {
      
      public static EntityContainer getEntityById(int entityId){
          
-         for(EntityContainer entity:all)
+         for(EntityContainer entity:entityContainers)
          {
              if(entityId == entity.entityId)
              {
