@@ -1,5 +1,5 @@
 /**
- * To decide in which situation the game is. 
+ * To decide in which situation the game is.
  * So we can pick an object and e.g. move it
  */
 package control;
@@ -36,8 +36,6 @@ public class GameState {
     private static Entity selectedEntity;
     private static Target target;
     private int entityID;
-  
-   
 
     public GameState(Main main, InputManager inputManager, Node rootNode, Camera cam) {
         GameState.main = main;
@@ -71,7 +69,6 @@ public class GameState {
                             entityID = Action.selectEntity(inputManager, cam, rootNode);
                             InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
                         }
-                       
 
                         /**
                          * get entity with id
@@ -79,25 +76,20 @@ public class GameState {
                         if (selectedEntity == null) {
                             selectedEntity = Helper.getEntityByID(entityID);
 
-                            if (selectedEntity != null ) {
+                            if (selectedEntity != null) {
 
-                                if(selectedEntity.getPlayerId() == Player.getPlayerId())
-                                {
-                                           selectedEntity.addHighlight();
-                                IS_ENTITY_SELECTED = true;
-                                
-                                 System.out.println("Entity selected \n name: "+selectedEntity.getName()+
-                                         " playerId: "+selectedEntity.getPlayerId()+
-                                         " entityId: "+entityID);
-                                }
-                                else
-                                {
-                                   
-                                }
-                                
+                                if (selectedEntity.getPlayerId() == Player.getPlayerId()) {
+                                    selectedEntity.addHighlight();
+                                    IS_ENTITY_SELECTED = true;
 
-                               
-                            } 
+                                    System.out.println("Entity selected \n name: " + selectedEntity.getName()
+                                            + " playerId: " + selectedEntity.getPlayerId()
+                                            + " entityId: " + entityID);
+                                } else {
+
+                                }
+
+                            }
                         }
                     }
 
@@ -127,12 +119,10 @@ public class GameState {
 
                                 System.out.println("target found!" + target.getContactPoint());
 
-                                
-                               // IS_ENTITY_SELECTED = false;
+                                // IS_ENTITY_SELECTED = false;
                                 SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
-                              //  selectedEntity = null;
+                                //  selectedEntity = null;
                                 target = null;
-
 
                             } else {
                                 // System.out.println("no target found"); 
@@ -142,20 +132,21 @@ public class GameState {
                     }
 
                     if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
+                        if (selectedEntity != null) {
+                            selectedEntity.removeHighLight();
+                        }
+
                         IS_ENTITY_SELECTED = false;
                         SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
-                        selectedEntity.removeHighLight();
-                       
+
                         target = null;
                         entityID = -1;
                         InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
                         InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
-                     selectedEntity = null;
+                        selectedEntity = null;
                         System.out.println("deselect");
                     }
 
- 
-                   
                 }
             }
         }
@@ -163,7 +154,7 @@ public class GameState {
 
     /*
     to check the basics game states seperate from the interaction states
-    */
+     */
     public void updateGameState() {
 
         if (main.client != null) {
@@ -174,17 +165,15 @@ public class GameState {
 
         IS_RUNNING = main.isRunning();
 
-        
-         hudInput();
+        hudInput();
     }
 
     public void hudInput() {
-        
-        if(HUD.IS_CREATE_ENTITY_BUTTON_PRESSED)
-        {
+
+        if (HUD.IS_CREATE_ENTITY_BUTTON_PRESSED) {
             Action.sendCreateEntity(main.sendNetworkMessage);
             HUD.IS_CREATE_ENTITY_BUTTON_PRESSED = false;
         }
-        
+
     }
 }
