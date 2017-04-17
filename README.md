@@ -1,5 +1,25 @@
 JME-Project
 
+In the next version it will be a gui login 
+now you need your console
+
+To start a server:
+
+* go into ServerMutliThread/dist/
+* you need only to Server.jar and lib folder
+* via console go into dist folder and run Server.jar (java -jar Server.jar)
+(it could be that you need to add java to your buildpath)
+
+To start a client
+
+* download Client-Test.zip
+* unpack
+* via console go into Client-Test folder and run Client.jar (java -jar Client.jar)
+
+
+
+
+
 For use in JME:
 
 Limur is used for GUI to run it it is needed to add following .jar's to clathpath
