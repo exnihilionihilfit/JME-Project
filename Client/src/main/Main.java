@@ -274,6 +274,7 @@ public class Main extends SimpleApplication {
 
                 if (entity.getID() == entityContainer.entityId) {
 
+                    entity.setDirection(entityContainer.lookAt);
                     entity.setNextPosition(entityContainer.position);
                     found = true;
                     break;

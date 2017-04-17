@@ -33,7 +33,7 @@ public class Entity {
 
     private String name = null;
     private final AssetManager assetManager;
-    private Node node;
+    private Node entityNode;
 
     private Vector3f nextPosition;
 
@@ -220,7 +220,7 @@ public class Entity {
     }
 
     private Vector3f getLocalTranslation() {
-        return node.getLocalTranslation();
+        return entityNode.getLocalTranslation();
     }
 
     public Node getEntityNode() {
@@ -242,6 +242,10 @@ public class Entity {
 
     public boolean getPosition() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void setDirection(Vector3f lookAt) {
+        getEntityNode().lookAt(lookAt, Vector3f.UNIT_Y);
     }
 
 }
