@@ -1,4 +1,7 @@
-need to add to clathpath
+JME-Project
+
+
+Limur is used for GUI to run it it is needed to add following .jar's to clathpath
 
 folder: lemur 
 
