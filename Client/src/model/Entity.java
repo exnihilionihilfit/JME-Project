@@ -24,13 +24,13 @@ public class Entity {
 
     private Vector3f desiredLocation = new Vector3f();
 //The MyWayList object that contains the result waylist:
-     private MyWayList wayList = null;
+    private MyWayList wayList = null;
 //The future that is used to check the execution status:
     private Future future = null;
     private long lastTime;
 
     private Main mainApp = null;
-  
+
     private String name = null;
     private final AssetManager assetManager;
     private Node node;
@@ -39,71 +39,88 @@ public class Entity {
 
     private boolean recevedNewPositionMessage = false;
     private boolean reseavedNewPositionMessage = false;
-    private  int entityID;
+    private int entityID;
     private boolean isMoveable = true;
     private Node ship;
+    
+    private boolean isSelected = false;
+    private  long playerId;
 
-    public Entity(Main mainApp, AssetManager assetManager, String name, int entityId) {
-        this.mainApp = mainApp;  
+    public Entity(Main mainApp, AssetManager assetManager, String name, int entityId,long playerId) {
+        this.mainApp = mainApp;
         this.name = name;
         this.assetManager = assetManager;
         this.entityID = entityId;
-
-        
+        this.playerId = playerId;
 
     }
     
-    public boolean isMoveable()
+    public void setPlayerId(long playerId)
     {
+        this.playerId = playerId;
+    }
+    
+    public long getPlayerId()
+    {
+        return this.playerId;
+    }
+
+    public void addHighlight() {
+        getEntityNode().addLight(Main.entityHighLightLight);
+    }
+
+    public void removeHighLight() {
+        getEntityNode().removeLight(Main.entityHighLightLight);
+    }
+    
+    public boolean isSelected(){
+        return this.isSelected;
+       
+    }
+    public void setSelected(boolean value)
+    {
+        this.isSelected = value;
+    }
+
+    public boolean isMoveable() {
         return isMoveable;
     }
-    
-    public void setMoveable(boolean value)
-    {
+
+    public void setMoveable(boolean value) {
         this.isMoveable = value;
     }
 
     public String getName() {
         return this.name;
     }
-    
-    public void sendNewPositionMessage(boolean b)
-    {
-        this.reseavedNewPositionMessage  = b;
-    }
-    
-    public boolean isRecevedNewPositionMessage()
-    {
-        return this.recevedNewPositionMessage;
-    }
-    
-    public void setRecevedNewPositionMessage(boolean b)
-    {
-        this.recevedNewPositionMessage = b;
-    }
-  
-    
-    public Vector3f getNextPosition()
-    {
-        return this.nextPosition;
-    }
-    
-    public void setNextPosition(Vector3f nextPosition)
-    {
-        this.nextPosition = nextPosition;
-    }
-    
-    public boolean isSendNewPositionMessage()
-    {
-        return this.reseavedNewPositionMessage;
-    }
-    
-    public void setSendNewPositionMessage(boolean b)
-    {
+
+    public void sendNewPositionMessage(boolean b) {
         this.reseavedNewPositionMessage = b;
     }
 
+    public boolean isRecevedNewPositionMessage() {
+        return this.recevedNewPositionMessage;
+    }
 
+    public void setRecevedNewPositionMessage(boolean b) {
+        this.recevedNewPositionMessage = b;
+    }
+
+    public Vector3f getNextPosition() {
+        return this.nextPosition;
+    }
+
+    public void setNextPosition(Vector3f nextPosition) {
+        this.nextPosition = nextPosition;
+    }
+
+    public boolean isSendNewPositionMessage() {
+        return this.reseavedNewPositionMessage;
+    }
+
+    public void setSendNewPositionMessage(boolean b) {
+        this.reseavedNewPositionMessage = b;
+    }
 
     public void rotateGeometry(final Geometry geo, final Quaternion rot) {
         mainApp.enqueue(new Callable<Spatial>() {
@@ -126,8 +143,6 @@ public class Entity {
         return nextPosition.toString();
     }
 
-  
-
     Callable<MyWayList> newPosition = new Callable<MyWayList>() {
 
         @Override
@@ -145,11 +160,9 @@ public class Entity {
             //Data data = myWorld.getData();
             //... Now process data and find the way ...
             Thread.sleep(2);
-           
 
             //wayList.setNewLocation(nextPosition);
             //  System.out.println("get new Location"+wayList.getNewLocation()+" "+newLocation);
-
             //  System.out.println(name + " " + translation);
             return wayList;
         }
@@ -157,8 +170,8 @@ public class Entity {
     };
 
     public void update(float tpf) {
-                
-    /*
+
+        /*
         if (reseavedNewPositionMessage) {
             try {
                 
@@ -198,11 +211,11 @@ public class Entity {
             }
 
         }
-*/
+         */
         if (nextPosition != null) {
-            getEntity().setLocalTranslation(nextPosition);
+            getEntityNode().setLocalTranslation(nextPosition);
 
-           // recevedNewPositionMessage = false;
+            // recevedNewPositionMessage = false;
         }
     }
 
@@ -210,24 +223,20 @@ public class Entity {
         return node.getLocalTranslation();
     }
 
-    public Node getEntity() {
-       
-        if(ship == null)
-        {
+    public Node getEntityNode() {
+
+        if (ship == null) {
             // load a character from jme3test-test-data
-        ship = (Node) assetManager.loadModel("Models/battleship5/battleship5.j3o");
-        ship.setName("ship");
-        ship.setUserData("id", entityID);   
-        ship.setLocalTranslation((float) (Math.random() * 5), 0, (float) (Math.random() * 5));
-        
-        
+            ship = (Node) assetManager.loadModel("Models/battleship5/battleship5.j3o");
+            ship.setName("ship");
+            ship.setUserData("id", entityID);
+            ship.setLocalTranslation((float) (Math.random() * 5), 0, (float) (Math.random() * 5));
 
-        //rootNode.attachChild(ship);
-       // CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(ship);
-       // RigidBodyControl shipBody = new RigidBodyControl(sceneShape, 0);
-
+            //rootNode.attachChild(ship);
+            // CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(ship);
+            // RigidBodyControl shipBody = new RigidBodyControl(sceneShape, 0);
         }
-        return  ship;
+        return ship;
 
     }
 

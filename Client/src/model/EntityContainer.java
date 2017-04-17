@@ -1,7 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Is used to transfer the needed data (only data) from server to client
+ * entities could only createt on server side after the client sends a create
+ * message and the server confirms that it could be done 
  */
 package model;
 

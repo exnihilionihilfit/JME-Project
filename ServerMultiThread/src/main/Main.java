@@ -25,7 +25,7 @@ public class Main extends SimpleApplication {
 
     Server server = null;
     long lastTime = 0;
-    long timeInterval = 5000;
+    long timeInterval = 100;
     int PORT_IP = 6143;
     int PORT_UDP = 6142;
     private static Players players;

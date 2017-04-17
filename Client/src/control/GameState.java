@@ -10,6 +10,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import main.Main;
 import model.Entity;
+import model.Player;
 import model.Target;
 import view.HUD;
 
@@ -78,14 +79,24 @@ public class GameState {
                         if (selectedEntity == null) {
                             selectedEntity = Helper.getEntityByID(entityID);
 
-                            if (selectedEntity != null) {
+                            if (selectedEntity != null ) {
 
-                                
-                                Action.highlight(selectedEntity);
+                                if(selectedEntity.getPlayerId() == Player.getPlayerId())
+                                {
+                                           selectedEntity.addHighlight();
                                 IS_ENTITY_SELECTED = true;
-                               
+                                
+                                 System.out.println("Entity selected \n name: "+selectedEntity.getName()+
+                                         " playerId: "+selectedEntity.getPlayerId()+
+                                         " entityId: "+entityID);
+                                }
+                                else
+                                {
+                                   
+                                }
+                                
 
-                                System.out.println("Entity selected "+selectedEntity.getName()+" "+entityID);
+                               
                             } 
                         }
                     }
@@ -133,11 +144,13 @@ public class GameState {
                     if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
                         IS_ENTITY_SELECTED = false;
                         SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
-                        selectedEntity = null;
+                        selectedEntity.removeHighLight();
+                       
                         target = null;
                         entityID = -1;
                         InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
                         InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
+                     selectedEntity = null;
                         System.out.println("deselect");
                     }
 

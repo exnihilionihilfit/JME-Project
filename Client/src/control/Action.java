@@ -12,6 +12,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import control.network.SendNetworkMessage;
+import main.Main;
 import model.Entity;
 import model.Target;
 
@@ -104,9 +105,7 @@ public class Action {
         return selectedEntityID;
     }
 
-    static void highlight(Entity selectedEntity) {
 
-    }
     
 
 

@@ -5,12 +5,9 @@
  */
 package control.network;
 
-import com.jme3.network.HostedConnection;
-import com.jme3.network.Message;
 import control.Helper;
 import main.Main;
 import model.Entity;
-import model.EntityContainer;
 
 /**
  *
@@ -64,7 +61,7 @@ public class NetworkMessageHandling {
         NetworkMessages.EntitiesListMessage entityPositionMessage = NetworkMessageListener.ENTITY_LIST_MESSAGE.poll();
 
         if (entityPositionMessage != null) {
-            main.setEntities(entityPositionMessage.entities);
+            main.setEntitiesPositionFromServerList(entityPositionMessage.entities);
         }
 
     }
