@@ -1,5 +1,6 @@
 JME-Project
 
+For use in JME:
 
 Limur is used for GUI to run it it is needed to add following .jar's to clathpath
 
