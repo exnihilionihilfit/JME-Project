@@ -70,7 +70,7 @@ public class SimpleCollision {
        System.out.println("collision!");
              
         
-        }
+        
         
         
         
