@@ -133,8 +133,6 @@ public class Main extends SimpleApplication {
 
         bulletAppState.setDebugEnabled(true);
 
-
-
         initKeys();
         initGameState();
         initHUD();
@@ -146,55 +144,51 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        
-        if(HUD.IS_SERVER_ADRESS_ENTERD)
-        {
-        connectToServer();
-        if(client != null)
-        {
-        addMessageListener();
-        initSendNetworkMessage();
-        startClient();
 
-        // wait as long a id is given by server
-        while (Player.getPlayerId() == 0L) {
-            registerOnServer();
-            System.out.println("try to register on server");
-            try {
-                Thread.sleep(REGISTER_ON_SERVER_DELAY);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        if (HUD.IS_SERVER_ADRESS_ENTERD) {
+            connectToServer();
+            if (client != null) {
+                addMessageListener();
+                initSendNetworkMessage();
+                startClient();
+
+                // wait as long a id is given by server
+                while (Player.getPlayerId() == 0L) {
+                    registerOnServer();
+                    System.out.println("try to register on server");
+                    try {
+                        Thread.sleep(REGISTER_ON_SERVER_DELAY);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+                System.out.println(" client registered ");
+                HUD.IS_SERVER_ADRESS_ENTERD = false;
             }
-        }
+        } else if (client != null && client.isConnected()) {
 
-        System.out.println(" client registered ");
-        HUD.IS_SERVER_ADRESS_ENTERD = false;
-        }
-        }
-        else if(client != null && client.isConnected())
-        {
+            UpdateEntity.update(ENTITIES, tpf);
 
-        UpdateEntity.update(ENTITIES, tpf);
+            checkServerConnection();
 
-        checkServerConnection();
+            // update current gamestate
+            gameState.updateGameState();
+            // check Action on gameState
+            gameState.entityInteraction();
+            // check HUD input action
+            gameState.hudInput();
 
-        // update current gamestate
-        gameState.updateGameState();
-        // check Action on gameState
-        gameState.entityInteraction();
-        // check HUD input action
-        gameState.hudInput();
+            // Reset all Key and Mouse Inputstatets
+            InputListener.resetInput();
+            // HUD reset e.g. buttons
+            hud.resetInput();
+            // Handle messages from server 
+            NetworkMessageHandling.handlePingMessage();
+            NetworkMessageHandling.handleEntityPositionMessage();
+            NetworkMessageHandling.handleEntitiesListMessage(this);
 
-        // Reset all Key and Mouse Inputstatets
-        InputListener.resetInput();
-        // HUD reset e.g. buttons
-        hud.resetInput();
-        // Handle messages from server 
-        NetworkMessageHandling.handlePingMessage();
-        NetworkMessageHandling.handleEntityPositionMessage();
-        NetworkMessageHandling.handleEntitiesListMessage(this);
-
-        checkIfDisplayIsResized();
+            checkIfDisplayIsResized();
         }
     }
 
@@ -259,7 +253,6 @@ public class Main extends SimpleApplication {
     private void connectToServer() {
 
         //inputServerConection = new InputServerData(Main.args);
-
         ServerConnection serverConnection = new ServerConnection(this);
 
         if (InputServerData.IS_VALID_SERVER_DATA) {

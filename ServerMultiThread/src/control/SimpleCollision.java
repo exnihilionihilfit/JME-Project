@@ -15,7 +15,7 @@ import model.EntityContainer;
  */
 public class SimpleCollision {
     
-    private static final float MININAL_DISTANCE = 5.0f;
+    private static final float MININAL_DISTANCE = 10.0f;
     
     public static void checkCollision(ArrayList<EntityContainer> enityContainers)
     {
@@ -47,13 +47,13 @@ public class SimpleCollision {
     
     private static void reactOnCollision(EntityContainer a, EntityContainer b) {
                      
-        if(a.moveToPositon && !a.collided){
+       
         
             a.position = a.lastPosition;
             
             Vector3f distance = a.position.subtract(b.position);
             
-             while(distance.length() <= MININAL_DISTANCE )
+             if(distance.length() < MININAL_DISTANCE )
              {
                  Vector3f direction = distance.normalize();
                  
@@ -64,8 +64,8 @@ public class SimpleCollision {
                  
                  Vector3f setBack = direction.negate().mult(MININAL_DISTANCE);
                  
-                 a.position.addLocal(setBack);
-             }
+                 a.position = a.position.addLocal(setBack);
+             
         
         }
         

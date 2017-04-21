@@ -7,6 +7,7 @@
 package control;
 
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -74,10 +75,14 @@ public final class InputServerData {
         if (adress.equals("localhost")) {
             return true;
         } else {
-            String[] parts = adress.split(".");
+            String[] parts = adress.split(Pattern.quote("."));
 
             if (parts.length == 4) {
                 return true;
+            }
+            else
+            {
+                System.out.println(" server adress "+adress+" not valid");
             }
         }
         return false;
