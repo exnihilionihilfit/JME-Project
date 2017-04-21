@@ -21,6 +21,7 @@ public class EntityAction {
             Vector3f destination = entity.destination;
             float speed = entity.speed;
             long updateTime = entity.lastMoveUpdate;
+            entity.lastPosition = entity.position;
 
             if (destination != null && speed != 0f) {
 
@@ -46,7 +47,7 @@ public class EntityAction {
                     System.out.println(" arrived ");
                 } else {
                     entity.position = entity.position.add(newPositionOnTheWay);
-                    entity.lookAt = destination;
+                    entity.direction = destination;
 
                 }
 

@@ -72,7 +72,7 @@ public class Main extends SimpleApplication {
     private int screenHeight = 0;
 
     private HUD hud;
-    private long REGISTER_ON_SERVER_DELAY = 1000;
+    private final long REGISTER_ON_SERVER_DELAY = 1000;
 
     public static AmbientLight entityHighLightLight = new AmbientLight(ColorRGBA.Blue);
 
@@ -83,7 +83,8 @@ public class Main extends SimpleApplication {
 
         AppSettings newSetting = new AppSettings(true);
 
-        newSetting.setFrameRate(30);
+        newSetting.setFrameRate(60);
+        newSetting.setMinResolution(1024, 860);
 
         mainApplication.setSettings(newSetting);
 
@@ -132,7 +133,25 @@ public class Main extends SimpleApplication {
 
         bulletAppState.setDebugEnabled(true);
 
+
+
+        initKeys();
+        initGameState();
+        initHUD();
+        initMap();
+
+        isRunning = true;
+
+    }
+
+    @Override
+    public void simpleUpdate(float tpf) {
+        
+        if(HUD.IS_SERVER_ADRESS_ENTERD)
+        {
         connectToServer();
+        if(client != null)
+        {
         addMessageListener();
         initSendNetworkMessage();
         startClient();
@@ -149,18 +168,11 @@ public class Main extends SimpleApplication {
         }
 
         System.out.println(" client registered ");
-
-        initKeys();
-        initGameState();
-        initHUD();
-        initMap();
-
-        isRunning = true;
-
-    }
-
-    @Override
-    public void simpleUpdate(float tpf) {
+        HUD.IS_SERVER_ADRESS_ENTERD = false;
+        }
+        }
+        else if(client != null && client.isConnected())
+        {
 
         UpdateEntity.update(ENTITIES, tpf);
 
@@ -183,7 +195,7 @@ public class Main extends SimpleApplication {
         NetworkMessageHandling.handleEntitiesListMessage(this);
 
         checkIfDisplayIsResized();
-
+        }
     }
 
     private void initKeys() {
@@ -237,18 +249,20 @@ public class Main extends SimpleApplication {
                     NetworkMessages.RegisterOnServer.class,
                     NetworkMessages.EntitiesListMessage.class,
                     EntityContainer.class);
+
+            client.addMessageListener(networkMessageListener.new ClientMoveOrderListener(),
+                    NetworkMessages.EntityPositionMessage.class);
         }
 
     }
 
     private void connectToServer() {
 
-        inputServerConection = new InputServerData(Main.args);
-        
-       
-       ServerConnection serverConnection = new ServerConnection(this);
+        //inputServerConection = new InputServerData(Main.args);
 
-        if (inputServerConection.isValidServerData()) {
+        ServerConnection serverConnection = new ServerConnection(this);
+
+        if (InputServerData.IS_VALID_SERVER_DATA) {
             serverConnection.connectToServer();
         }
     }
@@ -284,7 +298,7 @@ public class Main extends SimpleApplication {
 
                 if (entity.getID() == entityContainer.entityId) {
 
-                    entity.setDirection(entityContainer.lookAt);
+                    entity.setDirection(entityContainer.direction);
                     entity.setNextPosition(entityContainer.position);
                     found = true;
                     break;

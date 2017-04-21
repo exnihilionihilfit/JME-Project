@@ -9,6 +9,8 @@ import main.Main;
 import com.jme3.network.Network;
 import control.InputServerData;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -34,13 +36,19 @@ public class ServerConnection {
                 if (InputServerData.SERVER_UDP_PORT > 0) {
                     try {
                         main.client = Network.connectToServer(InputServerData.SERVER_ADRESS, InputServerData.SERVER_IP_PORT, InputServerData.SERVER_UDP_PORT);
-
+                        System.out.println(" try to connect to " + InputServerData.SERVER_ADRESS+"");
                     } catch (IOException ex) {
-                       // Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
+                } else {
+                    System.out.println("invalid server udp port");
                 }
+            } else {
+                System.out.println("invalid server ip port");
             }
+        } else {
+            System.out.println("invalid server adress");
         }
     }
 

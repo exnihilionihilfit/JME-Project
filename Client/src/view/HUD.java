@@ -18,6 +18,7 @@ import com.simsilica.lemur.Label;
 import com.simsilica.lemur.TextField;
 import com.simsilica.lemur.core.GuiLayout;
 import com.simsilica.lemur.style.BaseStyles;
+import control.InputServerData;
 import main.Main;
 
 /**
@@ -96,7 +97,17 @@ public class HUD {
                guiNode.attachChild(menuContainer);
                guiNode.detachChild(serverAdressContainer);
                guiNode.attachChild(helloText);
-               IS_SERVER_ADRESS_ENTERD = true;
+              
+               
+               if(InputServerData.checkServerAdress(serverAdressInput.getText()))
+               {
+                   InputServerData.SERVER_ADRESS = serverAdressInput.getText();
+                   InputServerData.IS_VALID_SERVER_DATA = true;
+                   
+                    IS_SERVER_ADRESS_ENTERD = true;
+                 
+                helloText.setText(" try to connect to server ");
+               }
               
             }
             

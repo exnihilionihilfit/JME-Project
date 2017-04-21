@@ -7,8 +7,6 @@ package control.network;
 
 import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
-import com.jme3.network.Message;
-import control.EntityAction;
 import control.GameOptions;
 import control.Helper;
 import java.util.UUID;
@@ -45,8 +43,8 @@ public class NetworkMessageHandling {
     returns false if the deque is empty and no messages are there
     returns true if a massage is handeld
      */
-    public static boolean handleEntityPositionMessage(HostedConnection source, Message message) {
-        NetworkMessages.EntityPositionMessage entityPositionMessage = (NetworkMessages.EntityPositionMessage) message;
+    public static void handleEntityPositionMessage() {
+        NetworkMessages.EntityPositionMessage entityPositionMessage = NetworkMessageListener.ENTITY_POSITION_MESSAGE.poll();
 
         if (entityPositionMessage != null) {
 
@@ -55,11 +53,6 @@ public class NetworkMessageHandling {
             int entityID = entityPositionMessage.entityID;
             long playerId = entityPositionMessage.payerId;
 
-            // just for testing//
-            // Vector3f tmp = Helper.convertStringToVector3f(newPositonVector);
-            // tmp.y = 25f;
-            // newPositonVector = tmp.toString();
-            ////////////////////
             System.out.println("Client [" + entityID + "] Validate position: " + newPositonVector);
 
             NetworkMessages.EntityPositionMessage newPositionMessage = new NetworkMessages.EntityPositionMessage(playerId, entityID, newPositonVector);
@@ -67,21 +60,12 @@ public class NetworkMessageHandling {
             Player player = Players.checkListOfPlayersContains(playerId);
 
             EntityContainer entityContainer = Entities.getEntityById(entityPositionMessage.entityID);
-            
+
             entityContainer.destination = Helper.convertStringToVector3f(newPositionMessage.position);
             entityContainer.lastMoveUpdate = System.currentTimeMillis();
             entityContainer.moveToPositon = true;
-            
-         
-        
-            //player.getConnection().send(newPositionMessage);
-            // source.send(newPositionMessage);
-
-            return true;
-        } else {
-            return false;
+            entityContainer.playerId = entityPositionMessage.payerId;
         }
-
     }
 
     /**
@@ -97,19 +81,18 @@ public class NetworkMessageHandling {
     public static void addPlayer(HostedConnection connection, NetworkMessages.RegisterOnServer registerOnServerMessage, HostedConnection source) {
 
         Player player = null;
-
         // a new player
         if (registerOnServerMessage.playerId == 0L) {
             // create id 
             UUID uuid = UUID.randomUUID();
             registerOnServerMessage.playerId = uuid.getLeastSignificantBits();
             player = new Player(GameOptions.clientStartCredits, connection, registerOnServerMessage.playerId);
-                   
-            
+
             Players.getPlayerList().add(player);
 
-        } else {
-
+        }
+        else 
+        {
             player = Players.checkListOfPlayersContains(registerOnServerMessage.playerId);
 
             if (player != null) {
@@ -117,7 +100,6 @@ public class NetworkMessageHandling {
             } else {
                 System.out.println("WARNING: client send playerId that didn't exists!");
             }
-
         }
 
         if (player != null) {
@@ -128,33 +110,27 @@ public class NetworkMessageHandling {
         } else {
             System.out.println(" Player registration failed ");
         }
-
     }
 
-    static void handleCreateEntityMessage(HostedConnection source, Message message) {
-        
-         NetworkMessages.CreateEntityMessage createEntityMessage = (NetworkMessages.CreateEntityMessage) message;
-         
-         long playerId = createEntityMessage.playerId;
-                             
-         Player player = Players.checkListOfPlayersContains(playerId);
-         
-         if(player != null)
-         {
-             int tmp = Entities.getNewEntityId();
-            EntityContainer entity = new EntityContainer(playerId ,tmp ,"battleship",Vector3f.ZERO);
-            Entities.entityContainers.add(entity);  
-            System.out.println( " new entity created ");
-            //player.getEntityList().add(ship);
-         }
-         else
-         {
-             System.out.println( "unknown player tries to create ship ");
-         }
-          
-          
+    public static void handleCreateEntityMessage() {
+
+        NetworkMessages.CreateEntityMessage createEntityMessage = NetworkMessageListener.CREATE_ENTITY_MESSAGES.poll();
+
+        if (createEntityMessage != null) {
+            long playerId = createEntityMessage.playerId;
+
+            Player player = Players.checkListOfPlayersContains(playerId);
+
+            if (player != null) {
+                int tmp = Entities.getNewEntityId();
+                EntityContainer entity = new EntityContainer(playerId, tmp, "battleship", Vector3f.ZERO);
+                Entities.entityContainers.add(entity);
+                System.out.println(" new entity created ");
+                //player.getEntityList().add(ship);
+            } else {
+                System.out.println("unknown player tries to create ship ");
+            }
+        }
     }
-
-
 
 }

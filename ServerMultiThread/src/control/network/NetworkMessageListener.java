@@ -38,11 +38,15 @@ public class NetworkMessageListener {
         return ENTITY_POSITION_MESSAGE;
     }
     
-     public class ServerMessageListener implements MessageListener<HostedConnection> {
+     public class ServerMoveOrderListener implements MessageListener<HostedConnection> {
 
         @Override
         public void messageReceived(HostedConnection source, Message message) {
-           // else....
+             if (message instanceof NetworkMessages.EntityPositionMessage) {
+               
+               // NetworkMessageHandling.handleEntityPositionMessage(source, message);
+               ENTITY_POSITION_MESSAGE.add((NetworkMessages.EntityPositionMessage) message);
+            }
 
         }
     }
@@ -70,14 +74,12 @@ public class NetworkMessageListener {
                                      
             }
 
-            if (message instanceof NetworkMessages.EntityPositionMessage) {
-               
-                NetworkMessageHandling.handleEntityPositionMessage(source, message);
-            }
+        
             
             if(message instanceof NetworkMessages.CreateEntityMessage)
             {
-                NetworkMessageHandling.handleCreateEntityMessage(source, message);
+               // NetworkMessageHandling.handleCreateEntityMessage(source, message);
+                CREATE_ENTITY_MESSAGES.add((NetworkMessages.CreateEntityMessage) message);
             }
             
          

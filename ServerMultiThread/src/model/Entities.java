@@ -15,7 +15,7 @@ public class Entities {
     
     private static int entityId = 0;
     
-     public static ArrayList<EntityContainer> entityContainers = new ArrayList<>();
+     public static final ArrayList<EntityContainer> entityContainers = new ArrayList<>();
 
      public static int getNewEntityId()
      {

@@ -230,8 +230,7 @@ public class Entity {
             ship = (Node) assetManager.loadModel("Models/battleship5/battleship5.j3o");
             ship.setName("ship");
             ship.setUserData("id", entityID);
-            ship.setLocalTranslation((float) (Math.random() * 5), 0, (float) (Math.random() * 5));
-
+            
             //rootNode.attachChild(ship);
             // CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(ship);
             // RigidBodyControl shipBody = new RigidBodyControl(sceneShape, 0);

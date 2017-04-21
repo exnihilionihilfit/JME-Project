@@ -43,6 +43,20 @@ public class NetworkMessageListener {
     {
         return ENTITY_LIST_MESSAGE;
     }
+     public class ClientMoveOrderListener implements MessageListener<Client> {
+
+        @Override
+        public void messageReceived(Client source, Message message) {
+                        
+                  if (message instanceof NetworkMessages.EntityPositionMessage) {
+                NetworkMessages.EntityPositionMessage positionMessage = (NetworkMessages.EntityPositionMessage) message;
+                ENTITY_POSITION_MESSAGE.add(positionMessage);
+                System.out.println("--> NewPositionReseaved "+positionMessage.position);
+        }
+         
+     }
+
+            }
 
     public class ClientListener implements MessageListener<Client> {
 
@@ -79,11 +93,7 @@ public class NetworkMessageListener {
                 System.out.println(" reseaved create of entity successfull "+createEntityMessage.isNewEntity);
             }
 
-            if (message instanceof NetworkMessages.EntityPositionMessage) {
-                NetworkMessages.EntityPositionMessage positionMessage = (NetworkMessages.EntityPositionMessage) message;
-                ENTITY_POSITION_MESSAGE.add(positionMessage);
-                System.out.println("--> NewPositionReseaved "+positionMessage.position);
-            }
+       
             
            if (message instanceof NetworkMessages.EntitiesListMessage) {
                 NetworkMessages.EntitiesListMessage entitiesListMessage = ( NetworkMessages.EntitiesListMessage ) message;
