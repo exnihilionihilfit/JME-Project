@@ -47,7 +47,7 @@ public class SimpleCollision {
     
     private static void reactOnCollision(EntityContainer a, EntityContainer b) {
                      
-       
+       /*
         
             a.position = a.lastPosition;
             
@@ -62,9 +62,12 @@ public class SimpleCollision {
                      direction = Vector3f.UNIT_X;
                  }
                  
-                 Vector3f setBack = direction.negate().mult(MININAL_DISTANCE);
-                 
-                 a.position = a.position.addLocal(setBack);
+                 Vector3f setBack = direction.negate().mult(3);
+               
+                 a.position.addLocal(setBack);
+               
+         */
+       System.out.println("collision!");
              
         
         }
