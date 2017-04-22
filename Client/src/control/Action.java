@@ -5,6 +5,7 @@
  */
 package control;
 
+import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
 import com.jme3.math.Plane;
@@ -34,13 +35,11 @@ public class Action {
     /*
     sends the entity and the picked position to the server to validate it and the server will send it back
      */
-
     public static void sendEntityMoveAction(SendNetworkMessage sendNetworkMessage, Entity entity, Vector3f position) {
         sendNetworkMessage.sendEntityPositionMessage(entity, position);
     }
-    
-    public static void sendCreateEntity(SendNetworkMessage sendNetworkMessage)
-    {
+
+    public static void sendCreateEntity(SendNetworkMessage sendNetworkMessage) {
         sendNetworkMessage.sendCreateEntityMessage();
     }
 
@@ -60,17 +59,16 @@ public class Action {
         if (results.size() > 0) {
 
             Vector3f contactPoint = results.getClosestCollision().getContactPoint();
-              /**
-                 * we use the plane to project the pick point to it because the
-                 * pick point could be on top of an entity 
-                 * TODO: use the entity to create a plane as base so 3d movement is possible 
-                 * but not now ;)
-                 *
-                 */
+            /**
+             * we use the plane to project the pick point to it because the pick
+             * point could be on top of an entity TODO: use the entity to create
+             * a plane as base so 3d movement is possible but not now ;)
+             *
+             */
             Vector3f pointOnFloor = FLOOR_PLANE.getClosestPoint(contactPoint);
 
             if (contactPoint != null) {
-              
+
                 target = new Target();
                 target.setPointOnFloor(pointOnFloor);
                 target.setContactPoint(contactPoint);
@@ -85,28 +83,33 @@ public class Action {
     private static int getEntityIDFromSelection(CollisionResults results) {
         // -1 is floor
         int selectedEntityID = -1;
-
         if (results.size() > 0) {
-            // strange but work
-            Node node = results.getClosestCollision().getGeometry().getParent();
-            if (node != null) {
-                node = node.getParent();
-                if (node != null) {
-                    node = node.getParent();
-                    String name = node.getName();
+            
+            /**
+             * go through all collison results and
+             * fetch hitted geometry by ray cast
+             * check name of node and go up to root node
+             * if any node called entity
+             * return its id
+             */
+            
+            for (CollisionResult result : results) {                             
 
-                    if (name != null && name.equals("ship")) {
-                        selectedEntityID = node.getUserData("id");
-                    }
-                }
+               
+                Node node = result.getGeometry().getParent();
+                
+                while(node != null)
+                {                    
+                    if(node.getName().equals("entity"))
+                    {
+                        System.out.println(node.getName());
+                         return node.getUserData("id");                           
+                    }                    
+                    node = node.getParent();
+                }    
             }
         }
         return selectedEntityID;
     }
-
-
-
-    
-
 
 }

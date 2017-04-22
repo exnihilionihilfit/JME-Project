@@ -65,6 +65,7 @@ public class NetworkMessageHandling {
             entityContainer.lastMoveUpdate = System.currentTimeMillis();
             entityContainer.moveToPositon = true;
             entityContainer.playerId = entityPositionMessage.payerId;
+      
         }
     }
 

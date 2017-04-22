@@ -75,8 +75,9 @@ public class Main extends SimpleApplication {
     private HUD hud;
     private final long REGISTER_ON_SERVER_DELAY = 1000;
 
-    public static AmbientLight entityHighLightLight = new AmbientLight(ColorRGBA.Blue);
-
+    public static AmbientLight entityHighLightLight = new AmbientLight(ColorRGBA.Green);
+ public static AmbientLight entityNeutralHighLightLight = new AmbientLight(ColorRGBA.Orange);
+    
     public static void main(String[] args) {
 
         Main.args = args;
@@ -194,11 +195,12 @@ public class Main extends SimpleApplication {
             // HUD reset e.g. buttons
             hud.resetInput();
             // Handle messages from server 
-            NetworkMessageHandling.handlePingMessage();
-            NetworkMessageHandling.handleEntityPositionMessage();
+            NetworkMessageHandling.handlePingMessage();         
             NetworkMessageHandling.handleEntitiesListMessage(this);
 
             checkIfDisplayIsResized();
+            
+    
         }
     }
 
@@ -301,8 +303,9 @@ public class Main extends SimpleApplication {
 
                 if (entity.getID() == entityContainer.entityId) {
 
+                    
                     entity.setDirection(entityContainer.direction);
-                    entity.setNextPosition(entityContainer.position);
+                    entity.setPosition(entityContainer.position);
                     found = true;
                     break;
                 }

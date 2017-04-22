@@ -6,6 +6,7 @@
 package model;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -71,6 +72,9 @@ public class Entity {
 
     public void removeHighLight() {
         getEntityNode().removeLight(Main.entityHighLightLight);
+    }
+      public void addNeutralHighlight() {
+        getEntityNode().removeLight(Main.entityNeutralHighLightLight);
     }
     
     public boolean isSelected(){
@@ -213,7 +217,7 @@ public class Entity {
         }
          */
         if (nextPosition != null) {
-            getEntityNode().setLocalTranslation(nextPosition);
+          //  getEntityNode().setLocalTranslation(nextPosition);
 
             // recevedNewPositionMessage = false;
         }
@@ -228,12 +232,14 @@ public class Entity {
         if (ship == null) {
             // load a character from jme3test-test-data
             ship = (Node) assetManager.loadModel("Models/battleship5/battleship5.j3o");
-            ship.setName("ship");
+            ship.setName("entity");
             ship.setUserData("id", entityID);
+            ship.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
             
             //rootNode.attachChild(ship);
             // CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(ship);
             // RigidBodyControl shipBody = new RigidBodyControl(sceneShape, 0);
+       
         }
         return ship;
 
@@ -244,7 +250,16 @@ public class Entity {
     }
 
     public void setDirection(Vector3f lookAt) {
+       
+ 
         getEntityNode().lookAt(lookAt, Vector3f.UNIT_Y);
+       
     }
+
+    public void setPosition(Vector3f position) {
+        getEntityNode().setLocalTranslation(position);
+    }
+
+  
 
 }

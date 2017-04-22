@@ -29,6 +29,7 @@ public class PickCollision {
             // Collect intersections between ray and all nodes in results list.
             rootNode.collideWith(ray, results);
            
+           
             return results;
     }
 }

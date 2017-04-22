@@ -7,7 +7,6 @@ package model;
 
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
-import java.util.Iterator;
 
     @Serializable
     public class EntityContainer{
@@ -18,10 +17,10 @@ import java.util.Iterator;
     public int entityId;
     public long playerId = 0;
     public Vector3f destination = new Vector3f(0, 0, 0);;
-    public float speed = 10.0f;
+    public float speed = 15.0f;
     public long lastMoveUpdate;
     public boolean moveToPositon;
-    public Vector3f direction = new Vector3f(1, 0, 0);
+    public Vector3f direction = new Vector3f(0, 0, 0);
     public boolean isNewCreated = true;
     public boolean collided = false;
     public Vector3f lastPosition = new Vector3f();
