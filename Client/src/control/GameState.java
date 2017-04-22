@@ -5,6 +5,7 @@
 package control;
 
 import com.jme3.input.InputManager;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -38,6 +39,9 @@ public class GameState {
     private int entityID;
     
     private double zoomFactor =1.0f;
+    private Vector3f currentLocation;
+    private Vector2f mousePosition2d;
+    private float tollerance;
 
     public GameState(Main main, InputManager inputManager, Node rootNode, Camera cam) {
         GameState.main = main;
@@ -181,15 +185,51 @@ public class GameState {
     
     public void mouseZoom()
     {
+        currentLocation = GameState.main.getCamera().getLocation();
+        
         if(InputListener.IS_WHEEL_FORWARD)
         {
-            zoomFactor++;
+            currentLocation.y -= zoomFactor;
         }
         if(InputListener.IS_WHEEL_BACKWARD)
         {
-            zoomFactor--;
+            currentLocation.y += zoomFactor;
         }
-       // GameState.
-      //  GameState.main.getCamera().setLocation();
+        
+        if(InputListener.IS_WHEEL_BACKWARD || InputListener.IS_WHEEL_FORWARD){
+        GameState.main.getCamera().setLocation(currentLocation);}
+    }
+    
+    public void moveCamera()
+    {
+       tollerance = 30.0f;
+       mousePosition2d = GameState.inputManager.getCursorPosition();
+       
+       
+       // move camera left
+       if(mousePosition2d.x <= 0 + tollerance)
+       {
+           currentLocation.x -= -1.0f;
+           GameState.main.getCamera().setLocation(currentLocation);
+       }
+       // move camera right
+       if(mousePosition2d.x >=  GameState.main.screenWidth - tollerance)
+       {
+                  currentLocation.x -= +1.0f;
+           GameState.main.getCamera().setLocation(currentLocation);
+       }
+       // move camera forwad
+        if(mousePosition2d.y >=  GameState.main.screenHeight - tollerance)
+       {
+                  currentLocation.z -= -1.0f;
+           GameState.main.getCamera().setLocation(currentLocation);
+       }
+       // move camera backword
+          if(mousePosition2d.y <= 0 + tollerance)
+       {
+           currentLocation.z -= +1.0f;
+           GameState.main.getCamera().setLocation(currentLocation);
+       }
+   
     }
 }

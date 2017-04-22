@@ -47,7 +47,6 @@ public class SimpleCollision {
         
        
             
-            
             Vector3f distance = a.position.subtract(b.position);
             
              if(distance.length() < MININAL_DISTANCE )

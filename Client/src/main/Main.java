@@ -15,6 +15,7 @@ import com.jme3.network.Client;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeContext;
+import com.jme3.util.SkyFactory;
 import control.GameState;
 import control.InputListener;
 import control.InputServerData;
@@ -68,8 +69,8 @@ public class Main extends SimpleApplication {
 
     private Map map;
     // get width and height from OpenGl directly in init
-    private int screenWidth = 0;
-    private int screenHeight = 0;
+    public int screenWidth = 0;
+    public int screenHeight = 0;
 
     private HUD hud;
     private final long REGISTER_ON_SERVER_DELAY = 1000;
@@ -85,6 +86,7 @@ public class Main extends SimpleApplication {
 
         newSetting.setFrameRate(60);
         newSetting.setMinResolution(1024, 860);
+        
 
         mainApplication.setSettings(newSetting);
 
@@ -110,6 +112,9 @@ public class Main extends SimpleApplication {
         //  stateManager.attach(bulletAppState);
         //bulletAppState.setDebugEnabled(true);
         //   bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, 0, 0));
+        
+        getRootNode().attachChild(SkyFactory.createSky(getAssetManager(), "Textures/starmap_4k.jpg", SkyFactory.EnvMapType.EquirectMap));
+
 
         getCamera().lookAtDirection(new Vector3f(0, -1, 0.70f), Vector3f.UNIT_Z);
         getCamera().setLocation(this.camerPosition);
@@ -132,7 +137,8 @@ public class Main extends SimpleApplication {
         screenHeight = Math.max(Display.getHeight(), 1);
 
         bulletAppState.setDebugEnabled(true);
-
+        
+   
         initKeys();
         initGameState();
         initHUD();
@@ -178,7 +184,10 @@ public class Main extends SimpleApplication {
             gameState.entityInteraction();
             // check HUD input action
             gameState.hudInput();
-            // 
+            // mouse zoom
+            gameState.mouseZoom();
+            // move camera
+            gameState.moveCamera();
 
             // Reset all Key and Mouse Inputstatets
             InputListener.resetInput();
