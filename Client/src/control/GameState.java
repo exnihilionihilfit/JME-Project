@@ -36,6 +36,8 @@ public class GameState {
     private static Entity selectedEntity;
     private static Target target;
     private int entityID;
+    
+    private double zoomFactor =1.0f;
 
     public GameState(Main main, InputManager inputManager, Node rootNode, Camera cam) {
         GameState.main = main;
@@ -175,5 +177,19 @@ public class GameState {
             HUD.IS_CREATE_ENTITY_BUTTON_PRESSED = false;
         }
 
+    }
+    
+    public void mouseZoom()
+    {
+        if(InputListener.IS_WHEEL_FORWARD)
+        {
+            zoomFactor++;
+        }
+        if(InputListener.IS_WHEEL_BACKWARD)
+        {
+            zoomFactor--;
+        }
+       // GameState.
+      //  GameState.main.getCamera().setLocation();
     }
 }

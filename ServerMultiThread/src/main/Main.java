@@ -119,6 +119,7 @@ public class Main extends SimpleApplication {
             for (EntityContainer entityContainer : Entities.entityContainers) {
                 
                 EntityAction.moveEntityToPosition(entityContainer);
+                SimpleCollision.checkCollision(entityContainer,Entities.entityContainers);
 
                 if (entityContainer.moveToPositon || entityContainer.isNewCreated) {
                     filteredEntityContainers.add(entityContainer);
@@ -130,7 +131,7 @@ public class Main extends SimpleApplication {
             NetworkMessageHandling.handleCreateEntityMessage();
             NetworkMessageHandling.handleEntityPositionMessage();
             
-            SimpleCollision.checkCollision(Entities.entityContainers);
+            
         }
 
     }

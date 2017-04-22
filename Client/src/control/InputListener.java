@@ -91,10 +91,17 @@ public class InputListener {
             }
             if (name.equals("Left")) {
                 IS_LEFT_PRESSED = true;
-            } else {
-                // System.out.println("Press P to unpause.");
+            } 
+            if(name.equals("MouseWheelForward"))
+            {
+                IS_WHEEL_FORWARD = true;
+            }
+            if(name.equals("MouseWheelBackward"))
+            {
+                IS_WHEEL_BACKWARD = true;
             }
             
+          
         }
     };
 

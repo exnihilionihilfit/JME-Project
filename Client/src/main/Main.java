@@ -64,7 +64,7 @@ public class Main extends SimpleApplication {
     private boolean isRunning;
     private GameState gameState;
 
-    private final Vector3f camerPosition = new Vector3f(0, 50, -30);
+    public final static Vector3f camerPosition = new Vector3f(0, 50, -30);
 
     private Map map;
     // get width and height from OpenGl directly in init
@@ -178,6 +178,7 @@ public class Main extends SimpleApplication {
             gameState.entityInteraction();
             // check HUD input action
             gameState.hudInput();
+            // 
 
             // Reset all Key and Mouse Inputstatets
             InputListener.resetInput();

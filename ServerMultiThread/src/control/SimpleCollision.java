@@ -17,39 +17,36 @@ public class SimpleCollision {
     
     private static final float MININAL_DISTANCE = 10.0f;
     
-    public static void checkCollision(ArrayList<EntityContainer> enityContainers)
+    public static void checkCollision(EntityContainer container, ArrayList<EntityContainer> enityContainers)
     {
         for(EntityContainer entityContainer: enityContainers)
         {
             entityContainer.collided = false;
         }
-        
-        ArrayList<EntityContainer> copyContainers = enityContainers;
-        for(EntityContainer entityContainer:enityContainers)            
-        {
                         
-            for(EntityContainer entityContainerCopy:copyContainers)
+            for(EntityContainer entityContainerCopy:enityContainers)
             {
-                if(entityContainer.entityId != entityContainerCopy.entityId)
+                if(container.entityId != entityContainerCopy.entityId)
                 {
-                    Vector3f tmp = entityContainer.position.subtract(entityContainerCopy.position); 
+                    Vector3f tmp = container.position.subtract(entityContainerCopy.position); 
                     
                     float distance = tmp.length();
                
                     if(distance <= MININAL_DISTANCE )
                     {
-                        reactOnCollision(entityContainer, entityContainerCopy);                    
+                        reactOnCollision(container, entityContainerCopy);                    
                     }                
                 }
             }
-        }
+        
     }
     
     private static void reactOnCollision(EntityContainer a, EntityContainer b) {
-                     
-       /*
+                 
+        a.position = a.lastPosition;
         
-            a.position = a.lastPosition;
+       
+            
             
             Vector3f distance = a.position.subtract(b.position);
             
@@ -65,16 +62,10 @@ public class SimpleCollision {
                  Vector3f setBack = direction.negate().mult(3);
                
                  a.position.addLocal(setBack);
+                 b.position.addLocal(setBack.negate());
                
-         */
-       System.out.println("collision!");
-             
-        
-        
-        
-        
-        
-
-   
+             }
+         
     }
+
 }
