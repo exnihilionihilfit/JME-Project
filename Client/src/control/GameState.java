@@ -60,6 +60,24 @@ public class GameState {
                     // pause
                 } else {
 
+                    // deselct
+                    if (IS_ENTITY_SELECTED) {
+                        if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
+                            if (selectedEntity != null) {
+                                selectedEntity.removeHighLight();
+                            }
+
+                            IS_ENTITY_SELECTED = false;
+                            SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
+
+                            target = null;
+                            entityID = -1;
+                           // InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
+                           // InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
+                            selectedEntity = null;
+                            System.out.println("deselect");
+                        }
+                    }
                     /**
                      * check start condition If the entityID > -1 an entity was
                      * found if so start EntityAction cancle with rightMouse
@@ -73,8 +91,6 @@ public class GameState {
 
                         if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
                             entityID = Action.selectEntity(inputManager, cam, rootNode);
-
-                          
 
                         }
 
@@ -139,30 +155,13 @@ public class GameState {
                                     target = null;
 
                                 } else {
-                                     System.out.println("no target found"); 
+                                    System.out.println("no target found");
                                 }
                             }
                         } else // if its a neutral or entity from another player
                         {
                             //TODO
 
-                        }
-
-                 
-                        if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
-                            if (selectedEntity != null) {
-                                selectedEntity.removeHighLight();
-                            }
-
-                            IS_ENTITY_SELECTED = false;
-                            SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
-
-                            target = null;
-                            entityID = -1;
-                            InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
-                            InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
-                            selectedEntity = null;
-                            System.out.println("deselect");
                         }
 
                     }
