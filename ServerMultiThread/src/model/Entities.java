@@ -15,17 +15,21 @@ public class Entities {
     
     private static int entityId = 0;
     
-     public static final ArrayList<EntityContainer> entityContainers = new ArrayList<>();
+     public static final ArrayList<EntityContainer> ENTITY_CONTAINER = new ArrayList<>();
 
      public static int getNewEntityId()
      {
          entityId++;
          return entityId;
      }
+     public static void addEntity(EntityContainer entityContainer)
+     {
+         Entities.ENTITY_CONTAINER.add(entityContainer);
+     }
      
      public static EntityContainer getEntityById(int entityId){
          
-         for(EntityContainer entity:entityContainers)
+         for(EntityContainer entity:ENTITY_CONTAINER)
          {
              if(entityId == entity.entityId)
              {

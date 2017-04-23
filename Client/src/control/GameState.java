@@ -177,7 +177,7 @@ public class GameState {
     public void hudInput() {
 
         if (HUD.IS_CREATE_ENTITY_BUTTON_PRESSED) {
-            Action.sendCreateEntity(main.sendNetworkMessage);
+            Action.sendCreateEntity(main.sendNetworkMessage, "USS Bob","ship");
             HUD.IS_CREATE_ENTITY_BUTTON_PRESSED = false;
         }
 

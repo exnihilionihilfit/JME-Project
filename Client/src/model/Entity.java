@@ -6,7 +6,6 @@
 package model;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -42,18 +41,20 @@ public class Entity {
     private boolean reseavedNewPositionMessage = false;
     private final int entityID;
     private boolean isMoveable = true;
-    private Node ship;
+    private Node entity;
     
     private boolean isSelected = false;
     private  long playerId;
     private Vector3f direction = new Vector3f(1, 0, 1);
+    private final String type;
 
-    public Entity(Main mainApp, AssetManager assetManager, String name, int entityId,long playerId) {
+    public Entity(Main mainApp, AssetManager assetManager, String name, String type, int entityId,long playerId) {
         this.mainApp = mainApp;
         this.name = name;
         this.assetManager = assetManager;
         this.entityID = entityId;
         this.playerId = playerId;
+        this.type = type;
 
     }
     
@@ -218,21 +219,27 @@ public class Entity {
 
     public Node getEntityNode() {
 
-        if (ship == null) {
-            // load a character from jme3test-test-data
-            ship = (Node) assetManager.loadModel("Models/battleship5/battleship5.j3o");
-            ship.setName("entity");
-            ship.setUserData("id", entityID);
-            ship.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
+        if (entity == null) {
             
-            //rootNode.attachChild(ship);
-            // CollisionShape sceneShape = CollisionShapeFactory.createMeshShape(ship);
-            // RigidBodyControl shipBody = new RigidBodyControl(sceneShape, 0);
+            if(this.type.equals("ship"))
+            {
+            // load a character from jme3test-test-data
+            entity = (Node) assetManager.loadModel("Models/battleship5/battleship5.j3o");
+            entity.setName("entity");
+            entity.setUserData("id", entityID);
+            entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
+            }
+            else if(this.type.equals("asteroid"))
+            {
+              entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
+              entity.rotate((float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI));
+              entity.scale(5f);
+            }
        
         }
         
      
-        return ship;
+        return entity;
 
     }
 
@@ -260,7 +267,7 @@ public class Entity {
 
     public void setDirection(Vector3f newDirection) {
         this.direction = newDirection;
-        
+        // to make sure 
         newDirection = newDirection.mult(5f).add(getEntityNode().getLocalTranslation());
         getEntityNode().lookAt(newDirection, Vector3f.UNIT_Y);
     }

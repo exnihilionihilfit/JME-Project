@@ -6,6 +6,7 @@ import com.jme3.network.Server;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.system.JmeContext;
 import control.EntityAction;
+import control.Map;
 import control.network.NetworkMessageHandling;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -85,6 +86,8 @@ public class Main extends SimpleApplication {
         }
 
         players = new Players();
+        Map map = new Map(200, 50);
+     
 
     }
 
@@ -103,7 +106,7 @@ public class Main extends SimpleApplication {
              * should be realy multy-threaded ;) AND: A reconnected player would
              * get the whole list of entities !
              */
-            NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(Entities.entityContainers);
+            NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(Entities.ENTITY_CONTAINER);
 
             for (Player player : Players.getPlayerList()) {
                 if (player.getConnection() != null) {
@@ -116,10 +119,10 @@ public class Main extends SimpleApplication {
         } else {
             filteredEntityContainers.clear();
 
-            for (EntityContainer entityContainer : Entities.entityContainers) {
+            for (EntityContainer entityContainer : Entities.ENTITY_CONTAINER) {
                 
                 EntityAction.moveEntityToPosition(entityContainer);
-                SimpleCollision.checkCollision(entityContainer,Entities.entityContainers);
+                SimpleCollision.checkCollision(entityContainer,Entities.ENTITY_CONTAINER);
 
                 if (entityContainer.moveToPositon || entityContainer.isNewCreated) {
                     filteredEntityContainers.add(entityContainer);

@@ -13,7 +13,7 @@ import com.jme3.network.serializing.Serializable;
     
     
     public Vector3f position = new Vector3f(1, 0, 0);
-    public String type = "battleship";
+    public String type = "entity";
     public int entityId;
     public long playerId = 0;
     public Vector3f destination = new Vector3f(0, 0, 0);;
@@ -24,18 +24,20 @@ import com.jme3.network.serializing.Serializable;
     public boolean isNewCreated = true;
     public boolean collided = false;
     public Vector3f lastPosition = new Vector3f();
+    public String name;
     
     public EntityContainer()
     {
         
     }
     
-    public EntityContainer(long playerId, int entityId, String type, Vector3f position)
+    public EntityContainer(long playerId, int entityId, String type, String name, Vector3f position)
     {
         this.playerId = playerId;
         this.entityId = entityId;
         this.position = position;
         this.type = type;
+        this.name = name;
     }
   
     

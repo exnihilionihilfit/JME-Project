@@ -317,7 +317,7 @@ public class Main extends SimpleApplication {
                 }
             }
             if (!found) {
-                createEntity(entityContainer.playerId, entityContainer.entityId);
+                createEntity(entityContainer.playerId, entityContainer.entityId, entityContainer.type,entityContainer.name);
                 System.out.println("create new Entity geometry ");
             }
 
@@ -325,14 +325,15 @@ public class Main extends SimpleApplication {
 
     }
 
-    private void createEntity(long playerId, int entityId) {
+    private void createEntity(long playerId, int entityId, String name, String type) {
+        
+         Entity   entity = new Entity(mainApplication, assetManager,name, type, entityId, playerId);
+      
+    
+        rootNode.attachChild(entity.getEntityNode());
 
-        Entity man = new Entity(mainApplication, assetManager, "USS Bob", entityId, playerId);
-
-        rootNode.attachChild(man.getEntityNode());
-
-        ENTITIES.add(man);
-
+        ENTITIES.add(entity);
+     
     }
 
     private void initSendNetworkMessage() {

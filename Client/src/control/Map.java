@@ -21,6 +21,7 @@ public class Map {
      * To create a target-point for movement
      *
      * @param assetManager
+     * @return 
      */
     public Geometry makeFloor(AssetManager assetManager) {
         Box box = new Box(1500, .02f, 1500);
@@ -34,5 +35,7 @@ public class Map {
         floor.setMaterial(mat);
         return floor;
     }
+    
+    
 
 }

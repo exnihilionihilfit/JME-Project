@@ -17,13 +17,14 @@ public class SimpleCollision {
     
     private static final float MININAL_DISTANCE = 10.0f;
     
-    public static void checkCollision(EntityContainer container, ArrayList<EntityContainer> enityContainers)
+    public static boolean checkCollision(EntityContainer container, ArrayList<EntityContainer> enityContainers)
     {
+        /*
         for(EntityContainer entityContainer: enityContainers)
         {
             entityContainer.collided = false;
         }
-                        
+          */              
             for(EntityContainer entityContainerCopy:enityContainers)
             {
                 if(container.entityId != entityContainerCopy.entityId)
@@ -34,11 +35,12 @@ public class SimpleCollision {
                
                     if(distance <= MININAL_DISTANCE )
                     {
-                        reactOnCollision(container, entityContainerCopy);                    
+                       // reactOnCollision(container, entityContainerCopy);  
+                        return true;
                     }                
                 }
             }
-        
+        return false;
     }
     
     private static void reactOnCollision(EntityContainer a, EntityContainer b) {

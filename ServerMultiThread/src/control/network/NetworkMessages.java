@@ -81,14 +81,18 @@ public class NetworkMessages {
 
         boolean isNewEntity = false;
         long playerId;
+        String type;
+        String name;
 
         public CreateEntityMessage() {
 
         }
 
-        public CreateEntityMessage(long playerId,boolean isNewEntity) {
+        public CreateEntityMessage(long playerId,boolean isNewEntity, String name, String type) {
             this.playerId = playerId;
             this.isNewEntity = isNewEntity;
+            this.name = name;
+            this.type = type;
         }
     }
     

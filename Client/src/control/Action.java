@@ -39,8 +39,8 @@ public class Action {
         sendNetworkMessage.sendEntityPositionMessage(entity, position);
     }
 
-    public static void sendCreateEntity(SendNetworkMessage sendNetworkMessage) {
-        sendNetworkMessage.sendCreateEntityMessage();
+    public static void sendCreateEntity(SendNetworkMessage sendNetworkMessage,String name,String type) {
+        sendNetworkMessage.sendCreateEntityMessage(name , type);
     }
 
     /*
