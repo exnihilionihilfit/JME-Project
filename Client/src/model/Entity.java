@@ -74,9 +74,10 @@ public class Entity {
 
     public void removeHighLight() {
         getEntityNode().removeLight(Main.entityHighLightLight);
+         getEntityNode().removeLight(Main.entityNeutralHighLightLight);
     }
       public void addNeutralHighlight() {
-        getEntityNode().removeLight(Main.entityNeutralHighLightLight);
+        getEntityNode().addLight(Main.entityNeutralHighLightLight);
     }
     
     public boolean isSelected(){
@@ -233,6 +234,8 @@ public class Entity {
             {
               entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
               entity.rotate((float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI));
+              entity.setName("entity");
+              entity.setUserData("id", entityID);
               entity.scale(5f);
             }
        

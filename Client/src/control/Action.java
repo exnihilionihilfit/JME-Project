@@ -100,6 +100,7 @@ public class Action {
                 
                 while(node != null)
                 {                    
+                    System.out.println(node.getName());
                     if(node.getName().equals("entity"))
                     {
                         System.out.println(node.getName());

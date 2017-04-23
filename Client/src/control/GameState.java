@@ -38,7 +38,7 @@ public class GameState {
     private static Target target;
     private int entityID;
 
-    private double zoomFactor = 1.0f;
+    private double zoomFactor = 3.0f;
     private Vector3f currentLocation;
     private Vector2f mousePosition2d;
     private float tollerance;
@@ -73,7 +73,9 @@ public class GameState {
 
                         if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
                             entityID = Action.selectEntity(inputManager, cam, rootNode);
-                            InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
+
+                          
+
                         }
 
                         /**
@@ -84,16 +86,20 @@ public class GameState {
 
                             if (selectedEntity != null) {
 
+                                InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
+
                                 if (selectedEntity.getPlayerId() == Player.getPlayerId()) {
                                     selectedEntity.addHighlight();
-                                    IS_ENTITY_SELECTED = true;
 
-                                    System.out.println("Entity selected \n name: " + selectedEntity.getName()
-                                            + " playerId: " + selectedEntity.getPlayerId()
-                                            + " entityId: " + entityID);
                                 } else {
                                     selectedEntity.addNeutralHighlight();
+
                                 }
+
+                                IS_ENTITY_SELECTED = true;
+                                System.out.println("Entity selected \n name: " + selectedEntity.getName()
+                                        + " playerId: " + selectedEntity.getPlayerId()
+                                        + " entityId: " + entityID);
 
                             }
                         }
@@ -101,56 +107,64 @@ public class GameState {
 
                     if (IS_ENTITY_SELECTED) {
 
-                        /**
-                         * try to get an target we need the target center point
-                         * pick point and target id if an entity was picked. To
-                         * do so we use a target object to gather all needed
-                         * info
-                         */
+                        // if its players entity
+                        if (selectedEntity.getPlayerId() == Player.getPlayerId()) {
+                            /**
+                             * try to get an target we need the target center
+                             * point pick point and target id if an entity was
+                             * picked. To do so we use a target object to gather
+                             * all needed info
+                             */
+                            if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
+                                target = Action.selectTargetPositionOnFloor(inputManager, cam, rootNode);
+                                InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
+
+                                if (target != null) {
+                                    SEND_ENTITY_MOVE_ACTION_TO_SERVER = true;
+
+                                }
+                                if (SEND_ENTITY_MOVE_ACTION_TO_SERVER) {
+
+                                    Vector3f entityPositionTarget = target.getPointOnFloor();
+
+                                    System.out.println("ENTIY " + selectedEntity);
+
+                                    Action.sendEntityMoveAction(main.sendNetworkMessage, selectedEntity, entityPositionTarget);
+
+                                    System.out.println("target found!" + target.getContactPoint());
+
+                                    // IS_ENTITY_SELECTED = false;
+                                    SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
+                                    //  selectedEntity = null;
+                                    target = null;
+
+                                } else {
+                                     System.out.println("no target found"); 
+                                }
+                            }
+                        } else // if its a neutral or entity from another player
+                        {
+                            //TODO
+
+                        }
+
+                 
                         if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
-                            target = Action.selectTargetPositionOnFloor(inputManager, cam, rootNode);
+                            if (selectedEntity != null) {
+                                selectedEntity.removeHighLight();
+                            }
+
+                            IS_ENTITY_SELECTED = false;
+                            SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
+
+                            target = null;
+                            entityID = -1;
+                            InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
                             InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
-
-                            if (target != null) {
-                                SEND_ENTITY_MOVE_ACTION_TO_SERVER = true;
-
-                            }
-                            if (SEND_ENTITY_MOVE_ACTION_TO_SERVER) {
-
-                                Vector3f entityPositionTarget = target.getPointOnFloor();
-
-                                System.out.println("ENTIY " + selectedEntity);
-
-                                Action.sendEntityMoveAction(main.sendNetworkMessage, selectedEntity, entityPositionTarget);
-
-                                System.out.println("target found!" + target.getContactPoint());
-
-                                // IS_ENTITY_SELECTED = false;
-                                SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
-                                //  selectedEntity = null;
-                                target = null;
-
-                            } else {
-                                // System.out.println("no target found"); 
-                            }
+                            selectedEntity = null;
+                            System.out.println("deselect");
                         }
 
-                    }
-
-                    if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
-                        if (selectedEntity != null) {
-                            selectedEntity.removeHighLight();
-                        }
-
-                        IS_ENTITY_SELECTED = false;
-                        SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
-
-                        target = null;
-                        entityID = -1;
-                        InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
-                        InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
-                        selectedEntity = null;
-                        System.out.println("deselect");
                     }
 
                 }
@@ -177,7 +191,7 @@ public class GameState {
     public void hudInput() {
 
         if (HUD.IS_CREATE_ENTITY_BUTTON_PRESSED) {
-            Action.sendCreateEntity(main.sendNetworkMessage, "USS Bob","ship");
+            Action.sendCreateEntity(main.sendNetworkMessage, "USS Bob", "ship");
             HUD.IS_CREATE_ENTITY_BUTTON_PRESSED = false;
         }
 
