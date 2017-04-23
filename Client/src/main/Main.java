@@ -57,7 +57,7 @@ public class Main extends SimpleApplication {
     long lastTime = System.currentTimeMillis();
     private static final List<Entity> ENTITIES = new ArrayList();
     /* This constructor creates a new executor with a core pool size of 4. */
-    public ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(50);
+    public ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
 
     public SendNetworkMessage sendNetworkMessage;
 
@@ -65,7 +65,7 @@ public class Main extends SimpleApplication {
     private boolean isRunning;
     private GameState gameState;
 
-    public final static Vector3f camerPosition = new Vector3f(0, 50, -30);
+    public final static Vector3f camerPosition = new Vector3f(0, 150, -130);
 
     private Map map;
     // get width and height from OpenGl directly in init
@@ -200,6 +200,12 @@ public class Main extends SimpleApplication {
 
             checkIfDisplayIsResized();
             
+            
+       
+      
+
+        
+            
     
         }
     }
@@ -303,7 +309,7 @@ public class Main extends SimpleApplication {
 
                 if (entity.getID() == entityContainer.entityId) {
 
-                    
+                  
                     entity.setDirection(entityContainer.direction);
                     entity.setPosition(entityContainer.position);
                     found = true;

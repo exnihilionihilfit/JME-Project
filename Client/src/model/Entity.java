@@ -23,7 +23,7 @@ import main.Main;
 public class Entity {
     //The vector to store the desired location in:
 
-    private Vector3f desiredLocation = new Vector3f();
+   
 //The MyWayList object that contains the result waylist:
     private MyWayList wayList = null;
 //The future that is used to check the execution status:
@@ -36,16 +36,17 @@ public class Entity {
     private final AssetManager assetManager;
     private Node entityNode;
 
-    private Vector3f nextPosition;
+    
 
     private boolean recevedNewPositionMessage = false;
     private boolean reseavedNewPositionMessage = false;
-    private int entityID;
+    private final int entityID;
     private boolean isMoveable = true;
     private Node ship;
     
     private boolean isSelected = false;
     private  long playerId;
+    private Vector3f direction = new Vector3f(1, 0, 1);
 
     public Entity(Main mainApp, AssetManager assetManager, String name, int entityId,long playerId) {
         this.mainApp = mainApp;
@@ -110,13 +111,7 @@ public class Entity {
         this.recevedNewPositionMessage = b;
     }
 
-    public Vector3f getNextPosition() {
-        return this.nextPosition;
-    }
-
-    public void setNextPosition(Vector3f nextPosition) {
-        this.nextPosition = nextPosition;
-    }
+  
 
     public boolean isSendNewPositionMessage() {
         return this.reseavedNewPositionMessage;
@@ -143,9 +138,7 @@ public class Entity {
         return entityID;
     }
 
-    public String getNextPositionAsString() {
-        return nextPosition.toString();
-    }
+ 
 
     Callable<MyWayList> newPosition = new Callable<MyWayList>() {
 
@@ -216,11 +209,7 @@ public class Entity {
 
         }
          */
-        if (nextPosition != null) {
-          //  getEntityNode().setLocalTranslation(nextPosition);
-
-            // recevedNewPositionMessage = false;
-        }
+      
     }
 
     private Vector3f getLocalTranslation() {
@@ -241,6 +230,8 @@ public class Entity {
             // RigidBodyControl shipBody = new RigidBodyControl(sceneShape, 0);
        
         }
+        
+     
         return ship;
 
     }
@@ -249,15 +240,29 @@ public class Entity {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void setDirection(Vector3f lookAt) {
-       
- 
-        getEntityNode().lookAt(lookAt, Vector3f.UNIT_Y);
-       
+    public void setToLookAt(Vector3f targetPosition) {
+     
+        if(targetPosition != null)
+        {
+        getEntityNode().lookAt(targetPosition, Vector3f.UNIT_Y);
+        }
+        
+    }
+    
+    public Vector3f getDirection()
+    {
+        return this.direction;
     }
 
     public void setPosition(Vector3f position) {
         getEntityNode().setLocalTranslation(position);
+    }
+
+    public void setDirection(Vector3f newDirection) {
+        this.direction = newDirection;
+        
+        newDirection = newDirection.mult(5f).add(getEntityNode().getLocalTranslation());
+        getEntityNode().lookAt(newDirection, Vector3f.UNIT_Y);
     }
 
   

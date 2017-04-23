@@ -49,19 +49,20 @@ public class NetworkMessageHandling {
         if (entityPositionMessage != null) {
 
             // just send the position back without check ... for now ...
-            String newPositonVector = entityPositionMessage.position;
+            Vector3f newPositonVector = entityPositionMessage.position;
+            Vector3f newDirection = entityPositionMessage.direction;
             int entityID = entityPositionMessage.entityID;
             long playerId = entityPositionMessage.payerId;
 
             System.out.println("Client [" + entityID + "] Validate position: " + newPositonVector);
 
-            NetworkMessages.EntityPositionMessage newPositionMessage = new NetworkMessages.EntityPositionMessage(playerId, entityID, newPositonVector);
+            NetworkMessages.EntityPositionMessage newPositionMessage = new NetworkMessages.EntityPositionMessage(playerId, entityID, newPositonVector,newDirection);
 
-            Player player = Players.checkListOfPlayersContains(playerId);
+           // Player player = Players.checkListOfPlayersContains(playerId);
 
             EntityContainer entityContainer = Entities.getEntityById(entityPositionMessage.entityID);
 
-            entityContainer.destination = Helper.convertStringToVector3f(newPositionMessage.position);
+            entityContainer.destination = newPositionMessage.position;
             entityContainer.lastMoveUpdate = System.currentTimeMillis();
             entityContainer.moveToPositon = true;
             entityContainer.playerId = entityPositionMessage.payerId;

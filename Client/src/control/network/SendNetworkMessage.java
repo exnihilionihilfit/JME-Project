@@ -23,9 +23,9 @@ public class SendNetworkMessage {
         this.client = client;
     }
     
-    public void sendEntityPositionMessage(Entity entity, Vector3f newPosition)
+    public void sendEntityPositionMessage(Entity entity, Vector3f targetPosition)
     {    
-         NetworkMessages.EntityPositionMessage message = new NetworkMessages.EntityPositionMessage(Player.getPlayerId(),entity.getID(), newPosition.toString());
+         NetworkMessages.EntityPositionMessage message = new NetworkMessages.EntityPositionMessage(Player.getPlayerId(),entity.getID(), targetPosition,entity.getDirection());
          client.send(message);   
       
     }

@@ -6,6 +6,7 @@
  */
 package control.network;
 
+import com.jme3.math.Vector3f;
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
 import java.util.ArrayList;
@@ -58,18 +59,20 @@ public class NetworkMessages {
     @Serializable
     public static class EntityPositionMessage extends AbstractMessage {
 
-        String position;
+        Vector3f position;
         int entityID;
         long payerId;
+        Vector3f direction;
         
         public EntityPositionMessage() {
 
         }
 
-        public EntityPositionMessage(long playerId, int entityID, String position) {
+        public EntityPositionMessage(long playerId, int entityID, Vector3f position, Vector3f direction) {
             this.payerId = playerId;
             this.position = position;
             this.entityID = entityID;
+            this.direction = direction;
         }
     }
 

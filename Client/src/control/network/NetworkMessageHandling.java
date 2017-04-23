@@ -32,30 +32,7 @@ public class NetworkMessageHandling {
         }
     }
 
-    /*
-    take each call one message and handle it
-    returns false if the deque is empty and no messages are there
-    returns true if a massage is handeld
-     */
-    public static boolean handleEntityPositionMessage() {
-        NetworkMessages.EntityPositionMessage entityPositionMessage = NetworkMessageListener.ENTITY_POSITION_MESSAGE.poll();
-
-        if (entityPositionMessage != null) {
-
-            for (Entity entity : Main.getEntities()) {
-                if (entityPositionMessage.entityID == entity.getID()) {
-                    entity.setRecevedNewPositionMessage(true);
-                    entity.setNextPosition(Helper.convertStringToVector3f(entityPositionMessage.position));
-
-                }
-            }
-
-            return true;
-        } else {
-            return false;
-        }
-
-    }
+ 
 
     public static void handleEntitiesListMessage(Main main) {
         NetworkMessages.EntitiesListMessage entityPositionMessage = NetworkMessageListener.ENTITY_LIST_MESSAGE.poll();
