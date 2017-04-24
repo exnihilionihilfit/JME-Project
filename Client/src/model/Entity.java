@@ -225,7 +225,7 @@ public class Entity {
             if(this.type.equals("ship"))
             {
             // load a character from jme3test-test-data
-            entity = (Node) assetManager.loadModel("Models/battleship5/battleship5.j3o");
+            entity = (Node) assetManager.loadModel("Models/shuttle_final/shuttle_final.j3o");
             entity.setName("entity");
             entity.setUserData("id", entityID);
             entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
@@ -233,10 +233,12 @@ public class Entity {
             else if(this.type.equals("asteroid"))
             {
               entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
-              entity.rotate((float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI));
-              entity.setName("entity");
+            
+             
+               entity.setName("entity");
               entity.setUserData("id", entityID);
-              entity.scale(5f);
+              entity.scale((float) (Math.random() * 12f));
+             
             }
        
         }

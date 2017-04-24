@@ -114,7 +114,7 @@ public class Main extends SimpleApplication {
         //bulletAppState.setDebugEnabled(true);
         //   bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, 0, 0));
         
-        getRootNode().attachChild(SkyFactory.createSky(getAssetManager(), "Textures/starmap_4k.jpg", SkyFactory.EnvMapType.EquirectMap));
+    
 
 
         getCamera().lookAtDirection(new Vector3f(0, -1, 0.70f), Vector3f.UNIT_Z);
@@ -131,7 +131,7 @@ public class Main extends SimpleApplication {
 
         // We must add a light to make the model visible
         DirectionalLight sun = new DirectionalLight();
-        sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
+        sun.setDirection(new Vector3f(-0.1f, -1.7f, -1.0f));
         rootNode.addLight(sun);
 
         screenWidth = Math.max(Display.getWidth(), 1);
@@ -139,7 +139,7 @@ public class Main extends SimpleApplication {
 
         bulletAppState.setDebugEnabled(true);
         
-   
+        
         initKeys();
         initGameState();
         initHUD();
@@ -201,10 +201,6 @@ public class Main extends SimpleApplication {
             checkIfDisplayIsResized();
             
             
-       
-      
-
-        
             
     
         }
@@ -365,6 +361,7 @@ public class Main extends SimpleApplication {
 
     private void initMap() {
         map = new Map();
+        map.initSky(assetManager, rootNode);
         rootNode.attachChild(map.makeFloor(assetManager));
     }
 

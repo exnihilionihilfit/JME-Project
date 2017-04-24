@@ -5,9 +5,7 @@
  */
 package control.network;
 
-import control.Helper;
 import main.Main;
-import model.Entity;
 
 /**
  *

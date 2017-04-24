@@ -39,6 +39,8 @@ public class Map {
 
             while (SimpleCollision.checkCollision(entityContainer, Entities.ENTITY_CONTAINER)) {
                 entityContainer.position = new Vector3f((float) (Math.random() * mapSize), 10 - (float) (Math.random() * 20), (float) (Math.random() * mapSize));
+                entityContainer.direction =   new Vector3f((float) (Math.random() * 2 * Math.PI),(float) (Math.random() * 2 * Math.PI),(float) (Math.random() * 2 * Math.PI));
+             
             }
 
             if (entityContainer != null) {
