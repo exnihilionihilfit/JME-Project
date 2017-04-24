@@ -12,6 +12,8 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.network.Client;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.FogFilter;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeContext;
@@ -124,7 +126,7 @@ public class Main extends SimpleApplication {
         Display.setResizable(true);
         // Prevent the flycam from grabbing the mouse
         // This is necessary because otherwise we couldn't resize the window.
-        flyCam.setDragToRotate(true);
+     //   flyCam.setDragToRotate(true);
 
         inputManager.setCursorVisible(true);
         flyCam.setEnabled(false);

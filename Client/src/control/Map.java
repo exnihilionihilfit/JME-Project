@@ -45,7 +45,7 @@ public class Map {
         Texture eastTex = assetManager.loadTexture("Textures/background/east.png");
         Texture northTex = assetManager.loadTexture("Textures/background/north.png");
         Texture southTex = assetManager.loadTexture("Textures/background/south.png");
-        Texture upTex = assetManager.loadTexture("Textures/background/up.png");
+        Texture upTex = assetManager.loadTexture("Textures/background/top.png");
         Texture downTex = assetManager.loadTexture("Textures/background/down.png");
         final Vector3f normalScale = new Vector3f(1, 1, 1);
 
