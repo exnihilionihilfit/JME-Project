@@ -25,14 +25,21 @@ import main.Main;
  *
  * @author novo
  */
-public class HUD {
+public final class HUD {
 
-    private final Container menuContainer;
+    public static boolean IS_CREATE_DRONE_BUTTON_PRESSED;
+    public static boolean IS_CREATE_FREIGHTER_BUTTON_PRESSED;
+    public static boolean IS_CREATE_SKIFF_BUTTON_PRESSED;
+    public static boolean IS_CREATE_EXCHANGE_STATION_BUTTON_PRESSED;
+    public static boolean IS_CREATE_SENSOR_STATION_BUTTON_PRESSED;
+
+    private final Container createShipContainer;
     private Main main;
 
-    public static boolean IS_CREATE_ENTITY_BUTTON_PRESSED;
+    public static boolean IS_CREATE_BATTLESHIP_BUTTON_PRESSED;
     public static boolean IS_SERVER_ADRESS_ENTERD;
     private final Container serverAdressContainer;
+    private final Container createBuildingContainer;
 
     public HUD(Main main, Node guiNode, BitmapFont guiFont, AssetManager assetManager) {
 
@@ -47,7 +54,6 @@ public class HUD {
         helloText.setSize(guiFont.getCharSet().getRenderedSize());
         helloText.setText("Info: \n hit create Entity button to get an entity \n left click selction and movement \n right click deselect ");
         helloText.setLocalTranslation(200, helloText.getLineHeight() + 150, 0);
-       
 
         // Initialize the globals access so that the defualt
         // components can find what they need.
@@ -60,72 +66,86 @@ public class HUD {
         GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
 
         // Create a simple container for our elements
-        menuContainer = new Container();
-        menuContainer.setPreferredSize(new Vector3f(200, 100, 10));
-
-        
-
-        menuContainer.setLocalTranslation(main.getScreenWidth() - 200, main.getScreenHeight() - 100, 0);
+        createShipContainer = new Container();
+        createShipContainer.setPreferredSize(new Vector3f(400, 100, 10));
 
         // Add some elements
-        menuContainer.addChild(new Label("Menu"));
-        Button createEntityButton = menuContainer.addChild(new Button("Create Ship"));
-        createEntityButton.setAlpha(0.5f);
+        createShipContainer.addChild(new Label("Ship"));
+        Button createDroneButton = createShipContainer.addChild(new Button("Drone"));
+        Button createFreighterButton = createShipContainer.addChild(new Button("Freighter"));
 
-        createEntityButton.addClickCommands(new Command<Button>() {
+        createBuildingContainer = new Container();
+        createBuildingContainer.setPreferredSize(new Vector3f(400, 100, 10));
+        createBuildingContainer.addChild(new Label("Building"));
+        Button createSkiffButton = createBuildingContainer.addChild(new Button("Skiff"));
+        Button createExchange_Station_Button = createBuildingContainer.addChild(new Button("Exchange Station"));
+        Button createSensor_Station_Button = createBuildingContainer.addChild(new Button("Sensor Station"));
+
+        createDroneButton.setAlpha(0.5f);
+
+        createDroneButton.addClickCommands(new Command<Button>() {
 
             @Override
             public void execute(Button source) {
-                IS_CREATE_ENTITY_BUTTON_PRESSED = true;
+                IS_CREATE_DRONE_BUTTON_PRESSED = true;
 
-                System.out.println("Create Entity");
+                System.out.println("Create Drone");
             }
+        });
+        
+        createFreighterButton.addClickCommands(new Command<Button>(){
+            @Override
+            public void execute(Button s) {
+               IS_CREATE_BATTLESHIP_BUTTON_PRESSED = true;
+                System.out.println("Create Freighter");
+            }
+            
         });
 
         serverAdressContainer = new Container();
         serverAdressContainer.addChild(new Label("Insert server adress"));
         serverAdressContainer.setPreferredSize(new Vector3f(300, 100, 10));
-        serverAdressContainer.setLocalTranslation(main.getScreenWidth() -300, 100, 0);
+        serverAdressContainer.setLocalTranslation(main.getScreenWidth() - 300, 100, 0);
         guiNode.attachChild(serverAdressContainer);
 
         TextField serverAdressInput = serverAdressContainer.addChild(new TextField("localhost"));
         Button connectToServer = serverAdressContainer.addChild(new Button("connect"));
-        
-        connectToServer.addClickCommands(new Command<Button>(){
+
+        connectToServer.addClickCommands(new Command<Button>() {
             @Override
             public void execute(Button s) {
-               guiNode.attachChild(menuContainer);
-               guiNode.detachChild(serverAdressContainer);
-               guiNode.attachChild(helloText);
-              
-               
-               if(InputServerData.checkServerAdress(serverAdressInput.getText()))
-               {
-                   InputServerData.SERVER_ADRESS = serverAdressInput.getText();
-                   InputServerData.IS_VALID_SERVER_DATA = true;
-                   
-                    IS_SERVER_ADRESS_ENTERD = true;
-                 
-                helloText.setText(" try to connect to server ");
-               }
-              
-            }
-            
-        });
+                guiNode.attachChild(createShipContainer);
+                guiNode.attachChild(createBuildingContainer);
+                guiNode.detachChild(serverAdressContainer);
+                guiNode.attachChild(helloText);
 
+                if (InputServerData.checkServerAdress(serverAdressInput.getText())) {
+                    InputServerData.SERVER_ADRESS = serverAdressInput.getText();
+                    InputServerData.IS_VALID_SERVER_DATA = true;
+
+                    IS_SERVER_ADRESS_ENTERD = true;
+
+                    helloText.setText(" try to connect to server ");
+                }
+
+            }
+
+        });
+        updateMenu();
     }
 
     public void updateMenu() {
-        menuContainer.setLocalTranslation(main.getScreenWidth() - 200, main.getScreenHeight() - 100, 0);
-        serverAdressContainer.setLocalTranslation(main.getScreenWidth() -300, 100, 0);
+        createShipContainer.setLocalTranslation(main.getScreenWidth() - 200, main.getScreenHeight() - 100, 0);
+        createBuildingContainer.setLocalTranslation(main.getScreenWidth() - 200, main.getScreenHeight() - 200, 0);
+        serverAdressContainer.setLocalTranslation(main.getScreenWidth() - 300, 100, 0);
     }
 
     public boolean isCreateEntityButtonIsPressed() {
-        return IS_CREATE_ENTITY_BUTTON_PRESSED;
+        return IS_CREATE_BATTLESHIP_BUTTON_PRESSED;
     }
 
     private void resetIsCreateEntityButtonPressed() {
-        IS_CREATE_ENTITY_BUTTON_PRESSED = false;
+        IS_CREATE_BATTLESHIP_BUTTON_PRESSED = false;
     }
 
     public void resetInput() {

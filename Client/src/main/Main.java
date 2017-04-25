@@ -78,8 +78,8 @@ public class Main extends SimpleApplication {
     private final long REGISTER_ON_SERVER_DELAY = 1000;
 
     public static AmbientLight entityHighLightLight = new AmbientLight(ColorRGBA.Green);
- public static AmbientLight entityNeutralHighLightLight = new AmbientLight(ColorRGBA.Orange);
-    
+    public static AmbientLight entityNeutralHighLightLight = new AmbientLight(ColorRGBA.Orange);
+
     public static void main(String[] args) {
 
         Main.args = args;
@@ -89,7 +89,6 @@ public class Main extends SimpleApplication {
 
         newSetting.setFrameRate(60);
         newSetting.setMinResolution(1024, 860);
-        
 
         mainApplication.setSettings(newSetting);
 
@@ -115,9 +114,6 @@ public class Main extends SimpleApplication {
         //  stateManager.attach(bulletAppState);
         //bulletAppState.setDebugEnabled(true);
         //   bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, 0, 0));
-        
-    
-
 
         getCamera().lookAtDirection(new Vector3f(0, -1, 0.70f), Vector3f.UNIT_Z);
         getCamera().setLocation(this.camerPosition);
@@ -126,7 +122,7 @@ public class Main extends SimpleApplication {
         Display.setResizable(true);
         // Prevent the flycam from grabbing the mouse
         // This is necessary because otherwise we couldn't resize the window.
-     //   flyCam.setDragToRotate(true);
+        //   flyCam.setDragToRotate(true);
 
         inputManager.setCursorVisible(true);
         flyCam.setEnabled(false);
@@ -140,8 +136,7 @@ public class Main extends SimpleApplication {
         screenHeight = Math.max(Display.getHeight(), 1);
 
         bulletAppState.setDebugEnabled(true);
-        
-        
+
         initKeys();
         initGameState();
         initHUD();
@@ -154,6 +149,8 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
 
+        checkIfDisplayIsResized();
+        
         if (HUD.IS_SERVER_ADRESS_ENTERD) {
             connectToServer();
             if (client != null) {
@@ -197,14 +194,11 @@ public class Main extends SimpleApplication {
             // HUD reset e.g. buttons
             hud.resetInput();
             // Handle messages from server 
-            NetworkMessageHandling.handlePingMessage();         
+            NetworkMessageHandling.handlePingMessage();
             NetworkMessageHandling.handleEntitiesListMessage(this);
 
-            checkIfDisplayIsResized();
             
-            
-            
-    
+
         }
     }
 
@@ -307,16 +301,22 @@ public class Main extends SimpleApplication {
 
                 if (entity.getID() == entityContainer.entityId) {
 
-                  
                     entity.setDirection(entityContainer.direction);
                     entity.setPosition(entityContainer.position);
                     found = true;
                     break;
                 }
+                
+                
             }
             if (!found) {
-                createEntity(entityContainer.playerId, entityContainer.entityId, entityContainer.type,entityContainer.name);
+                
+            
+                if(entityContainer.entityId >= -1)
+                {
+                createEntity(entityContainer.playerId, entityContainer.entityId, entityContainer.name  , entityContainer.type);
                 System.out.println("create new Entity geometry ");
+                }
             }
 
         }
@@ -324,14 +324,20 @@ public class Main extends SimpleApplication {
     }
 
     private void createEntity(long playerId, int entityId, String name, String type) {
-        
-         Entity   entity = new Entity(mainApplication, assetManager,name, type, entityId, playerId);
-      
-    
-        rootNode.attachChild(entity.getEntityNode());
 
-        ENTITIES.add(entity);
-     
+        Entity entity = new Entity(mainApplication, assetManager, name, type, entityId, playerId);
+
+       if(entity.getEntityNode() != null){
+             rootNode.attachChild(entity.getEntityNode());
+
+            ENTITIES.add(entity);
+       }
+       else
+       {
+           System.out.println("Crete new Entity failed for type: "+type);
+       }
+          
+        
     }
 
     private void initSendNetworkMessage() {

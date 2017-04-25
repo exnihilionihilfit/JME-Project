@@ -22,7 +22,6 @@ import main.Main;
 public class Entity {
     //The vector to store the desired location in:
 
-   
 //The MyWayList object that contains the result waylist:
     private MyWayList wayList = null;
 //The future that is used to check the execution status:
@@ -35,20 +34,18 @@ public class Entity {
     private final AssetManager assetManager;
     private Node entityNode;
 
-    
-
     private boolean recevedNewPositionMessage = false;
     private boolean reseavedNewPositionMessage = false;
     private final int entityID;
     private boolean isMoveable = true;
     private Node entity;
-    
+
     private boolean isSelected = false;
-    private  long playerId;
+    private long playerId;
     private Vector3f direction = new Vector3f(1, 0, 1);
     private final String type;
 
-    public Entity(Main mainApp, AssetManager assetManager, String name, String type, int entityId,long playerId) {
+    public Entity(Main mainApp, AssetManager assetManager, String name, String type, int entityId, long playerId) {
         this.mainApp = mainApp;
         this.name = name;
         this.assetManager = assetManager;
@@ -57,14 +54,12 @@ public class Entity {
         this.type = type;
 
     }
-    
-    public void setPlayerId(long playerId)
-    {
+
+    public void setPlayerId(long playerId) {
         this.playerId = playerId;
     }
-    
-    public long getPlayerId()
-    {
+
+    public long getPlayerId() {
         return this.playerId;
     }
 
@@ -74,18 +69,19 @@ public class Entity {
 
     public void removeHighLight() {
         getEntityNode().removeLight(Main.entityHighLightLight);
-         getEntityNode().removeLight(Main.entityNeutralHighLightLight);
+        getEntityNode().removeLight(Main.entityNeutralHighLightLight);
     }
-      public void addNeutralHighlight() {
+
+    public void addNeutralHighlight() {
         getEntityNode().addLight(Main.entityNeutralHighLightLight);
     }
-    
-    public boolean isSelected(){
+
+    public boolean isSelected() {
         return this.isSelected;
-       
+
     }
-    public void setSelected(boolean value)
-    {
+
+    public void setSelected(boolean value) {
         this.isSelected = value;
     }
 
@@ -113,8 +109,6 @@ public class Entity {
         this.recevedNewPositionMessage = b;
     }
 
-  
-
     public boolean isSendNewPositionMessage() {
         return this.reseavedNewPositionMessage;
     }
@@ -139,8 +133,6 @@ public class Entity {
     public int getID() {
         return entityID;
     }
-
- 
 
     Callable<MyWayList> newPosition = new Callable<MyWayList>() {
 
@@ -211,7 +203,6 @@ public class Entity {
 
         }
          */
-      
     }
 
     private Vector3f getLocalTranslation() {
@@ -220,30 +211,44 @@ public class Entity {
 
     public Node getEntityNode() {
 
-        if (entity == null) {
-            
-            if(this.type.equals("ship"))
-            {
-            // load a character from jme3test-test-data
-            entity = (Node) assetManager.loadModel("Models/shuttle_final/shuttle_final.j3o");
-            entity.setName("entity");
-            entity.setUserData("id", entityID);
-            entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
+        if (entity == null && this.type != null) {
+
+            if (this.type.equals(EntityTypes.BATTLESHIP.name())) {
+                
+               
+                entity = (Node) assetManager.loadModel("Models/shuttle_final/shuttle_final.j3o");
+                entity.setName("entity");
+                entity.setUserData("id", entityID);
+                entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
+                entity.scale((float) (3));
+                 
+            } else if (this.type.equals(EntityTypes.FREIGHTER.name())) {
+                
+                entity = (Node) assetManager.loadModel("Models/freighter/freighter.j3o");
+                entity.setName("entity");
+                entity.setUserData("id", entityID);
+                entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
+                entity.scale((float) (3));
+
+            }else if (this.type.equals(EntityTypes.DRONE.name())) {
+                
+                 entity = (Node) assetManager.loadModel("Models/drone/drone.j3o");
+                entity.setName("entity");
+                entity.setUserData("id", entityID);
+                entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
+                entity.scale((float) (3));
+                
+            } else if (this.type.equals(EntityTypes.ASTEROID.name())) {
+                entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
+
+                entity.setName("entity");
+                entity.setUserData("id", entityID);
+                entity.scale((float) (Math.random() * 12f));
+
             }
-            else if(this.type.equals("asteroid"))
-            {
-              entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
-            
-             
-               entity.setName("entity");
-              entity.setUserData("id", entityID);
-              entity.scale((float) (Math.random() * 12f));
-             
-            }
-       
+
         }
-        
-     
+
         return entity;
 
     }
@@ -253,16 +258,14 @@ public class Entity {
     }
 
     public void setToLookAt(Vector3f targetPosition) {
-     
-        if(targetPosition != null)
-        {
-        getEntityNode().lookAt(targetPosition, Vector3f.UNIT_Y);
+
+        if (targetPosition != null) {
+            getEntityNode().lookAt(targetPosition, Vector3f.UNIT_Y);
         }
-        
+
     }
-    
-    public Vector3f getDirection()
-    {
+
+    public Vector3f getDirection() {
         return this.direction;
     }
 
@@ -277,6 +280,8 @@ public class Entity {
         getEntityNode().lookAt(newDirection, Vector3f.UNIT_Y);
     }
 
-  
+    public String getType() {
+        return this.type;
+    }
 
 }

@@ -14,6 +14,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import control.network.SendNetworkMessage;
 import model.Entity;
+import model.EntityTypes;
 import model.Target;
 
 /**
@@ -111,6 +112,10 @@ public class Action {
             }
         }
         return selectedEntityID;
+    }
+
+    static void sendCreateEntity(SendNetworkMessage sendNetworkMessage, String uss_Bob, EntityTypes entityTypes) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

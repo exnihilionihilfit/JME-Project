@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import model.Entities;
 import model.EntityContainer;
+import model.EntityTypes;
 
 /**
  *
@@ -35,13 +36,15 @@ public class Map {
         for (int i = 0; i < this.numberOfAsteroids; i++) {
             position = new Vector3f((float) (Math.random() * mapSize), 10 - (float) (Math.random() * 20), (float) (Math.random() * mapSize));
 
-            entityContainer = new EntityContainer(-1L, Entities.getNewEntityId(), "asteroid", "asteroid", position);
+            entityContainer = new EntityContainer(-1L, Entities.getNewEntityId(), "Asteroid_"+Entities.getNewEntityId(), EntityTypes.ASTEROID.name(), position);
 
             while (SimpleCollision.checkCollision(entityContainer, Entities.ENTITY_CONTAINER)) {
                 entityContainer.position = new Vector3f((float) (Math.random() * mapSize), 10 - (float) (Math.random() * 20), (float) (Math.random() * mapSize));
                 entityContainer.direction =   new Vector3f((float) (Math.random() * 2 * Math.PI),(float) (Math.random() * 2 * Math.PI),(float) (Math.random() * 2 * Math.PI));
              
             }
+            
+            
 
             if (entityContainer != null) {
                 Entities.addEntity(entityContainer);

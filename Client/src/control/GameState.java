@@ -11,6 +11,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import main.Main;
 import model.Entity;
+import model.EntityTypes;
 import model.Player;
 import model.Target;
 import view.HUD;
@@ -38,7 +39,7 @@ public class GameState {
     private static Target target;
     private int entityID;
 
-    private double zoomFactor = 3.0f;
+    private double zoomFactor = 4.0f;
     private Vector3f currentLocation;
     private Vector2f mousePosition2d;
     private float tollerance;
@@ -72,8 +73,8 @@ public class GameState {
 
                             target = null;
                             entityID = -1;
-                           // InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
-                           // InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
+                            // InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
+                            // InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
                             selectedEntity = null;
                             System.out.println("deselect");
                         }
@@ -189,11 +190,30 @@ public class GameState {
 
     public void hudInput() {
 
-        if (HUD.IS_CREATE_ENTITY_BUTTON_PRESSED) {
-            Action.sendCreateEntity(main.sendNetworkMessage, "USS Bob", "ship");
-            HUD.IS_CREATE_ENTITY_BUTTON_PRESSED = false;
-        }
+        String shipType = null;
 
+        if (HUD.IS_CREATE_BATTLESHIP_BUTTON_PRESSED) {
+            
+            shipType = EntityTypes.BATTLESHIP.name();
+            HUD.IS_CREATE_BATTLESHIP_BUTTON_PRESSED = false;
+            
+        } else if (HUD.IS_CREATE_DRONE_BUTTON_PRESSED) {
+            
+            shipType = EntityTypes.DRONE.name();
+            HUD.IS_CREATE_DRONE_BUTTON_PRESSED = false;
+            
+        } else if(HUD.IS_CREATE_FREIGHTER_BUTTON_PRESSED)            
+        {
+            shipType = EntityTypes.FREIGHTER.name();
+            HUD.IS_CREATE_FREIGHTER_BUTTON_PRESSED = false;
+            
+        }
+        
+        if(shipType != null)
+        {
+              Action.sendCreateEntity(main.sendNetworkMessage, "USS"+shipType, shipType);
+        }
+      
     }
 
     public void mouseZoom() {

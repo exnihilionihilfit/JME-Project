@@ -10,7 +10,9 @@
             <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/EntityAction.java</file>
             <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/model/EntityContainer.java</file>
             <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/main/Main.java</file>
+            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/Entity.java</file>
             <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/network/NetworkMessageHandling.java</file>
+            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/model/EntityTypes.java</file>
             <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/GameOptions.java</file>
             <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/network/NetworkMessageListener.java</file>
         </group>

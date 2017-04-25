@@ -31,14 +31,18 @@ import com.jme3.network.serializing.Serializable;
         
     }
     
-    public EntityContainer(long playerId, int entityId, String type, String name, Vector3f position)
+    public EntityContainer(long playerId, int entityId, String name, String type, Vector3f position)
     {
         this.playerId = playerId;
         this.entityId = entityId;
         this.position = position;
         this.type = type;
         this.name = name;
+        
+        
     }
+
+ 
   
     
 }
