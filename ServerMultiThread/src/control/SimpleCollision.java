@@ -51,6 +51,7 @@ public class SimpleCollision {
      * ToDo:    - nonmovable objects
      *          - own collision for them
      *          - collision damage
+     *          - move methode in enteties
     */
 
                  
