@@ -1,11 +1,19 @@
+private.properties
+
 /Client/nbproject/private/
 /Client/build/
 /Client/dist/
+/Client/nbproject/private/private.properties
+
 
 /Picking/nbproject/private/
 /Picking/build/
 /Picking/dist/
+/Picking/nbproject/private/private.properties
+
 
 /ServerMultiThread/nbproject/private/
 /ServerMultiThread/build/
 /ServerMultiThread/dist/
+/ServerMultiThread/nbproject/private/private.properties
+

@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import model.EntityContainer;
 
 /**
- *
- * @author novo
+ * 
+ * @author Antarius
  */
 public class SimpleCollision {
     
-    private static final float MININAL_DISTANCE = 10.0f;
+    private static final float MININAL_DISTANCE = 30.0f;
     
     public static boolean checkCollision(EntityContainer container, ArrayList<EntityContainer> enityContainers)
     {
@@ -33,9 +33,9 @@ public class SimpleCollision {
                     
                     float distance = tmp.length();
                
-                    if(distance <= MININAL_DISTANCE )
+                    if(distance < MININAL_DISTANCE )
                     {
-                       // reactOnCollision(container, entityContainerCopy);  
+                       primitiveReactOnCollision(container, entityContainerCopy, tmp);  
                         return true;
                     }                
                 }
@@ -43,25 +43,30 @@ public class SimpleCollision {
         return false;
     }
     
-    private static void reactOnCollision(EntityContainer a, EntityContainer b) {
+      private static void primitiveReactOnCollision(EntityContainer a, EntityContainer b, Vector3f vectorAminusB) {
+
+    
+
                  
         a.position = a.lastPosition;
         
        
             
-            Vector3f distance = a.position.subtract(b.position);
+            float distance = vectorAminusB.length();
             
-             if(distance.length() < MININAL_DISTANCE )
+             if(distance < MININAL_DISTANCE)
              {
-                 Vector3f direction = distance.normalize();
+                 Vector3f direction = vectorAminusB.normalize();
                  
                  if(direction.equals(Vector3f.ZERO))
                  {
                      direction = Vector3f.UNIT_X;
                  }
-                 
-                 Vector3f setBack = direction.negate().mult(3);
-               
+
+                 float closeness = (MININAL_DISTANCE - distance) /*  / 2 +1   */; //gibt noch probleme wegen dritter dimension
+                 Vector3f setBack = direction.mult(closeness);
+                 setBack.y = 0;
+                              
                  a.position.addLocal(setBack);
                  b.position.addLocal(setBack.negate());
                
