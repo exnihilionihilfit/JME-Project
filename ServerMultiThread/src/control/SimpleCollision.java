@@ -11,7 +11,7 @@ import model.EntityContainer;
 
 /**
  * 
- * @author Antarius
+ * @author Antarius, novo
  */
 public class SimpleCollision {
     
@@ -45,7 +45,13 @@ public class SimpleCollision {
     
       private static void primitiveReactOnCollision(EntityContainer a, EntityContainer b, Vector3f vectorAminusB) {
 
-    
+    /**
+     * 
+     * @author Antarius
+     * ToDo:    - nonmovable objects
+     *          - own collision for them
+     *          - collision damage
+    */
 
                  
         a.position = a.lastPosition;
