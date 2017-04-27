@@ -86,7 +86,7 @@ public class Main extends SimpleApplication {
         }
 
         players = new Players();
-        Map map = new Map(200, 50);
+        Map map = new Map(400, 200);
 
     }
 
@@ -105,6 +105,7 @@ public class Main extends SimpleApplication {
              * should be realy multy-threaded ;) AND: A reconnected player would
              * get the whole list of entities !
              */
+            // should be filtedEntities but we need to set proper flags and send client at start all entities once !
             NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(Entities.ENTITY_CONTAINER);
 
             for (Player player : Players.getPlayerList()) {
@@ -112,6 +113,7 @@ public class Main extends SimpleApplication {
 
                     synchronized (player.getConnection()) {
                         player.getConnection().notify();
+                       
                         player.getConnection().send(entitiesListMessage);
                         try {
                             player.getConnection().wait(20);
