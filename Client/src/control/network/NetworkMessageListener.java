@@ -66,10 +66,10 @@ public class NetworkMessageListener {
         public void messageReceived(Client source, Message message) {
             
              // should used only once at registration
-            if(message instanceof NetworkMessages.RegisterOnServer)
+            if(message instanceof NetworkMessages.RegisterOnServerMessage)
             {
                
-                NetworkMessages.RegisterOnServer registerOnServerMessage = (NetworkMessages.RegisterOnServer) message;
+                NetworkMessages.RegisterOnServerMessage registerOnServerMessage = (NetworkMessages.RegisterOnServerMessage) message;
                
                 // 0L is default value and idicates no registration yet
                 if(Player.getPlayerId() == 0L)

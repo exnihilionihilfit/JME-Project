@@ -25,6 +25,7 @@ import com.jme3.network.serializing.Serializable;
     public boolean collided = false;
     public Vector3f lastPosition = new Vector3f();
     public String name;
+    public double size = 1;
     
     public EntityContainer()
     {

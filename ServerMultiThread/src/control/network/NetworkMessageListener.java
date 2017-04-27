@@ -10,6 +10,7 @@ import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import java.util.LinkedList;
 import java.util.Queue;
+import model.Entities;
 import model.Player;
 
 /**
@@ -22,7 +23,10 @@ public class NetworkMessageListener {
     static final Queue<NetworkMessages.PingMessage> PING_MESSAGES = new LinkedList<>();
     static final Queue<NetworkMessages.CreateEntityMessage> CREATE_ENTITY_MESSAGES = new LinkedList<>();
     static final Queue<NetworkMessages.EntityPositionMessage> ENTITY_POSITION_MESSAGE = new LinkedList<>();
-       
+    static final Queue<NetworkMessages.RegisterOnServerMessage> REGISTER_ON_SERVER_MESSAGE =  new LinkedList<>();
+            
+              
+    
     public Queue<NetworkMessages.PingMessage> getPingMessages()
     {
         return PING_MESSAGES;
@@ -56,15 +60,17 @@ public class NetworkMessageListener {
         @Override
         public void messageReceived(HostedConnection source, Message message) {
             
-            if(message instanceof NetworkMessages.RegisterOnServer)
+            if(message instanceof NetworkMessages.RegisterOnServerMessage)
             {
                 // should used only once at registration
-                NetworkMessages.RegisterOnServer registerOnServerMessage = (NetworkMessages.RegisterOnServer) message;
-               
-                // get a new or old player , if null a client tries to connect with a playerId that doesn't exsist (shouldn't be!)
-                 NetworkMessageHandling.addPlayer(source, registerOnServerMessage,source);
+                NetworkMessages.RegisterOnServerMessage registerOnServerMessage = (NetworkMessages.RegisterOnServerMessage) message;
                 
-            
+                NetworkMessageHandling.addPlayer(source, registerOnServerMessage);
+                
+                  NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(Entities.ENTITY_CONTAINER);
+
+                
+                source.send(entitiesListMessage);
                 
             }
               if (message instanceof NetworkMessages.PingMessage) {

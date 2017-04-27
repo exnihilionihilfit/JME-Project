@@ -54,7 +54,7 @@ public class Main extends SimpleApplication {
             Serializer.registerClass(NetworkMessages.PingMessage.class);
             Serializer.registerClass(NetworkMessages.EntityPositionMessage.class);
             Serializer.registerClass(NetworkMessages.CreateEntityMessage.class);
-            Serializer.registerClass(NetworkMessages.RegisterOnServer.class);
+            Serializer.registerClass(NetworkMessages.RegisterOnServerMessage.class);
             Serializer.registerClass(NetworkMessages.EntitiesListMessage.class);
             Serializer.registerClass(EntityContainer.class);
 
@@ -70,7 +70,7 @@ public class Main extends SimpleApplication {
                 NetworkMessages.CreateEntityMessage.class,
                 NetworkMessages.EntityPositionMessage.class,
                 NetworkMessages.PingMessage.class,
-                NetworkMessages.RegisterOnServer.class,
+                NetworkMessages.RegisterOnServerMessage.class,
                 NetworkMessages.EntitiesListMessage.class,
                 EntityContainer.class);
 
@@ -106,7 +106,7 @@ public class Main extends SimpleApplication {
              * get the whole list of entities !
              */
             // should be filtedEntities but we need to set proper flags and send client at start all entities once !
-            NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(Entities.ENTITY_CONTAINER);
+            NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(filteredEntityContainers);
 
             for (Player player : Players.getPlayerList()) {
                 if (player.getConnection() != null) {
@@ -132,7 +132,7 @@ public class Main extends SimpleApplication {
                 EntityAction.moveEntityToPosition(entityContainer);
                 SimpleCollision.checkCollision(entityContainer, Entities.ENTITY_CONTAINER);
 
-                if (entityContainer.moveToPositon || entityContainer.isNewCreated) {
+                if (entityContainer.moveToPositon || entityContainer.isNewCreated || entityContainer.collided) {
                     filteredEntityContainers.add(entityContainer);
                     entityContainer.isNewCreated = false;
 
@@ -141,6 +141,7 @@ public class Main extends SimpleApplication {
 
             NetworkMessageHandling.handleCreateEntityMessage();
             NetworkMessageHandling.handleEntityPositionMessage();
+     
 
         }
 

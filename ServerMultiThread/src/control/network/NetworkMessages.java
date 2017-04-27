@@ -8,6 +8,7 @@ package control.network;
 
 import com.jme3.math.Vector3f;
 import com.jme3.network.AbstractMessage;
+import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
 import java.util.ArrayList;
 import model.EntityContainer;
@@ -19,22 +20,24 @@ import model.EntityContainer;
 public class NetworkMessages {
 
     @Serializable
-    public static class RegisterOnServer extends AbstractMessage {
+    public static class RegisterOnServerMessage extends AbstractMessage {
 
         String clienUserName;
         long playerId;
+      
 
-        public RegisterOnServer() {
+        public RegisterOnServerMessage() {
             // empty constructor
         }
 
-        public RegisterOnServer(String userName) {
+        public RegisterOnServerMessage(String userName) {
             this.clienUserName = userName;
         }
 
-        public RegisterOnServer(String clientUserName, long uuid) {
+        public RegisterOnServerMessage(String clientUserName, long uuid) {
             this.clienUserName = clientUserName;
             this.playerId = uuid;
+        
         }
     }
 

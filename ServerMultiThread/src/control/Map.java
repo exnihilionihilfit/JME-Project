@@ -48,6 +48,7 @@ public class Map {
             
 
             if (entityContainer != null) {
+               
                 Entities.addEntity(entityContainer);
             }
         }

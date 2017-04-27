@@ -80,9 +80,10 @@ public class NetworkMessageHandling {
      * @param registerOnServerMessage
      * @param source
      */
-    public static void addPlayer(HostedConnection connection, NetworkMessages.RegisterOnServer registerOnServerMessage, HostedConnection source) {
+    public static void addPlayer(HostedConnection connection, NetworkMessages.RegisterOnServerMessage registerOnServerMessage) {
 
         Player player = null;
+       
         // a new player
         if (registerOnServerMessage.playerId == 0L) {
             // create id 
@@ -106,7 +107,7 @@ public class NetworkMessageHandling {
 
         if (player != null) {
             registerOnServerMessage.playerId = player.getPlayerId();
-            source.send(registerOnServerMessage);
+          connection.send(registerOnServerMessage);
 
             System.out.println(" registered client \n name: " + registerOnServerMessage.clienUserName + " id: " + registerOnServerMessage.playerId);
         } else {
@@ -134,5 +135,7 @@ public class NetworkMessageHandling {
             }
         }
     }
+    
+
 
 }

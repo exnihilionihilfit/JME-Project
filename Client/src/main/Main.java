@@ -250,7 +250,7 @@ public class Main extends SimpleApplication {
                     NetworkMessages.PingMessage.class,
                     NetworkMessages.CreateEntityMessage.class,
                     NetworkMessages.EntityPositionMessage.class,
-                    NetworkMessages.RegisterOnServer.class,
+                    NetworkMessages.RegisterOnServerMessage.class,
                     NetworkMessages.EntitiesListMessage.class,
                     EntityContainer.class);
 
@@ -294,6 +294,8 @@ public class Main extends SimpleApplication {
     public void setEntitiesPositionFromServerList(ArrayList<EntityContainer> containerEntities) {
 
         boolean found = false;
+        
+        
 
         for (EntityContainer entityContainer : containerEntities) {
             for (Entity entity : Main.ENTITIES) {
@@ -314,8 +316,9 @@ public class Main extends SimpleApplication {
             
                 if(entityContainer.entityId >= -1)
                 {
-                createEntity(entityContainer.playerId, entityContainer.entityId, entityContainer.name  , entityContainer.type);
-                System.out.println("create new Entity geometry ");
+                createEntity(entityContainer);
+               
+                System.out.println("create new Entity geometry "+entityContainer.type);
                 }
             }
 
@@ -323,10 +326,11 @@ public class Main extends SimpleApplication {
 
     }
 
-    private void createEntity(long playerId, int entityId, String name, String type) {
+    private void createEntity(EntityContainer entityContainer) {
 
-        Entity entity = new Entity(mainApplication, assetManager, name, type, entityId, playerId);
+        Entity entity = new Entity(mainApplication, assetManager, entityContainer.name, entityContainer.type, entityContainer.entityId, entityContainer.playerId);
 
+        entity.setPosition(entityContainer.position);
        if(entity.getEntityNode() != null){
              rootNode.attachChild(entity.getEntityNode());
 
@@ -334,7 +338,7 @@ public class Main extends SimpleApplication {
        }
        else
        {
-           System.out.println("Crete new Entity failed for type: "+type);
+           System.out.println("Crete new Entity failed for type: "+entityContainer.type);
        }
           
         
@@ -384,7 +388,7 @@ public class Main extends SimpleApplication {
 
     private void registerOnServer() {
         try {
-            client.send(new NetworkMessages.RegisterOnServer("Bob"));
+            client.send(new NetworkMessages.RegisterOnServerMessage("Bob"));
         } catch (Exception e) {
             System.out.println(" client is not ready ");
         }

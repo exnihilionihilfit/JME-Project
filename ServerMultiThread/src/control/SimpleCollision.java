@@ -19,12 +19,12 @@ public class SimpleCollision {
     
     public static boolean checkCollision(EntityContainer container, ArrayList<EntityContainer> enityContainers)
     {
-        /*
+        
         for(EntityContainer entityContainer: enityContainers)
         {
             entityContainer.collided = false;
         }
-          */              
+                       
             for(EntityContainer entityContainerCopy:enityContainers)
             {
                 if(container.entityId != entityContainerCopy.entityId)
@@ -36,6 +36,7 @@ public class SimpleCollision {
                     if(distance < MININAL_DISTANCE )
                     {
                        primitiveReactOnCollision(container, entityContainerCopy, tmp);  
+                       container.collided = true;
                         return true;
                     }                
                 }
@@ -73,8 +74,10 @@ public class SimpleCollision {
                  Vector3f setBack = direction.mult(closeness);
            
                               
-                 a.position.addLocal(setBack);
+                a.position.addLocal(setBack);
                  b.position.addLocal(setBack.negate());
+                 
+             
                
              }
          
