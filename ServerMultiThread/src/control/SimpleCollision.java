@@ -71,7 +71,7 @@ public class SimpleCollision {
 
                  float closeness = (MININAL_DISTANCE - distance) /*  / 2 +1   */; //gibt noch probleme wegen dritter dimension
                  Vector3f setBack = direction.mult(closeness);
-                 setBack.y = 0;
+           
                               
                  a.position.addLocal(setBack);
                  b.position.addLocal(setBack.negate());

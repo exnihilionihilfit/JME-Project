@@ -87,7 +87,6 @@ public class Main extends SimpleApplication {
 
         players = new Players();
         Map map = new Map(200, 50);
-     
 
     }
 
@@ -111,8 +110,15 @@ public class Main extends SimpleApplication {
             for (Player player : Players.getPlayerList()) {
                 if (player.getConnection() != null) {
 
-                    player.getConnection().send(entitiesListMessage);
-
+                    synchronized (player.getConnection()) {
+                        player.getConnection().notify();
+                        player.getConnection().send(entitiesListMessage);
+                        try {
+                            player.getConnection().wait(20);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 }
 
             }
@@ -120,9 +126,9 @@ public class Main extends SimpleApplication {
             filteredEntityContainers.clear();
 
             for (EntityContainer entityContainer : Entities.ENTITY_CONTAINER) {
-                
+
                 EntityAction.moveEntityToPosition(entityContainer);
-                SimpleCollision.checkCollision(entityContainer,Entities.ENTITY_CONTAINER);
+                SimpleCollision.checkCollision(entityContainer, Entities.ENTITY_CONTAINER);
 
                 if (entityContainer.moveToPositon || entityContainer.isNewCreated) {
                     filteredEntityContainers.add(entityContainer);
@@ -133,8 +139,7 @@ public class Main extends SimpleApplication {
 
             NetworkMessageHandling.handleCreateEntityMessage();
             NetworkMessageHandling.handleEntityPositionMessage();
-            
-            
+
         }
 
     }
