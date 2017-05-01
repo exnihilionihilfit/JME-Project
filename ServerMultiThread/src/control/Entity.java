@@ -14,9 +14,7 @@ import com.jme3.scene.Spatial;
  * @author chasma
  */
 public class Entity {
-    
-    
-    
+
     private void move(Spatial ship) {
 
         // get node data
@@ -68,5 +66,5 @@ public class Entity {
         ship.setUserData("lastMoveUpdate", System.currentTimeMillis());
 
     }
-    
+
 }

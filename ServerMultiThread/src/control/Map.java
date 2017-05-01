@@ -36,19 +36,17 @@ public class Map {
         for (int i = 0; i < this.numberOfAsteroids; i++) {
             position = new Vector3f((float) (Math.random() * mapSize), 0, (float) (Math.random() * mapSize));
 
-            entityContainer = new EntityContainer(-1L, Entities.getNewEntityId(), "Asteroid_"+Entities.getNewEntityId(), EntityTypes.ASTEROID.name(), position);
+            entityContainer = new EntityContainer(-1L, Entities.getNewEntityId(), "Asteroid_" + Entities.getNewEntityId(), EntityTypes.ASTEROID.name(), position);
 
             while (SimpleCollision.checkCollision(entityContainer, Entities.ENTITY_CONTAINER)) {
                 entityContainer.position = new Vector3f((float) (Math.random() * mapSize), 0, (float) (Math.random() * mapSize));
 
-                entityContainer.direction =   new Vector3f((float) (Math.random() * 2 * Math.PI),(float) (Math.random() * 2 * Math.PI),(float) (Math.random() * 2 * Math.PI));
-             
+                entityContainer.direction = new Vector3f((float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI));
+
             }
-            
-            
 
             if (entityContainer != null) {
-               
+
                 Entities.addEntity(entityContainer);
             }
         }

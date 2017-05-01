@@ -1,7 +1,7 @@
 /**
- * To prevent problems with multi-pressed keys 
+ * To prevent problems with multi-pressed keys
  * and massive typing we set each key stroke to a field
- * and reset it after a time. 
+ * and reset it after a time.
  * Also it should be timed (not yet) so only each time intervall
  * the keys will be set
  */
@@ -32,7 +32,7 @@ public class InputListener {
     public static boolean IS_WHEEL_FORWARD = false;
     public static boolean IS_WHEEL_BACKWARD = false;
 
-    public static int KEY_CODE = -1;  
+    public static int KEY_CODE = -1;
 
     public InputListener() {
 
@@ -72,16 +72,15 @@ public class InputListener {
                 IS_WHEEL_FORWARD = "MouseWheelForward".equals(name);
 
                 IS_WHEEL_BACKWARD = "MouseWheelBackward".endsWith(name);
-                
-               
+
             }
         }
     };
 
-   public static final ActionListener ACTION_LISTENER = new ActionListener() {
+    public static final ActionListener ACTION_LISTENER = new ActionListener() {
         @Override
         public void onAction(String name, boolean isPressed, float tpf) {
-          IS_KEY_PRESSED = true;
+            IS_KEY_PRESSED = true;
             if (name.equals("Rotate")) {
                 IS_ROTATE_PRESSED = true;
 
@@ -91,21 +90,15 @@ public class InputListener {
             }
             if (name.equals("Left")) {
                 IS_LEFT_PRESSED = true;
-            } 
-            if(name.equals("MouseWheelForward"))
-            {
+            }
+            if (name.equals("MouseWheelForward")) {
                 IS_WHEEL_FORWARD = true;
             }
-            if(name.equals("MouseWheelBackward"))
-            {
+            if (name.equals("MouseWheelBackward")) {
                 IS_WHEEL_BACKWARD = true;
             }
-            
-          
+
         }
     };
-
-        
-   
 
 }

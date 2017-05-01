@@ -113,7 +113,7 @@ public class Main extends SimpleApplication {
 
                     synchronized (player.getConnection()) {
                         player.getConnection().notify();
-                       
+
                         player.getConnection().send(entitiesListMessage);
                         try {
                             player.getConnection().wait(20);
@@ -141,7 +141,6 @@ public class Main extends SimpleApplication {
 
             NetworkMessageHandling.handleCreateEntityMessage();
             NetworkMessageHandling.handleEntityPositionMessage();
-     
 
         }
 

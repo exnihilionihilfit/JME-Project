@@ -12,14 +12,14 @@ import java.util.ArrayList;
  * @author novo
  */
 public class Players {
-     private static final ArrayList<Player> LIST_OF_PLAYERS = new ArrayList<>();
-     
-     public static ArrayList<Player> getPlayerList()
-     {
-         return Players.LIST_OF_PLAYERS;
-     }
-     
-         public static Player checkListOfPlayersContains(long playerId) {
+
+    private static final ArrayList<Player> LIST_OF_PLAYERS = new ArrayList<>();
+
+    public static ArrayList<Player> getPlayerList() {
+        return Players.LIST_OF_PLAYERS;
+    }
+
+    public static Player checkListOfPlayersContains(long playerId) {
         /**
          *
          * check if player with specific id is allready there and update

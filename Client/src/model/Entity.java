@@ -214,30 +214,29 @@ public class Entity {
         if (entity == null && this.type != null) {
 
             if (this.type.equals(EntityTypes.BATTLESHIP.name())) {
-                
-               
+
                 entity = (Node) assetManager.loadModel("Models/shuttle_final/shuttle_final.j3o");
                 entity.setName("entity");
                 entity.setUserData("id", entityID);
                 entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
                 entity.scale((float) (3));
-                 
+
             } else if (this.type.equals(EntityTypes.FREIGHTER.name())) {
-                
+
                 entity = (Node) assetManager.loadModel("Models/freighter/freighter.j3o");
                 entity.setName("entity");
                 entity.setUserData("id", entityID);
                 entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
                 entity.scale((float) (3));
 
-            }else if (this.type.equals(EntityTypes.DRONE.name())) {
-                
-                 entity = (Node) assetManager.loadModel("Models/drone/drone.j3o");
+            } else if (this.type.equals(EntityTypes.DRONE.name())) {
+
+                entity = (Node) assetManager.loadModel("Models/drone/drone.j3o");
                 entity.setName("entity");
                 entity.setUserData("id", entityID);
                 entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
                 entity.scale((float) (3));
-                
+
             } else if (this.type.equals(EntityTypes.ASTEROID.name())) {
                 entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
 

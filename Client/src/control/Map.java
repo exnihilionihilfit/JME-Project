@@ -13,6 +13,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
+
 /**
  *
  * @author chasma
@@ -25,9 +26,9 @@ public class Map {
      * To create a target-point for movement
      *
      * @param assetManager
-     * @return 
+     * @return
      */
-    public  Geometry makeFloor(AssetManager assetManager) {
+    public Geometry makeFloor(AssetManager assetManager) {
         Box box = new Box(1500, .02f, 1500);
         floor = new Geometry("Floor", box);
         floor.setLocalTranslation(0, -5, 0);
@@ -39,8 +40,8 @@ public class Map {
         floor.setMaterial(mat);
         return floor;
     }
-    
-       public void initSky(AssetManager assetManager,Node rootNode) {
+
+    public void initSky(AssetManager assetManager, Node rootNode) {
         Texture westTex = assetManager.loadTexture("Textures/background/west.png");
         Texture eastTex = assetManager.loadTexture("Textures/background/east.png");
         Texture northTex = assetManager.loadTexture("Textures/background/north.png");

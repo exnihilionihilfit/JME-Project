@@ -12,16 +12,15 @@ import com.jme3.math.Vector3f;
  * @author chasma
  */
 public class MyWayList {
-    
+
     Vector3f newLocation = null;
-    
-    public Vector3f getNewLocation()
-    {
+
+    public Vector3f getNewLocation() {
         return newLocation;
     }
-    public void setNewLocation(Vector3f newLocation)
-    {
+
+    public void setNewLocation(Vector3f newLocation) {
         this.newLocation = newLocation;
     }
-    
+
 }

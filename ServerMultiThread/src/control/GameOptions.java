@@ -10,7 +10,7 @@ package control;
  * @author chasma
  */
 public class GameOptions {
-    
+
     public static long clientStartCredits = 500L;
-    
+
 }

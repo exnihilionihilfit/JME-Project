@@ -14,62 +14,54 @@ import java.util.List;
  * @author chasma
  */
 public class Player {
-    
+
     private long credits;
     private final List<EntityContainer> shipList;
     private HostedConnection connection;
     private long playerId;
-    
-    public Player(long credits, HostedConnection connection, long playerId)
-    {
+
+    public Player(long credits, HostedConnection connection, long playerId) {
         this.credits = credits;
         this.shipList = new ArrayList<>();
         this.connection = connection;
         this.playerId = playerId;
     }
-    
-    public void setPlayerId(long playerId){
+
+    public void setPlayerId(long playerId) {
         this.playerId = playerId;
-                
+
     }
-    
-    public long getPlayerId(){
+
+    public long getPlayerId() {
         return this.playerId;
     }
-    
-    
-    public HostedConnection getConnection()
-    {
+
+    public HostedConnection getConnection() {
         return this.connection;
     }
-    
-    public void setConnection(HostedConnection hostedConnection)
-    {
+
+    public void setConnection(HostedConnection hostedConnection) {
         this.connection = hostedConnection;
     }
-    
-    public long getCredits()
-    {
+
+    public long getCredits() {
         return this.credits;
     }
-    public void addCredits(long income)
-    {
+
+    public void addCredits(long income) {
         this.credits += income;
     }
-    
-    public void removeCredits(long outcome)
-    {        
+
+    public void removeCredits(long outcome) {
         this.credits -= outcome;
     }
-    
- 
-    public List<EntityContainer> getEntityList()
-    {
+
+    public List<EntityContainer> getEntityList() {
         return this.shipList;
     }
 
     public void addHostedConnection(HostedConnection source) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

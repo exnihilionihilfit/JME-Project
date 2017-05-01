@@ -193,27 +193,25 @@ public class GameState {
         String shipType = null;
 
         if (HUD.IS_CREATE_BATTLESHIP_BUTTON_PRESSED) {
-            
+
             shipType = EntityTypes.BATTLESHIP.name();
             HUD.IS_CREATE_BATTLESHIP_BUTTON_PRESSED = false;
-            
+
         } else if (HUD.IS_CREATE_DRONE_BUTTON_PRESSED) {
-            
+
             shipType = EntityTypes.DRONE.name();
             HUD.IS_CREATE_DRONE_BUTTON_PRESSED = false;
-            
-        } else if(HUD.IS_CREATE_FREIGHTER_BUTTON_PRESSED)            
-        {
+
+        } else if (HUD.IS_CREATE_FREIGHTER_BUTTON_PRESSED) {
             shipType = EntityTypes.FREIGHTER.name();
             HUD.IS_CREATE_FREIGHTER_BUTTON_PRESSED = false;
-            
+
         }
-        
-        if(shipType != null)
-        {
-              Action.sendCreateEntity(main.sendNetworkMessage, "USS"+shipType, shipType);
+
+        if (shipType != null) {
+            Action.sendCreateEntity(main.sendNetworkMessage, "USS" + shipType, shipType);
         }
-      
+
     }
 
     public void mouseZoom() {

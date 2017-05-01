@@ -17,19 +17,19 @@ import com.jme3.scene.Node;
  * @author chasma
  */
 public class PickCollision {
-       protected static CollisionResults getCollisionResults(InputManager inputManager, Camera cam, Node rootNode) {
-         // Reset results list.
-            CollisionResults results = new CollisionResults();
-            // Convert screen click to 3d position
-            Vector2f click2d = inputManager.getCursorPosition();
-            Vector3f click3d = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-            Vector3f dir = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
-            // Aim the ray from the clicked spot forwards.
-            Ray ray = new Ray(click3d, dir);
-            // Collect intersections between ray and all nodes in results list.
-            rootNode.collideWith(ray, results);
-           
-           
-            return results;
+
+    protected static CollisionResults getCollisionResults(InputManager inputManager, Camera cam, Node rootNode) {
+        // Reset results list.
+        CollisionResults results = new CollisionResults();
+        // Convert screen click to 3d position
+        Vector2f click2d = inputManager.getCursorPosition();
+        Vector3f click3d = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+        Vector3f dir = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d);
+        // Aim the ray from the clicked spot forwards.
+        Ray ray = new Ray(click3d, dir);
+        // Collect intersections between ray and all nodes in results list.
+        rootNode.collideWith(ray, results);
+
+        return results;
     }
 }

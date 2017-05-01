@@ -15,36 +15,30 @@ import model.Player;
  * @author novo
  */
 public class SendNetworkMessage {
-    
+
     Client client;
-    
-    public SendNetworkMessage(Client client)
-    {
+
+    public SendNetworkMessage(Client client) {
         this.client = client;
     }
-    
-    public void sendEntityPositionMessage(Entity entity, Vector3f targetPosition)
-    {    
-         NetworkMessages.EntityPositionMessage message = new NetworkMessages.EntityPositionMessage(Player.getPlayerId(),entity.getID(), targetPosition,entity.getDirection());
-         client.send(message);   
-      
+
+    public void sendEntityPositionMessage(Entity entity, Vector3f targetPosition) {
+        NetworkMessages.EntityPositionMessage message = new NetworkMessages.EntityPositionMessage(Player.getPlayerId(), entity.getID(), targetPosition, entity.getDirection());
+        client.send(message);
+
     }
-    
-    public void sendPingMessage(String message)
-    {
+
+    public void sendPingMessage(String message) {
         long time = System.currentTimeMillis();
-        NetworkMessages.PingMessage pingMessage = new NetworkMessages.PingMessage(Player.getPlayerId(),message,time);
+        NetworkMessages.PingMessage pingMessage = new NetworkMessages.PingMessage(Player.getPlayerId(), message, time);
         client.send(pingMessage);
     }
-    
-    public void sendCreateEntityMessage(String name, String type)
-    {
+
+    public void sendCreateEntityMessage(String name, String type) {
         NetworkMessages.CreateEntityMessage createEntityMessage = new NetworkMessages.CreateEntityMessage(Player.getPlayerId(), true, name, type);
-        
+
         client.send(createEntityMessage);
         System.out.println("send create entity message");
     }
-   
-               
-    
+
 }

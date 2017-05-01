@@ -10,8 +10,7 @@ package model;
  * @author novo
  */
 public enum EntityTypes {
-    
-  
+
     BATTLESHIP("BATTLESHIP"),
     FREIGHTER("FREIGHTER"),
     SKIFF("SKIFF"),
@@ -19,15 +18,11 @@ public enum EntityTypes {
     DRONE("DRONE"),
     SENSOR_STATION("SENSOR_STATION"),
     ASTEROID("ASTEROID");
- 
 
- private final  String name;
-    
+    private final String name;
+
     EntityTypes(String name) {
-      this.name  = name;
+        this.name = name;
     }
-    
 
-    
-    
 }
