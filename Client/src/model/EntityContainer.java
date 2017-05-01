@@ -25,7 +25,8 @@ public class EntityContainer {
     public boolean collided = false;
     public Vector3f lastPosition = new Vector3f();
     public String name;
-    public double size = 1;
+    public float size = 10;
+    public boolean hasStaticPosition = false;
 
     public EntityContainer() {
 

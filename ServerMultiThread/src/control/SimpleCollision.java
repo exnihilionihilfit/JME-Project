@@ -15,13 +15,16 @@ import model.EntityContainer;
  */
 public class SimpleCollision {
 
-    private static final float MININAL_DISTANCE = 30.0f;
+   public static void resetCollided(ArrayList<EntityContainer> enityContainers)
+   {
+          for (EntityContainer entityContainer : enityContainers) {
+            entityContainer.collided = false;
+        }
+   }
 
     public static boolean checkCollision(EntityContainer container, ArrayList<EntityContainer> enityContainers) {
 
-        for (EntityContainer entityContainer : enityContainers) {
-            entityContainer.collided = false;
-        }
+     
 
         for (EntityContainer entityContainerCopy : enityContainers) {
             if (container.entityId != entityContainerCopy.entityId) {
@@ -29,9 +32,10 @@ public class SimpleCollision {
 
                 float distance = tmp.length();
 
-                if (distance < MININAL_DISTANCE) {
+                if (distance < container.size) {
                     primitiveReactOnCollision(container, entityContainerCopy, tmp);
                     container.collided = true;
+                    entityContainerCopy.collided = true;
                     return true;
                 }
             }
@@ -50,14 +54,14 @@ public class SimpleCollision {
 
         float distance = vectorAminusB.length();
 
-        if (distance < MININAL_DISTANCE) {
+        if (distance < a.size) {
             Vector3f direction = vectorAminusB.normalize();
 
             if (direction.equals(Vector3f.ZERO)) {
                 direction = Vector3f.UNIT_X;
             }
 
-            float closeness = (MININAL_DISTANCE - distance) /*  / 2 +1   */; //gibt noch probleme wegen dritter dimension
+            float closeness = (a.size- distance) /*  / 2 +1   */; //gibt noch probleme wegen dritter dimension
             Vector3f setBack = direction.mult(closeness);
 
             a.position.addLocal(setBack);

@@ -25,12 +25,14 @@ public class Players {
          * check if player with specific id is allready there and update
          * connection
          */
+        synchronized(Players.getPlayerList())
+        {
         for (Player player : Players.getPlayerList()) {
             if (player.getPlayerId() == playerId) {
                 return player;
             }
         }
-
+        }
         return null;
     }
 

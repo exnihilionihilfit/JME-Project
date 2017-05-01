@@ -44,14 +44,16 @@ public class Entity {
     private long playerId;
     private Vector3f direction = new Vector3f(1, 0, 1);
     private final String type;
+    private final EntityContainer entityContainer;
 
-    public Entity(Main mainApp, AssetManager assetManager, String name, String type, int entityId, long playerId) {
+    public Entity(Main mainApp, AssetManager assetManager, EntityContainer entityContainer) {
         this.mainApp = mainApp;
-        this.name = name;
+        this.name =  entityContainer.name;
         this.assetManager = assetManager;
-        this.entityID = entityId;
-        this.playerId = playerId;
-        this.type = type;
+        this.entityID =  entityContainer.entityId;
+        this.playerId =  entityContainer.playerId;
+        this.type =  entityContainer.type;
+        this.entityContainer = entityContainer;
 
     }
 
@@ -212,6 +214,7 @@ public class Entity {
     public Node getEntityNode() {
 
         if (entity == null && this.type != null) {
+            
 
             if (this.type.equals(EntityTypes.BATTLESHIP.name())) {
 
@@ -219,7 +222,7 @@ public class Entity {
                 entity.setName("entity");
                 entity.setUserData("id", entityID);
                 entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
-                entity.scale((float) (3));
+                
 
             } else if (this.type.equals(EntityTypes.FREIGHTER.name())) {
 
@@ -227,7 +230,7 @@ public class Entity {
                 entity.setName("entity");
                 entity.setUserData("id", entityID);
                 entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
-                entity.scale((float) (3));
+                
 
             } else if (this.type.equals(EntityTypes.DRONE.name())) {
 
@@ -235,19 +238,26 @@ public class Entity {
                 entity.setName("entity");
                 entity.setUserData("id", entityID);
                 entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
-                entity.scale((float) (3));
+               
 
             } else if (this.type.equals(EntityTypes.ASTEROID.name())) {
                 entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
 
                 entity.setName("entity");
                 entity.setUserData("id", entityID);
-                entity.scale((float) (Math.random() * 12f));
+              
 
             }
 
         }
-
+        float radius = (float) Math.cbrt(entity.getWorldBound().getVolume());
+        
+        float scaleFactor = (float) (this.entityContainer.size / radius);
+        
+        
+        
+        entity.scale(scaleFactor);
+        
         return entity;
 
     }

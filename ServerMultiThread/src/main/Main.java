@@ -86,7 +86,7 @@ public class Main extends SimpleApplication {
         }
 
         players = new Players();
-        Map map = new Map(400, 200);
+        Map map = new Map(500, 50);
 
     }
 
@@ -108,28 +108,25 @@ public class Main extends SimpleApplication {
             // should be filtedEntities but we need to set proper flags and send client at start all entities once !
             NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(filteredEntityContainers);
 
+             synchronized (Players.getPlayerList()){
             for (Player player : Players.getPlayerList()) {
                 if (player.getConnection() != null) {
 
-                    synchronized (player.getConnection()) {
-                        player.getConnection().notify();
 
-                        player.getConnection().send(entitiesListMessage);
-                        try {
-                            player.getConnection().wait(20);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
+                    player.getConnection().send(entitiesListMessage);
+                     
                 }
-
+            }
             }
         } else {
             filteredEntityContainers.clear();
 
+            SimpleCollision.resetCollided(Entities.ENTITY_CONTAINER);
+            
             for (EntityContainer entityContainer : Entities.ENTITY_CONTAINER) {
 
                 EntityAction.moveEntityToPosition(entityContainer);
+                
                 SimpleCollision.checkCollision(entityContainer, Entities.ENTITY_CONTAINER);
 
                 if (entityContainer.moveToPositon || entityContainer.isNewCreated || entityContainer.collided) {

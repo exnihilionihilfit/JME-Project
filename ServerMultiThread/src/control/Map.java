@@ -37,6 +37,7 @@ public class Map {
             position = new Vector3f((float) (Math.random() * mapSize), 0, (float) (Math.random() * mapSize));
 
             entityContainer = new EntityContainer(-1L, Entities.getNewEntityId(), "Asteroid_" + Entities.getNewEntityId(), EntityTypes.ASTEROID.name(), position);
+            entityContainer.direction = new Vector3f((float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI));
 
             while (SimpleCollision.checkCollision(entityContainer, Entities.ENTITY_CONTAINER)) {
                 entityContainer.position = new Vector3f((float) (Math.random() * mapSize), 0, (float) (Math.random() * mapSize));
@@ -44,6 +45,8 @@ public class Map {
                 entityContainer.direction = new Vector3f((float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI));
 
             }
+
+            entityContainer.size = (float) (Math.random() * 75);
 
             if (entityContainer != null) {
 

@@ -325,7 +325,7 @@ public class Main extends SimpleApplication {
 
     private void createEntity(EntityContainer entityContainer) {
 
-        Entity entity = new Entity(mainApplication, assetManager, entityContainer.name, entityContainer.type, entityContainer.entityId, entityContainer.playerId);
+        Entity entity = new Entity(mainApplication, assetManager, entityContainer);
 
         entity.setPosition(entityContainer.position);
        if(entity.getEntityNode() != null){

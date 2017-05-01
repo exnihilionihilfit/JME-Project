@@ -89,7 +89,9 @@ public class NetworkMessageHandling {
             registerOnServerMessage.playerId = uuid.getLeastSignificantBits();
             player = new Player(GameOptions.clientStartCredits, connection, registerOnServerMessage.playerId);
 
-            Players.getPlayerList().add(player);
+            synchronized (Players.getPlayerList()) {
+                Players.getPlayerList().add(player);
+            }
 
         } else {
             player = Players.checkListOfPlayersContains(registerOnServerMessage.playerId);
