@@ -15,17 +15,16 @@ import model.EntityContainer;
  */
 public class SimpleCollision {
     
-       public static void resetCollided(ArrayList<EntityContainer> enityContainers)
-   {
-          for(EntityContainer entityContainer : enityContainers) {
-            entityContainer.collided = false;
-        }
-   }
+    private static final float MININAL_DISTANCE = 30.0f;
     
     public static boolean checkCollision(EntityContainer container, ArrayList<EntityContainer> enityContainers)
     {
-    
-        
+        /*
+        for(EntityContainer entityContainer: enityContainers)
+        {
+            entityContainer.collided = false;
+        }
+          */              
             for(EntityContainer entityContainerCopy:enityContainers)
             {
                 if(container.entityId != entityContainerCopy.entityId)
@@ -34,11 +33,9 @@ public class SimpleCollision {
                     
                     float distance = tmp.length();
                
-                    if (distance < container.size) 
+                    if(distance < MININAL_DISTANCE )
                     {
-                        primitiveReactOnCollision(container, entityContainerCopy, tmp);  
-                        container.collided = true;
-                        entityContainerCopy.collided = true;
+                       primitiveReactOnCollision(container, entityContainerCopy, tmp);  
                         return true;
                     }                
                 }
@@ -64,7 +61,7 @@ public class SimpleCollision {
             
             float distance = vectorAminusB.length();
             
-             if(distance < a.size)
+             if(distance < MININAL_DISTANCE)
              {
                  Vector3f direction = vectorAminusB.normalize();
                  
@@ -73,7 +70,7 @@ public class SimpleCollision {
                      direction = Vector3f.UNIT_X;
                  }
 
-                 float closeness = (a.size - distance) /*  / 2 +1   */; //gibt noch probleme wegen dritter dimension
+                 float closeness = (MININAL_DISTANCE - distance) /*  / 2 +1   */; //gibt noch probleme wegen dritter dimension
                  Vector3f setBack = direction.mult(closeness);
                  setBack.y = 0;
                               
