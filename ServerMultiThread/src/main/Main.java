@@ -54,7 +54,7 @@ public class Main extends SimpleApplication {
             Serializer.registerClass(NetworkMessages.PingMessage.class);
             Serializer.registerClass(NetworkMessages.EntityPositionMessage.class);
             Serializer.registerClass(NetworkMessages.CreateEntityMessage.class);
-            Serializer.registerClass(NetworkMessages.RegisterOnServer.class);
+            Serializer.registerClass(NetworkMessages.RegisterOnServerMessage.class);
             Serializer.registerClass(NetworkMessages.EntitiesListMessage.class);
             Serializer.registerClass(EntityContainer.class);
 
@@ -70,7 +70,7 @@ public class Main extends SimpleApplication {
                 NetworkMessages.CreateEntityMessage.class,
                 NetworkMessages.EntityPositionMessage.class,
                 NetworkMessages.PingMessage.class,
-                NetworkMessages.RegisterOnServer.class,
+                NetworkMessages.RegisterOnServerMessage.class,
                 NetworkMessages.EntitiesListMessage.class,
                 EntityContainer.class);
 
@@ -86,8 +86,7 @@ public class Main extends SimpleApplication {
         }
 
         players = new Players();
-        Map map = new Map(200, 50);
-     
+        Map map = new Map(500, 50);
 
     }
 
@@ -106,25 +105,31 @@ public class Main extends SimpleApplication {
              * should be realy multy-threaded ;) AND: A reconnected player would
              * get the whole list of entities !
              */
-            NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(Entities.ENTITY_CONTAINER);
+            // should be filtedEntities but we need to set proper flags and send client at start all entities once !
+            NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(filteredEntityContainers);
 
+             synchronized (Players.getPlayerList()){
             for (Player player : Players.getPlayerList()) {
                 if (player.getConnection() != null) {
 
+
                     player.getConnection().send(entitiesListMessage);
-
+                     
                 }
-
+            }
             }
         } else {
             filteredEntityContainers.clear();
 
+            SimpleCollision.resetCollided(Entities.ENTITY_CONTAINER);
+            
             for (EntityContainer entityContainer : Entities.ENTITY_CONTAINER) {
-                
-                EntityAction.moveEntityToPosition(entityContainer);
-                SimpleCollision.checkCollision(entityContainer,Entities.ENTITY_CONTAINER);
 
-                if (entityContainer.moveToPositon || entityContainer.isNewCreated) {
+                EntityAction.moveEntityToPosition(entityContainer);
+                
+                SimpleCollision.checkCollision(entityContainer, Entities.ENTITY_CONTAINER);
+
+                if (entityContainer.moveToPositon || entityContainer.isNewCreated || entityContainer.collided) {
                     filteredEntityContainers.add(entityContainer);
                     entityContainer.isNewCreated = false;
 
@@ -133,8 +138,7 @@ public class Main extends SimpleApplication {
 
             NetworkMessageHandling.handleCreateEntityMessage();
             NetworkMessageHandling.handleEntityPositionMessage();
-            
-            
+
         }
 
     }

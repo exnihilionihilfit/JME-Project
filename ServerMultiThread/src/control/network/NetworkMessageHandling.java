@@ -8,7 +8,6 @@ package control.network;
 import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import control.GameOptions;
-import control.Helper;
 import java.util.UUID;
 import model.Entities;
 import model.EntityContainer;
@@ -56,17 +55,16 @@ public class NetworkMessageHandling {
 
             System.out.println("Client [" + entityID + "] Validate position: " + newPositonVector);
 
-            NetworkMessages.EntityPositionMessage newPositionMessage = new NetworkMessages.EntityPositionMessage(playerId, entityID, newPositonVector,newDirection);
+            NetworkMessages.EntityPositionMessage newPositionMessage = new NetworkMessages.EntityPositionMessage(playerId, entityID, newPositonVector, newDirection);
 
-           // Player player = Players.checkListOfPlayersContains(playerId);
-
+            // Player player = Players.checkListOfPlayersContains(playerId);
             EntityContainer entityContainer = Entities.getEntityById(entityPositionMessage.entityID);
 
             entityContainer.destination = newPositionMessage.position;
             entityContainer.lastMoveUpdate = System.currentTimeMillis();
             entityContainer.moveToPositon = true;
             entityContainer.playerId = entityPositionMessage.payerId;
-      
+
         }
     }
 
@@ -80,9 +78,10 @@ public class NetworkMessageHandling {
      * @param registerOnServerMessage
      * @param source
      */
-    public static void addPlayer(HostedConnection connection, NetworkMessages.RegisterOnServer registerOnServerMessage, HostedConnection source) {
+    public static void addPlayer(HostedConnection connection, NetworkMessages.RegisterOnServerMessage registerOnServerMessage) {
 
         Player player = null;
+
         // a new player
         if (registerOnServerMessage.playerId == 0L) {
             // create id 
@@ -90,11 +89,11 @@ public class NetworkMessageHandling {
             registerOnServerMessage.playerId = uuid.getLeastSignificantBits();
             player = new Player(GameOptions.clientStartCredits, connection, registerOnServerMessage.playerId);
 
-            Players.getPlayerList().add(player);
+            synchronized (Players.getPlayerList()) {
+                Players.getPlayerList().add(player);
+            }
 
-        }
-        else 
-        {
+        } else {
             player = Players.checkListOfPlayersContains(registerOnServerMessage.playerId);
 
             if (player != null) {
@@ -106,7 +105,7 @@ public class NetworkMessageHandling {
 
         if (player != null) {
             registerOnServerMessage.playerId = player.getPlayerId();
-            source.send(registerOnServerMessage);
+            connection.send(registerOnServerMessage);
 
             System.out.println(" registered client \n name: " + registerOnServerMessage.clienUserName + " id: " + registerOnServerMessage.playerId);
         } else {
@@ -125,7 +124,7 @@ public class NetworkMessageHandling {
 
             if (player != null) {
                 int tmp = Entities.getNewEntityId();
-                EntityContainer entity = new EntityContainer(playerId, tmp, createEntityMessage.name,createEntityMessage.type, Vector3f.ZERO);
+                EntityContainer entity = new EntityContainer(playerId, tmp, createEntityMessage.name, createEntityMessage.type, Vector3f.ZERO);
                 Entities.ENTITY_CONTAINER.add(entity);
                 System.out.println(" new entity created ");
                 //player.getEntityList().add(ship);

@@ -40,8 +40,8 @@ public class Action {
         sendNetworkMessage.sendEntityPositionMessage(entity, position);
     }
 
-    public static void sendCreateEntity(SendNetworkMessage sendNetworkMessage,String name,String type) {
-        sendNetworkMessage.sendCreateEntityMessage(name , type);
+    public static void sendCreateEntity(SendNetworkMessage sendNetworkMessage, String name, String type) {
+        sendNetworkMessage.sendCreateEntityMessage(name, type);
     }
 
     /*
@@ -85,30 +85,24 @@ public class Action {
         // -1 is floor
         int selectedEntityID = -1;
         if (results.size() > 0) {
-            
-            /**
-             * go through all collison results and
-             * fetch hitted geometry by ray cast
-             * check name of node and go up to root node
-             * if any node called entity
-             * return its id
-             */
-            
-            for (CollisionResult result : results) {                             
 
-               
+            /**
+             * go through all collison results and fetch hitted geometry by ray
+             * cast check name of node and go up to root node if any node called
+             * entity return its id
+             */
+            for (CollisionResult result : results) {
+
                 Node node = result.getGeometry().getParent();
-                
-                while(node != null)
-                {                    
+
+                while (node != null) {
                     System.out.println(node.getName());
-                    if(node.getName().equals("entity"))
-                    {
+                    if (node.getName().equals("entity")) {
                         System.out.println(node.getName());
-                         return node.getUserData("id");                           
-                    }                    
+                        return node.getUserData("id");
+                    }
                     node = node.getParent();
-                }    
+                }
             }
         }
         return selectedEntityID;

@@ -36,7 +36,7 @@ public class ServerConnection {
                 if (InputServerData.SERVER_UDP_PORT > 0) {
                     try {
                         main.client = Network.connectToServer(InputServerData.SERVER_ADRESS, InputServerData.SERVER_IP_PORT, InputServerData.SERVER_UDP_PORT);
-                        System.out.println(" try to connect to " + InputServerData.SERVER_ADRESS+"");
+                        System.out.println(" try to connect to " + InputServerData.SERVER_ADRESS + "");
                     } catch (IOException ex) {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     }

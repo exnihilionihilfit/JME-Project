@@ -34,19 +34,22 @@ public class Map {
         EntityContainer entityContainer = null;
 
         for (int i = 0; i < this.numberOfAsteroids; i++) {
-            position = new Vector3f((float) (Math.random() * mapSize), 10 - (float) (Math.random() * 20), (float) (Math.random() * mapSize));
+            position = new Vector3f((float) (Math.random() * mapSize), 0, (float) (Math.random() * mapSize));
 
-            entityContainer = new EntityContainer(-1L, Entities.getNewEntityId(), "Asteroid_"+Entities.getNewEntityId(), EntityTypes.ASTEROID.name(), position);
+            entityContainer = new EntityContainer(-1L, Entities.getNewEntityId(), "Asteroid_" + Entities.getNewEntityId(), EntityTypes.ASTEROID.name(), position);
+            entityContainer.direction = new Vector3f((float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI));
 
             while (SimpleCollision.checkCollision(entityContainer, Entities.ENTITY_CONTAINER)) {
-                entityContainer.position = new Vector3f((float) (Math.random() * mapSize), 10 - (float) (Math.random() * 20), (float) (Math.random() * mapSize));
-                entityContainer.direction =   new Vector3f((float) (Math.random() * 2 * Math.PI),(float) (Math.random() * 2 * Math.PI),(float) (Math.random() * 2 * Math.PI));
-             
+                entityContainer.position = new Vector3f((float) (Math.random() * mapSize), 0, (float) (Math.random() * mapSize));
+
+                entityContainer.direction = new Vector3f((float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI));
+
             }
-            
-            
+
+            entityContainer.size = (float) (Math.random() * 75);
 
             if (entityContainer != null) {
+
                 Entities.addEntity(entityContainer);
             }
         }

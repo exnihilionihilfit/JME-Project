@@ -11,14 +11,11 @@ import model.Entity;
  * @author novo
  */
 public class UpdateEntity {
-    
 
     public static void update(List<Entity> entities, float tpf) {
-          entities.forEach((entity) -> {
+        entities.forEach((entity) -> {
             entity.update(tpf);
         });
     }
-    
-    
-    
+
 }

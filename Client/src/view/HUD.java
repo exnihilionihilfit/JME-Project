@@ -16,7 +16,6 @@ import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.Label;
 import com.simsilica.lemur.TextField;
-import com.simsilica.lemur.core.GuiLayout;
 import com.simsilica.lemur.style.BaseStyles;
 import control.InputServerData;
 import main.Main;
@@ -92,14 +91,14 @@ public final class HUD {
                 System.out.println("Create Drone");
             }
         });
-        
-        createFreighterButton.addClickCommands(new Command<Button>(){
+
+        createFreighterButton.addClickCommands(new Command<Button>() {
             @Override
             public void execute(Button s) {
-               IS_CREATE_BATTLESHIP_BUTTON_PRESSED = true;
+                IS_CREATE_BATTLESHIP_BUTTON_PRESSED = true;
                 System.out.println("Create Freighter");
             }
-            
+
         });
 
         serverAdressContainer = new Container();

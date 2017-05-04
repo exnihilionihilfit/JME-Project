@@ -10,17 +10,14 @@ package model;
  * @author novo
  */
 public class Player {
-    
-   
+
     private static long playerId = 0L;
-    
-    public static void setPlayerId(long clientID)
-    {
+
+    public static void setPlayerId(long clientID) {
         Player.playerId = clientID;
     }
-    
-    public static long getPlayerId()
-    {
+
+    public static long getPlayerId() {
         return Player.playerId;
     }
 }

@@ -43,14 +43,11 @@ public class EntityAction {
                 if (0.01 > distanceToTargetAsNumber || distanceToTargetAsNumber - flyedLengthSinceLastUpdate < 0) {
                     entity.position = destination;
                     entity.moveToPositon = false;
-                
 
                     System.out.println(" arrived ");
                 } else {
-                    entity.position = entity.position.add(newPositionOnTheWay);                                        
+                    entity.position = entity.position.add(newPositionOnTheWay);
                     entity.direction = entity.position.subtract(entity.lastPosition).normalize();
-                    
-               
 
                 }
 

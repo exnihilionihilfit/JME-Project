@@ -19,22 +19,23 @@ import model.EntityContainer;
 public class NetworkMessages {
 
     @Serializable
-    public static class RegisterOnServer extends AbstractMessage {
+    public static class RegisterOnServerMessage extends AbstractMessage {
 
         String clienUserName;
         long playerId;
 
-        public RegisterOnServer() {
+        public RegisterOnServerMessage() {
             // empty constructor
         }
 
-        public RegisterOnServer(String userName) {
+        public RegisterOnServerMessage(String userName) {
             this.clienUserName = userName;
         }
 
-        public RegisterOnServer(String clientUserName, long uuid) {
+        public RegisterOnServerMessage(String clientUserName, long uuid) {
             this.clienUserName = clientUserName;
             this.playerId = uuid;
+
         }
     }
 
@@ -49,7 +50,7 @@ public class NetworkMessages {
             // empty constructor
         }
 
-        public PingMessage(long playerId,String s, long t) {
+        public PingMessage(long playerId, String s, long t) {
             this.playerId = playerId;
             this.hello = s;
             this.time = t;
@@ -63,7 +64,7 @@ public class NetworkMessages {
         int entityID;
         long payerId;
         Vector3f direction;
-        
+
         public EntityPositionMessage() {
 
         }
@@ -88,29 +89,28 @@ public class NetworkMessages {
 
         }
 
-        public CreateEntityMessage(long playerId,boolean isNewEntity, String name, String type) {
+        public CreateEntityMessage(long playerId, boolean isNewEntity, String name, String type) {
             this.playerId = playerId;
             this.isNewEntity = isNewEntity;
             this.name = name;
             this.type = type;
         }
     }
-    
+
     @Serializable
-    public static class EntitiesListMessage extends AbstractMessage{
-        
+    public static class EntitiesListMessage extends AbstractMessage {
+
         //contains shipId, type, position
-       ArrayList<EntityContainer> entities;
-        
-        public EntitiesListMessage()
-        {
-            
+        ArrayList<EntityContainer> entities;
+
+        public EntitiesListMessage() {
+
         }
-        public EntitiesListMessage(ArrayList<EntityContainer> entities)
-        {
+
+        public EntitiesListMessage(ArrayList<EntityContainer> entities) {
             this.entities = entities;
         }
-        
+
     }
 
 }

@@ -69,9 +69,9 @@ public final class InputServerData {
     }
 
     public static boolean checkServerAdress(String adress) {
-        
+
         adress = adress.trim();
-        
+
         if (adress.equals("localhost")) {
             return true;
         } else {
@@ -79,10 +79,8 @@ public final class InputServerData {
 
             if (parts.length == 4) {
                 return true;
-            }
-            else
-            {
-                System.out.println(" server adress "+adress+" not valid");
+            } else {
+                System.out.println(" server adress " + adress + " not valid");
             }
         }
         return false;

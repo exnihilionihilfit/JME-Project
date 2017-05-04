@@ -12,39 +12,34 @@ import com.jme3.math.Vector3f;
  * @author chasma
  */
 public class Target {
-    
+
     private int targetID;
     private int entityID;
     private Vector3f contatctPoint;
     private Vector3f pointOnFloor;
-    
-    public void setPointOnFloor(Vector3f pointOnFloor)
-    {
+
+    public void setPointOnFloor(Vector3f pointOnFloor) {
         this.pointOnFloor = pointOnFloor;
     }
-    
-    
-    public Vector3f getPointOnFloor()
-    {
+
+    public Vector3f getPointOnFloor() {
         return this.pointOnFloor;
     }
-    
-        public void setContactPoint(Vector3f contactPoint) {
-         this.contatctPoint = contactPoint;
+
+    public void setContactPoint(Vector3f contactPoint) {
+        this.contatctPoint = contactPoint;
     }
-    public Vector3f getContactPoint()
-    {
+
+    public Vector3f getContactPoint() {
         return this.contatctPoint;
     }
-    
-    public void setEntityID(int entityId){
+
+    public void setEntityID(int entityId) {
         this.entityID = entityId;
     }
-    
-    public int getEntityID(){
+
+    public int getEntityID() {
         return this.entityID;
     }
 
-
-    
 }

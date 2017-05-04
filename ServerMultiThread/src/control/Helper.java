@@ -14,7 +14,8 @@ import model.Player;
  * @author novo
  */
 public class Helper {
-       public static Vector3f convertStringToVector3f(String nextPosition) {
+
+    public static Vector3f convertStringToVector3f(String nextPosition) {
 
         String replace = nextPosition.replace("(", "");
         replace = replace.replace(")", "");
@@ -31,7 +32,7 @@ public class Helper {
     }
 
     public static String[] prepareEntitiesList(List<Player> playerList) {
-        
-   return new String[20];
+
+        return new String[20];
     }
 }

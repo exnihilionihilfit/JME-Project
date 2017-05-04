@@ -30,8 +30,6 @@ public class NetworkMessageHandling {
         }
     }
 
- 
-
     public static void handleEntitiesListMessage(Main main) {
         NetworkMessages.EntitiesListMessage entityPositionMessage = NetworkMessageListener.ENTITY_LIST_MESSAGE.poll();
 

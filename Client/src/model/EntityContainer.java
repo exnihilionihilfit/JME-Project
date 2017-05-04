@@ -8,15 +8,15 @@ package model;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 
-    @Serializable
-    public class EntityContainer{
-    
-    
+@Serializable
+public class EntityContainer {
+
     public Vector3f position = new Vector3f(1, 0, 0);
     public String type = "entity";
     public int entityId;
     public long playerId = 0;
-    public Vector3f destination = new Vector3f(0, 0, 0);;
+    public Vector3f destination = new Vector3f(0, 0, 0);
+    
     public float speed = 15.0f;
     public long lastMoveUpdate;
     public boolean moveToPositon;
@@ -25,24 +25,20 @@ import com.jme3.network.serializing.Serializable;
     public boolean collided = false;
     public Vector3f lastPosition = new Vector3f();
     public String name;
-    
-    public EntityContainer()
-    {
-        
+    public float size = 10;
+    public boolean hasStaticPosition = false;
+
+    public EntityContainer() {
+
     }
-    
-    public EntityContainer(long playerId, int entityId, String name, String type, Vector3f position)
-    {
+
+    public EntityContainer(long playerId, int entityId, String name, String type, Vector3f position) {
         this.playerId = playerId;
         this.entityId = entityId;
         this.position = position;
         this.type = type;
         this.name = name;
-        
-        
+
     }
 
- 
-  
-    
 }
