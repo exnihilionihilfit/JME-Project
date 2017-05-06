@@ -16,6 +16,8 @@ import control.network.NetworkMessageListener;
 import control.network.NetworkMessages;
 import control.SimpleCollision;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import model.Entities;
 import model.EntityContainer;
 import model.Players;
@@ -30,11 +32,14 @@ public class Main extends SimpleApplication {
 
     Server server = null;
     long lastTime = 0;
-    long timeInterval = 50;
+    long timeInterval = 40;
     int PORT_IP = 6143;
     int PORT_UDP = 6142;
+    int maxMessageSize = 50;
     private static Players players;
     ArrayList<EntityContainer> filteredEntityContainers = new ArrayList<>();
+
+    static final Queue<EntityContainer> CLIENT_MESSAGES = new LinkedList<>();
 
     public static void main(String[] args) {
 
@@ -93,19 +98,15 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
 
-        
-        
         if ((lastTime + timeInterval) < System.currentTimeMillis()) {
             lastTime = System.currentTimeMillis();
 
             NetworkMessageHandling.handleCreateEntityMessage();
             NetworkMessageHandling.handleEntityPositionMessage();
-        
 
             filteredEntityContainers.clear();
 
             //SimpleCollision.resetCollided(Entities.ENTITY_CONTAINER);
-
             for (EntityContainer entityContainer : Entities.ENTITY_CONTAINER) {
 
                 EntityAction.moveEntityToPosition(entityContainer);
@@ -113,17 +114,27 @@ public class Main extends SimpleApplication {
                 SimpleCollision.checkCollision(entityContainer, Entities.ENTITY_CONTAINER);
 
                 if (entityContainer.collided || entityContainer.moveToPositon || entityContainer.isNewCreated) {
-                    filteredEntityContainers.add(entityContainer);
+                    CLIENT_MESSAGES.add(entityContainer);
                     entityContainer.isNewCreated = false;
                     entityContainer.collided = false;
-                    
 
                 }
             }
 
-       
-            
-                /**
+           
+            int i = 0;
+            while (i < maxMessageSize) {
+                EntityContainer container = CLIENT_MESSAGES.poll();
+
+                if (container != null) {
+                    filteredEntityContainers.add(container);
+                } else {
+                    break;
+                }
+                i++;
+            }
+
+            /**
              * move each entity and only the entities which are moved will be
              * send to reduce traffic. After all any change should set a flag to
              * send it for now only movement will do so Also all other
@@ -138,6 +149,7 @@ public class Main extends SimpleApplication {
             synchronized (Players.getPlayerList()) {
                 for (Player player : Players.getPlayerList()) {
                     if (player.getConnection() != null) {
+                        System.out.println(filteredEntityContainers.size());
                         player.getConnection().send(entitiesListMessage);
                     }
                 }

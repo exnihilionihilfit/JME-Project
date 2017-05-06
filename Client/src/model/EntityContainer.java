@@ -20,7 +20,7 @@ public class EntityContainer {
     public float speed = 15.0f;
     public long lastMoveUpdate;
     public boolean moveToPositon;
-    public Vector3f direction = new Vector3f(0, 0, 0);
+    public Vector3f direction = new Vector3f(1, 0, 0);
     public boolean isNewCreated = true;
     public boolean collided = false;
     public Vector3f lastPosition = new Vector3f();
