@@ -58,7 +58,7 @@ public class SimpleCollision {
     */
 
                  
-        a.position = a.lastPosition;
+        ///a.position = a.lastPosition;
         
        
             

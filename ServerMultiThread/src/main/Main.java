@@ -108,22 +108,22 @@ public class Main extends SimpleApplication {
             // should be filtedEntities but we need to set proper flags and send client at start all entities once !
             NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(filteredEntityContainers);
 
-             synchronized (Players.getPlayerList()){
-            for (Player player : Players.getPlayerList()) {
-                if (player.getConnection() != null) {
-                    player.getConnection().send(entitiesListMessage);                     
+            synchronized (Players.getPlayerList()) {
+                for (Player player : Players.getPlayerList()) {
+                    if (player.getConnection() != null) {
+                        player.getConnection().send(entitiesListMessage);
+                    }
                 }
             }
-            }
-        
+
             filteredEntityContainers.clear();
 
             SimpleCollision.resetCollided(Entities.ENTITY_CONTAINER);
-            
+
             for (EntityContainer entityContainer : Entities.ENTITY_CONTAINER) {
 
                 EntityAction.moveEntityToPosition(entityContainer);
-                
+
                 SimpleCollision.checkCollision(entityContainer, Entities.ENTITY_CONTAINER);
 
                 if (entityContainer.moveToPositon || entityContainer.isNewCreated || entityContainer.collided) {
