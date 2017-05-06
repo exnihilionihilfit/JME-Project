@@ -64,7 +64,7 @@ public class Main extends SimpleApplication {
     private boolean isRunning;
     private GameState gameState;
 
-    public final static Vector3f camerPosition = new Vector3f(0, 150, -130);
+    public final static Vector3f CAMERA_START_POSITION = new Vector3f(0, 150, -130);
 
     private Map map;
     // get width and height from OpenGl directly in init
@@ -113,7 +113,7 @@ public class Main extends SimpleApplication {
         //   bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, 0, 0));
 
         getCamera().lookAtDirection(new Vector3f(0, -1, 0.70f), Vector3f.UNIT_Z);
-        getCamera().setLocation(this.camerPosition);
+        getCamera().setLocation(this.CAMERA_START_POSITION);
 
         // Make the main window resizable
         Display.setResizable(true);
@@ -204,10 +204,9 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("Pause", new KeyTrigger(KeyInput.KEY_P));
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_J));
         inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_K));
-        inputManager.addMapping("Rotate", new KeyTrigger(KeyInput.KEY_SPACE),
-                new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addMapping("ResetCamera", new KeyTrigger(KeyInput.KEY_SPACE));
         // Add the names to the action listener.   
-        inputManager.addListener(InputListener.ACTION_LISTENER, "Left", "Right", "Rotate", "Pause");
+        inputManager.addListener(InputListener.ACTION_LISTENER, "Left", "Right", "ResetCamera", "Pause");
 
         inputManager.addMapping("LeftMouse", new MouseButtonTrigger(MouseInput.BUTTON_LEFT)); // trigger 2: left-button click
         inputManager.addListener(InputListener.MOUSE_INPUT_LISTENER, "LeftMouse");

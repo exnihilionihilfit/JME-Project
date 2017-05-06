@@ -124,7 +124,7 @@ public class NetworkMessageHandling {
 
             if (player != null) {
                 int tmp = Entities.getNewEntityId();
-                EntityContainer entity = new EntityContainer(playerId, tmp, createEntityMessage.name, createEntityMessage.type, Vector3f.ZERO);
+                EntityContainer entity = new EntityContainer(playerId, tmp, createEntityMessage.name, createEntityMessage.type, new Vector3f(0, 0, 0));
                 Entities.ENTITY_CONTAINER.add(entity);
                 System.out.println(" new entity created ");
                 //player.getEntityList().add(ship);

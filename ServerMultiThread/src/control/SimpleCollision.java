@@ -23,8 +23,7 @@ public class SimpleCollision {
    }
     
     public static boolean checkCollision(EntityContainer container, ArrayList<EntityContainer> enityContainers)
-    {
-    
+    {    
         
             for(EntityContainer entityContainerCopy:enityContainers)
             {
@@ -49,18 +48,14 @@ public class SimpleCollision {
       private static void primitiveReactOnCollision(EntityContainer a, EntityContainer b, Vector3f vectorAminusB) {
 
     /**
-     * 
      * @author Antarius
      * ToDo:    - nonmovable objects
      *          - own collision for them
      *          - collision damage
      *          - move methode in enteties
     */
-
                  
-        ///a.position = a.lastPosition;
-        
-       
+        ///a.position = a.lastPosition;       
             
             float distance = vectorAminusB.length();
             
@@ -76,9 +71,12 @@ public class SimpleCollision {
                  float closeness = (a.size - distance) /*  / 2 +1   */; //gibt noch probleme wegen dritter dimension
                  Vector3f setBack = direction.mult(closeness);
                  setBack.y = 0;
-                              
+                 
+                                            
                  a.position.addLocal(setBack);
                  b.position.addLocal(setBack.negate());
+                 
+             
                
              }
          

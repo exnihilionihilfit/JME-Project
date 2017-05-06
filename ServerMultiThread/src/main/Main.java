@@ -93,10 +93,37 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
 
+        
+        
         if ((lastTime + timeInterval) < System.currentTimeMillis()) {
             lastTime = System.currentTimeMillis();
 
-            /**
+            NetworkMessageHandling.handleCreateEntityMessage();
+            NetworkMessageHandling.handleEntityPositionMessage();
+        
+
+            filteredEntityContainers.clear();
+
+            //SimpleCollision.resetCollided(Entities.ENTITY_CONTAINER);
+
+            for (EntityContainer entityContainer : Entities.ENTITY_CONTAINER) {
+
+                EntityAction.moveEntityToPosition(entityContainer);
+
+                SimpleCollision.checkCollision(entityContainer, Entities.ENTITY_CONTAINER);
+
+                if (entityContainer.collided || entityContainer.moveToPositon || entityContainer.isNewCreated) {
+                    filteredEntityContainers.add(entityContainer);
+                    entityContainer.isNewCreated = false;
+                    entityContainer.collided = false;
+                    
+
+                }
+            }
+
+       
+            
+                /**
              * move each entity and only the entities which are moved will be
              * send to reduce traffic. After all any change should set a flag to
              * send it for now only movement will do so Also all other
@@ -115,26 +142,6 @@ public class Main extends SimpleApplication {
                     }
                 }
             }
-
-            filteredEntityContainers.clear();
-
-            SimpleCollision.resetCollided(Entities.ENTITY_CONTAINER);
-
-            for (EntityContainer entityContainer : Entities.ENTITY_CONTAINER) {
-
-                EntityAction.moveEntityToPosition(entityContainer);
-
-                SimpleCollision.checkCollision(entityContainer, Entities.ENTITY_CONTAINER);
-
-                if (entityContainer.moveToPositon || entityContainer.isNewCreated || entityContainer.collided) {
-                    filteredEntityContainers.add(entityContainer);
-                    entityContainer.isNewCreated = false;
-
-                }
-            }
-
-            NetworkMessageHandling.handleCreateEntityMessage();
-            NetworkMessageHandling.handleEntityPositionMessage();
 
         }
 

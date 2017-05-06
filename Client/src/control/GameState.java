@@ -230,6 +230,14 @@ public class GameState {
     }
 
     public void moveCamera() {
+        
+       
+        
+        if(InputListener.IS_RESET_CAMERA_PRESSED)
+        {
+            GameState.main.getCamera().setLocation(GameState.main.CAMERA_START_POSITION);
+        }
+        
         tollerance = 30.0f;
         mousePosition2d = GameState.inputManager.getCursorPosition();
 
@@ -253,6 +261,8 @@ public class GameState {
             currentLocation.z -= +1.0f;
             GameState.main.getCamera().setLocation(currentLocation);
         }
+        
+        
 
     }
 }

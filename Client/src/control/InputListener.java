@@ -23,7 +23,7 @@ public class InputListener {
     public static boolean IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
 
     public static boolean IS_RIGHT_PRESSED = false;
-    public static boolean IS_ROTATE_PRESSED = false;
+    public static boolean IS_RESET_CAMERA_PRESSED = false;
     public static boolean IS_LEFT_PRESSED = false;
 
     public static boolean IS_KEY_PRESSED = false;
@@ -50,7 +50,7 @@ public class InputListener {
         IS_WHEEL_FORWARD = false;
         IS_WHEEL_BACKWARD = false;
 
-        IS_ROTATE_PRESSED = false;
+        IS_RESET_CAMERA_PRESSED = false;
         IS_RIGHT_PRESSED = false;
         IS_LEFT_PRESSED = false;
     }
@@ -81,8 +81,12 @@ public class InputListener {
         @Override
         public void onAction(String name, boolean isPressed, float tpf) {
             IS_KEY_PRESSED = true;
-            if (name.equals("Rotate")) {
-                IS_ROTATE_PRESSED = true;
+            
+            
+            
+            if (name.equals("ResetCamera")) {
+                IS_RESET_CAMERA_PRESSED = true;
+              
 
             }
             if (name.equals("Right")) {
