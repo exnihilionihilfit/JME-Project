@@ -245,18 +245,14 @@ public class Entity {
 
                 entity.setName("entity");
                 entity.setUserData("id", entityID);
-              
+                entity.scale(10);
 
             }
 
         }
-        float radius = (float) Math.cbrt(entity.getWorldBound().getVolume());
-        
-        float scaleFactor = (float) (this.entityContainer.size / radius);
+     
         
         
-        
-        entity.scale(scaleFactor);
         
         return entity;
 

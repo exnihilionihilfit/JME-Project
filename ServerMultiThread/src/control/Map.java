@@ -46,7 +46,7 @@ public class Map {
 
             }
 
-            entityContainer.size = (float) (Math.random() * 75);
+            entityContainer.size = (20);
 
             if (entityContainer != null) {
 

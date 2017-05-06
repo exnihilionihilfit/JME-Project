@@ -111,14 +111,11 @@ public class Main extends SimpleApplication {
              synchronized (Players.getPlayerList()){
             for (Player player : Players.getPlayerList()) {
                 if (player.getConnection() != null) {
-
-
-                    player.getConnection().send(entitiesListMessage);
-                     
+                    player.getConnection().send(entitiesListMessage);                     
                 }
             }
             }
-        } else {
+        
             filteredEntityContainers.clear();
 
             SimpleCollision.resetCollided(Entities.ENTITY_CONTAINER);
