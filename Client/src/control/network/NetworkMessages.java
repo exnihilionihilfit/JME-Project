@@ -11,6 +11,7 @@ import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
 import java.util.ArrayList;
 import model.EntityContainer;
+import model.EntityTypes;
 
 /**
  *
@@ -82,14 +83,14 @@ public class NetworkMessages {
 
         boolean isNewEntity = false;
         long playerId;
-        String type;
+        EntityTypes type;
         String name;
 
         public CreateEntityMessage() {
 
         }
 
-        public CreateEntityMessage(long playerId, boolean isNewEntity, String name, String type) {
+        public CreateEntityMessage(long playerId, boolean isNewEntity, String name, EntityTypes type) {
             this.playerId = playerId;
             this.isNewEntity = isNewEntity;
             this.name = name;

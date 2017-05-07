@@ -312,9 +312,10 @@ public class Main extends SimpleApplication {
             
                 if(entityContainer.entityId >= -1)
                 {
+                    System.out.println("create new Entity geometry "+entityContainer.type);
                 createEntity(entityContainer);
                
-                System.out.println("create new Entity geometry "+entityContainer.type);
+                
                 }
             }
 
@@ -325,6 +326,8 @@ public class Main extends SimpleApplication {
     private void createEntity(EntityContainer entityContainer) {
 
         Entity entity = new Entity(mainApplication, assetManager, entityContainer);
+        
+        
 
         entity.setPosition(entityContainer.position);
        if(entity.getEntityNode() != null){
@@ -377,8 +380,13 @@ public class Main extends SimpleApplication {
         if (Display.wasResized() || screenWidth == 0 || screenHeight == 0) {
             screenWidth = Math.max(Display.getWidth(), 1);
             screenHeight = Math.max(Display.getHeight(), 1);
-            hud.updateMenu();
+            HUD.UPDATE_GUI = true;
             reshape(screenWidth, screenHeight);
+        }
+        
+        if(HUD.UPDATE_GUI)
+        {
+            hud.updateMenu(guiNode);
         }
     }
 

@@ -13,6 +13,7 @@ import model.Entities;
 import model.EntityContainer;
 import model.Player;
 import model.Players;
+import control.PropertiesHandler;
 
 /**
  *
@@ -125,6 +126,10 @@ public class NetworkMessageHandling {
             if (player != null) {
                 int tmp = Entities.getNewEntityId();
                 EntityContainer entity = new EntityContainer(playerId, tmp, createEntityMessage.name, createEntityMessage.type, new Vector3f(0, 0, 0));
+                
+                PropertiesHandler.setProperties(entity);
+                                
+                
                 Entities.ENTITY_CONTAINER.add(entity);
                 System.out.println(" new entity created ");
                 //player.getEntityList().add(ship);

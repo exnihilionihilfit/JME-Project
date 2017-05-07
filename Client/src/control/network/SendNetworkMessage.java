@@ -8,6 +8,7 @@ package control.network;
 import com.jme3.math.Vector3f;
 import com.jme3.network.Client;
 import model.Entity;
+import model.EntityTypes;
 import model.Player;
 
 /**
@@ -34,7 +35,7 @@ public class SendNetworkMessage {
         client.send(pingMessage);
     }
 
-    public void sendCreateEntityMessage(String name, String type) {
+    public void sendCreateEntityMessage(String name, EntityTypes type) {
         NetworkMessages.CreateEntityMessage createEntityMessage = new NetworkMessages.CreateEntityMessage(Player.getPlayerId(), true, name, type);
 
         client.send(createEntityMessage);

@@ -21,6 +21,7 @@ import java.util.Queue;
 import model.Entities;
 import model.EntityContainer;
 import model.Players;
+import control.PropertiesHandler;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -81,6 +82,9 @@ public class Main extends SimpleApplication {
 
         server.addMessageListener(networkMessageListener.new ServerMoveOrderListener(),
                 NetworkMessages.EntityPositionMessage.class);
+        
+        // load all entity properties
+        PropertiesHandler.load();
 
         if (server != null) {
             server.start();
@@ -148,8 +152,8 @@ public class Main extends SimpleApplication {
 
             synchronized (Players.getPlayerList()) {
                 for (Player player : Players.getPlayerList()) {
-                    if (player.getConnection() != null) {
-                        System.out.println(filteredEntityContainers.size());
+                    if (player.getConnection() != null)
+                    {                    
                         player.getConnection().send(entitiesListMessage);
                     }
                 }

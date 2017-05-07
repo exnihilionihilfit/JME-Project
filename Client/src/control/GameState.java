@@ -43,6 +43,8 @@ public class GameState {
     private Vector3f currentLocation;
     private Vector2f mousePosition2d;
     private float tollerance;
+    private EntityTypes ENTITY_TYPE;
+    private boolean IS_BUILDING_SET;
 
     public GameState(Main main, InputManager inputManager, Node rootNode, Camera cam) {
         GameState.main = main;
@@ -76,6 +78,8 @@ public class GameState {
                             // InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
                             // InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
                             selectedEntity = null;
+                            
+                            HUD.IS_BUILDABLE = false;
                             System.out.println("deselect");
                         }
                     }
@@ -126,6 +130,26 @@ public class GameState {
 
                         // if its players entity
                         if (selectedEntity.getPlayerId() == Player.getPlayerId()) {
+                            
+                            
+                            if(selectedEntity.getEntityContainer().isBuildable)
+                            {
+                                HUD.IS_BUILDABLE(true);                               
+                            }
+                            else
+                            {
+                               HUD.IS_BUILDABLE(false);                               
+                            }
+                            
+                            if(HUD.IS_BUILDABLE)
+                            {
+                                checkWhatToBuild();
+                            }
+                            
+                            if(IS_BUILDING_SET)
+                            {
+                                Action.sendCreateEntity(main.sendNetworkMessage,ENTITY_TYPE.name() , ENTITY_TYPE);
+                            }
                             /**
                              * try to get an target we need the target center
                              * point pick point and target id if an entity was
@@ -190,20 +214,20 @@ public class GameState {
 
     public void hudInput() {
 
-        String shipType = null;
+        EntityTypes shipType = null;
 
         if (HUD.IS_CREATE_BATTLESHIP_BUTTON_PRESSED) {
 
-            shipType = EntityTypes.BATTLESHIP.name();
+            shipType = EntityTypes.BATTLESHIP;
             HUD.IS_CREATE_BATTLESHIP_BUTTON_PRESSED = false;
 
         } else if (HUD.IS_CREATE_DRONE_BUTTON_PRESSED) {
 
-            shipType = EntityTypes.DRONE.name();
+            shipType = EntityTypes.DRONE;
             HUD.IS_CREATE_DRONE_BUTTON_PRESSED = false;
 
         } else if (HUD.IS_CREATE_FREIGHTER_BUTTON_PRESSED) {
-            shipType = EntityTypes.FREIGHTER.name();
+            shipType = EntityTypes.FREIGHTER;
             HUD.IS_CREATE_FREIGHTER_BUTTON_PRESSED = false;
 
         }
@@ -264,5 +288,25 @@ public class GameState {
         
         
 
+    }
+
+    private void checkWhatToBuild() {
+        
+        if(HUD.IS_BUILD_EXCHANGE_STATION)
+        {
+            ENTITY_TYPE = EntityTypes.EXCHANGE_STATION;
+        }
+        else if(HUD.IS_BUILD_SENSOR_STATION)
+        {
+            ENTITY_TYPE = EntityTypes.SENSOR_STATION;
+        }
+        else if(HUD.IS_BUILD_SKIFF)
+        {
+            ENTITY_TYPE = EntityTypes.SKIFF;
+        }
+        else
+        {
+            ENTITY_TYPE = EntityTypes.NOT_DEFINED;
+        }
     }
 }

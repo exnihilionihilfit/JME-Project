@@ -13,7 +13,7 @@ import control.CollisionTypes;
 public class EntityContainer {
 
     public Vector3f position = new Vector3f(1, 0, 0);
-    public String type = "entity";
+    public EntityTypes type = EntityTypes.NOT_DEFINED;
     public int entityId;
     public long playerId = 0;
     public Vector3f destination = new Vector3f(0, 0, 0);
@@ -29,12 +29,14 @@ public class EntityContainer {
     public float size = 10;
     public boolean hasStaticPosition = false;
     public CollisionTypes collisionTypes = CollisionTypes.MOVEABLE;
+    public boolean isBuildable = false;
+    public boolean isMoveable = true;
 
     public EntityContainer() {
 
     }
 
-    public EntityContainer(long playerId, int entityId, String name, String type, Vector3f position) {
+    public EntityContainer(long playerId, int entityId, String name, EntityTypes type, Vector3f position) {
         this.playerId = playerId;
         this.entityId = entityId;
         this.position = position;

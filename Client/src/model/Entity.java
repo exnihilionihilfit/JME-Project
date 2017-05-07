@@ -16,7 +16,10 @@ import java.util.concurrent.Future;
 import main.Main;
 
 /**
- *
+ * Data a redudant all basic data should be set in
+ * entityContainer which is used for server exchange
+ * all other local data needed should be here only !
+ * 
  * @author chasma
  */
 public class Entity {
@@ -43,7 +46,7 @@ public class Entity {
     private boolean isSelected = false;
     private long playerId;
     private Vector3f direction = new Vector3f(1, 0, 1);
-    private final String type;
+    private final EntityTypes type;
     private final EntityContainer entityContainer;
 
     public Entity(Main mainApp, AssetManager assetManager, EntityContainer entityContainer) {
@@ -55,6 +58,11 @@ public class Entity {
         this.type =  entityContainer.type;
         this.entityContainer = entityContainer;
 
+    }
+    
+    public EntityContainer getEntityContainer()
+    {
+        return entityContainer;
     }
 
     public void setPlayerId(long playerId) {
@@ -216,7 +224,7 @@ public class Entity {
         if (entity == null && this.type != null) {
             
 
-            if (this.type.equals(EntityTypes.BATTLESHIP.name())) {
+            if (this.type.equals(EntityTypes.BATTLESHIP)) {
 
                 entity = (Node) assetManager.loadModel("Models/shuttle_final/shuttle_final.j3o");
                 entity.setName("entity");
@@ -224,7 +232,7 @@ public class Entity {
                 entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
                 
 
-            } else if (this.type.equals(EntityTypes.FREIGHTER.name())) {
+            } else if (this.type.equals(EntityTypes.FREIGHTER)) {
 
                 entity = (Node) assetManager.loadModel("Models/freighter/freighter.j3o");
                 entity.setName("entity");
@@ -232,7 +240,7 @@ public class Entity {
                 entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
                 
 
-            } else if (this.type.equals(EntityTypes.DRONE.name())) {
+            } else if (this.type.equals(EntityTypes.DRONE)) {
 
                 entity = (Node) assetManager.loadModel("Models/drone/drone.j3o");
                 entity.setName("entity");
@@ -240,14 +248,38 @@ public class Entity {
                 entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
                
 
-            } else if (this.type.equals(EntityTypes.ASTEROID.name())) {
+            } else if (this.type.equals(EntityTypes.ASTEROID)) {
                 entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
 
                 entity.setName("entity");
                 entity.setUserData("id", entityID);
                 entity.scale(10);
 
+            }else if( this.type.equals(EntityTypes.EXCHANGE_STATION))
+            {
+                   entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
+
+                entity.setName("entity");
+                entity.setUserData("id", entityID);
+                entity.scale(10);
             }
+            else if( this.type.equals(EntityTypes.SENSOR_STATION))
+            {
+                   entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
+
+                entity.setName("entity");
+                entity.setUserData("id", entityID);
+                entity.scale(10);
+            }
+            else if( this.type.equals(EntityTypes.SKIFF))
+            {
+                   entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
+
+                entity.setName("entity");
+                entity.setUserData("id", entityID);
+                entity.scale(10);
+            }
+         
 
         }
              
@@ -273,7 +305,12 @@ public class Entity {
     }
 
     public void setPosition(Vector3f position) {
-        getEntityNode().setLocalTranslation(position);
+        Node tmp  = getEntityNode();
+        if(tmp != null)
+        {
+              getEntityNode().setLocalTranslation(position);
+        }
+      
     }
 
     public void setDirection(Vector3f newDirection) {
@@ -283,7 +320,7 @@ public class Entity {
         getEntityNode().lookAt(newDirection, Vector3f.UNIT_Y);
     }
 
-    public String getType() {
+    public EntityTypes getType() {
         return this.type;
     }
 

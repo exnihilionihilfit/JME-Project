@@ -62,6 +62,9 @@ public class SimpleCollision {
 
             a.position.addLocal(setBack);
             a.collided = true;
+            
+            // only if the entity is moveable the collision will be set to 
+            // trigger a reset to client and update position
            if (b.collisionTypes.equals(CollisionTypes.MOVEABLE)) {
             b.position.addLocal(setBack.negate());
             b.collided = true;

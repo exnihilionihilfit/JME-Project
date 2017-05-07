@@ -40,7 +40,7 @@ public class Action {
         sendNetworkMessage.sendEntityPositionMessage(entity, position);
     }
 
-    public static void sendCreateEntity(SendNetworkMessage sendNetworkMessage, String name, String type) {
+    public static void sendCreateEntity(SendNetworkMessage sendNetworkMessage, String name, EntityTypes type) {
         sendNetworkMessage.sendCreateEntityMessage(name, type);
     }
 
@@ -108,8 +108,5 @@ public class Action {
         return selectedEntityID;
     }
 
-    static void sendCreateEntity(SendNetworkMessage sendNetworkMessage, String uss_Bob, EntityTypes entityTypes) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+ 
 }
