@@ -7,6 +7,7 @@ package model;
 
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
+import control.CollisionTypes;
 
 @Serializable
 public class EntityContainer {
@@ -27,6 +28,7 @@ public class EntityContainer {
     public String name;
     public float size = 10;
     public boolean hasStaticPosition = false;
+    public CollisionTypes collisionTypes = CollisionTypes.MOVEABLE;
 
     public EntityContainer() {
 

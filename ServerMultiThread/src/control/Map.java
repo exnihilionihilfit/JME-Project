@@ -45,7 +45,7 @@ public class Map {
                 entityContainer.direction = new Vector3f((float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI), (float) (Math.random() * 2 * Math.PI));
 
             }
-
+            entityContainer.collisionTypes = CollisionTypes.NONMOVEABLE;
             entityContainer.size = (20);
 
             if (entityContainer != null) {

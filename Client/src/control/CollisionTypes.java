@@ -3,12 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package control;
+
+
 
 /**
  *
- * @author chasma
+ * @author novo
  */
-public class Freighter {
+public enum CollisionTypes {
+    
+    MOVEABLE(),
+    NONMOVEABLE(),
+    PLACEABLE();
+
+
     
 }

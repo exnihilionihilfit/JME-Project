@@ -3,12 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entityInterfaces;
+package control;
+
+
 
 /**
  *
- * @author chasma
+ * @author novo
  */
-public interface NonMoveable {
+public enum CollisionTypes {
+    
+    MOVEABLE(),
+    NONMOVEABLE(),
+    PLACEABLE();
+
+
     
 }
