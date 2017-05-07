@@ -43,8 +43,9 @@ public class GameState {
     private Vector3f currentLocation;
     private Vector2f mousePosition2d;
     private float tollerance;
-    private EntityTypes ENTITY_TYPE;
+    private EntityTypes TO_BUILD_ENTITY_TYPE = EntityTypes.NOT_DEFINED;
     private boolean IS_BUILDING_SET;
+    private Node buildingPlacementHull;
 
     public GameState(Main main, InputManager inputManager, Node rootNode, Camera cam) {
         GameState.main = main;
@@ -65,6 +66,10 @@ public class GameState {
 
                     // deselct
                     if (IS_ENTITY_SELECTED) {
+                        
+                        /**
+                         * Deselection 
+                         */
                         if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
                             if (selectedEntity != null) {
                                 selectedEntity.removeHighLight();
@@ -78,8 +83,17 @@ public class GameState {
                             // InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
                             // InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
                             selectedEntity = null;
-                            
+                            // for building structures
                             HUD.IS_BUILDABLE = false;
+                            IS_BUILDING_SET = false;
+                            
+                            if(buildingPlacementHull != null)
+                            {
+                                 main.getRootNode().detachChild(buildingPlacementHull);
+                            }
+                           
+                            buildingPlacementHull = null;
+                            TO_BUILD_ENTITY_TYPE = EntityTypes.NOT_DEFINED;
                             System.out.println("deselect");
                         }
                     }
@@ -130,25 +144,38 @@ public class GameState {
 
                         // if its players entity
                         if (selectedEntity.getPlayerId() == Player.getPlayerId()) {
-                            
-                            
-                            if(selectedEntity.getEntityContainer().isBuildable)
-                            {
-                                HUD.IS_BUILDABLE(true);                               
+
+                            /**
+                             * This is for building structures first check if
+                             * the selected entity could build buildings then
+                             * check if one building is selected by button
+                             *
+                             * then create a geometry and add it to the rootNode
+                             * as indicator for building
+                             */
+                            if (selectedEntity.getEntityContainer().isBuildable) {
+                                HUD.IS_BUILDABLE(true);
+                            } else {
+                                HUD.IS_BUILDABLE(false);
                             }
-                            else
-                            {
-                               HUD.IS_BUILDABLE(false);                               
+
+                            if (HUD.IS_BUILDABLE && TO_BUILD_ENTITY_TYPE.equals(EntityTypes.NOT_DEFINED)) {
+                                checkWhatToBuild();                              
                             }
-                            
-                            if(HUD.IS_BUILDABLE)
-                            {
-                                checkWhatToBuild();
-                            }
-                            
-                            if(IS_BUILDING_SET)
-                            {
-                                Action.sendCreateEntity(main.sendNetworkMessage,ENTITY_TYPE.name() , ENTITY_TYPE);
+                            if (!TO_BUILD_ENTITY_TYPE.equals(EntityTypes.NOT_DEFINED)) {
+                                
+                                if ( buildingPlacementHull == null) {
+                                   
+                                    buildingPlacementHull = CreateEntityGeometry.getEntityNode( TO_BUILD_ENTITY_TYPE, -2, main.getAssetManager());
+                                    main.getRootNode().attachChild(buildingPlacementHull);                                  
+                                }
+
+                                if (buildingPlacementHull != null) {
+                                    if (IS_BUILDING_SET) {
+                                        Action.sendCreateEntity(main.sendNetworkMessage, TO_BUILD_ENTITY_TYPE.name(), TO_BUILD_ENTITY_TYPE);
+                                    }
+                                }
+
                             }
                             /**
                              * try to get an target we need the target center
@@ -254,14 +281,11 @@ public class GameState {
     }
 
     public void moveCamera() {
-        
-       
-        
-        if(InputListener.IS_RESET_CAMERA_PRESSED)
-        {
+
+        if (InputListener.IS_RESET_CAMERA_PRESSED) {
             GameState.main.getCamera().setLocation(GameState.main.CAMERA_START_POSITION);
         }
-        
+
         tollerance = 30.0f;
         mousePosition2d = GameState.inputManager.getCursorPosition();
 
@@ -285,28 +309,21 @@ public class GameState {
             currentLocation.z -= +1.0f;
             GameState.main.getCamera().setLocation(currentLocation);
         }
-        
-        
 
     }
 
     private void checkWhatToBuild() {
+
+        System.out.println(HUD.IS_BUILD_EXCHANGE_STATION);
         
-        if(HUD.IS_BUILD_EXCHANGE_STATION)
-        {
-            ENTITY_TYPE = EntityTypes.EXCHANGE_STATION;
-        }
-        else if(HUD.IS_BUILD_SENSOR_STATION)
-        {
-            ENTITY_TYPE = EntityTypes.SENSOR_STATION;
-        }
-        else if(HUD.IS_BUILD_SKIFF)
-        {
-            ENTITY_TYPE = EntityTypes.SKIFF;
-        }
-        else
-        {
-            ENTITY_TYPE = EntityTypes.NOT_DEFINED;
+        if (HUD.IS_BUILD_EXCHANGE_STATION) {
+            TO_BUILD_ENTITY_TYPE = EntityTypes.EXCHANGE_STATION;
+        } else if (HUD.IS_BUILD_SENSOR_STATION) {
+            TO_BUILD_ENTITY_TYPE = EntityTypes.SENSOR_STATION;
+        } else if (HUD.IS_BUILD_SKIFF) {
+            TO_BUILD_ENTITY_TYPE = EntityTypes.SKIFF;
+        } else {
+            TO_BUILD_ENTITY_TYPE = EntityTypes.NOT_DEFINED;
         }
     }
 }

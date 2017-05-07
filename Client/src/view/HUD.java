@@ -26,6 +26,7 @@ import main.Main;
  */
 public final class HUD {
 
+    public static boolean IS_CREATE_BATTLESHIP_BUTTON_PRESSED;
     public static boolean IS_CREATE_DRONE_BUTTON_PRESSED;
     public static boolean IS_CREATE_FREIGHTER_BUTTON_PRESSED;
     public static boolean IS_CREATE_SKIFF_BUTTON_PRESSED;
@@ -34,7 +35,7 @@ public final class HUD {
     public static boolean IS_BUILD_SKIFF;
     public static boolean IS_BUILD_EXCHANGE_STATION;
     public static boolean IS_BUILD_SENSOR_STATION;
-    
+
     public static boolean IS_BUILDABLE;
 
     public static void IS_BUILDABLE(boolean b) {
@@ -45,12 +46,11 @@ public final class HUD {
     private final Container createShipContainer;
     private Main main;
 
-    public static boolean IS_CREATE_BATTLESHIP_BUTTON_PRESSED;
     public static boolean IS_SERVER_ADRESS_ENTERD;
     private final Container serverAdressContainer;
     private final Container createBuildingContainer;
-    
-    public static boolean UPDATE_GUI= false;
+
+    public static boolean UPDATE_GUI = false;
 
     public HUD(Main main, Node guiNode, BitmapFont guiFont, AssetManager assetManager) {
 
@@ -92,33 +92,32 @@ public final class HUD {
         Button createExchange_Station_Button = createBuildingContainer.addChild(new Button("Exchange Station"));
         Button createSensor_Station_Button = createBuildingContainer.addChild(new Button("Sensor Station"));
 
-        
-        createSkiffButton.addClickCommands(new Command<Button>(){
-           
+        createSkiffButton.addClickCommands(new Command<Button>() {
+
             @Override
             public void execute(Button s) {
                 IS_BUILD_SKIFF = true;
                 helloText.setText("create skiff");
             }
-            
+
         });
-        
-        createExchange_Station_Button.addClickCommands(new Command<Button>(){
+
+        createExchange_Station_Button.addClickCommands(new Command<Button>() {
             @Override
             public void execute(Button s) {
                 IS_BUILD_EXCHANGE_STATION = true;
                 helloText.setText("create exchange station");
             }
-            
+
         });
-        
-        createSensor_Station_Button.addClickCommands(new Command<Button>(){
+
+        createSensor_Station_Button.addClickCommands(new Command<Button>() {
             @Override
             public void execute(Button s) {
                 IS_BUILD_SENSOR_STATION = true;
                 helloText.setText("create sensor station");
             }
-            
+
         });
 
         createDroneButton.addClickCommands(new Command<Button>() {
@@ -152,7 +151,7 @@ public final class HUD {
         connectToServer.addClickCommands(new Command<Button>() {
             @Override
             public void execute(Button s) {
-                guiNode.attachChild(createShipContainer);                
+                guiNode.attachChild(createShipContainer);
                 guiNode.detachChild(serverAdressContainer);
                 guiNode.attachChild(helloText);
 
@@ -175,17 +174,14 @@ public final class HUD {
         createShipContainer.setLocalTranslation(main.getScreenWidth() - 200, main.getScreenHeight() - 100, 0);
         createBuildingContainer.setLocalTranslation(main.getScreenWidth() - 200, main.getScreenHeight() - 200, 0);
         serverAdressContainer.setLocalTranslation(main.getScreenWidth() - 300, 100, 0);
-        
-       if(IS_BUILDABLE)
-       {
+
+        if (IS_BUILDABLE) {
             guiNode.attachChild(createBuildingContainer);
-       }
-       else
-       {
+        } else {
             guiNode.detachChild(createBuildingContainer);
-       }
-       
-       UPDATE_GUI = false;
+        }
+
+        UPDATE_GUI = false;
     }
 
     public boolean isCreateEntityButtonIsPressed() {
@@ -194,6 +190,16 @@ public final class HUD {
 
     private void resetIsCreateEntityButtonPressed() {
         IS_CREATE_BATTLESHIP_BUTTON_PRESSED = false;
+        IS_CREATE_BATTLESHIP_BUTTON_PRESSED = false;
+        IS_CREATE_DRONE_BUTTON_PRESSED = false;
+        IS_CREATE_FREIGHTER_BUTTON_PRESSED = false;
+        IS_CREATE_SKIFF_BUTTON_PRESSED = false;
+        IS_CREATE_EXCHANGE_STATION_BUTTON_PRESSED = false;
+        IS_CREATE_SENSOR_STATION_BUTTON_PRESSED = false;
+        IS_BUILD_SKIFF = false;
+        IS_BUILD_EXCHANGE_STATION = false;
+        IS_BUILD_SENSOR_STATION = false;
+       
     }
 
     public void resetInput() {

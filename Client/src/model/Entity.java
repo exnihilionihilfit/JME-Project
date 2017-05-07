@@ -11,6 +11,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import control.CreateEntityGeometry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import main.Main;
@@ -41,7 +42,7 @@ public class Entity {
     private boolean reseavedNewPositionMessage = false;
     private final int entityID;
     private boolean isMoveable = true;
-    private Node entity;
+    private Node entityGeometry;
 
     private boolean isSelected = false;
     private long playerId;
@@ -219,73 +220,15 @@ public class Entity {
         return entityNode.getLocalTranslation();
     }
 
-    public Node getEntityNode() {
-
-        if (entity == null && this.type != null) {
-            
-
-            if (this.type.equals(EntityTypes.BATTLESHIP)) {
-
-                entity = (Node) assetManager.loadModel("Models/shuttle_final/shuttle_final.j3o");
-                entity.setName("entity");
-                entity.setUserData("id", entityID);
-                entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
-                
-
-            } else if (this.type.equals(EntityTypes.FREIGHTER)) {
-
-                entity = (Node) assetManager.loadModel("Models/freighter/freighter.j3o");
-                entity.setName("entity");
-                entity.setUserData("id", entityID);
-                entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
-                
-
-            } else if (this.type.equals(EntityTypes.DRONE)) {
-
-                entity = (Node) assetManager.loadModel("Models/drone/drone.j3o");
-                entity.setName("entity");
-                entity.setUserData("id", entityID);
-                entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);
-               
-
-            } else if (this.type.equals(EntityTypes.ASTEROID)) {
-                entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
-
-                entity.setName("entity");
-                entity.setUserData("id", entityID);
-                entity.scale(10);
-
-            }else if( this.type.equals(EntityTypes.EXCHANGE_STATION))
-            {
-                   entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
-
-                entity.setName("entity");
-                entity.setUserData("id", entityID);
-                entity.scale(10);
-            }
-            else if( this.type.equals(EntityTypes.SENSOR_STATION))
-            {
-                   entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
-
-                entity.setName("entity");
-                entity.setUserData("id", entityID);
-                entity.scale(10);
-            }
-            else if( this.type.equals(EntityTypes.SKIFF))
-            {
-                   entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
-
-                entity.setName("entity");
-                entity.setUserData("id", entityID);
-                entity.scale(10);
-            }
+    
+    
+    public Node getEntityNode()
+    {
+         if (entityGeometry == null && this.type != null) {
+            entityGeometry =  CreateEntityGeometry.getEntityNode(type, entityID, assetManager);
+         }
          
-
-        }
-             
-        
-        return entity;
-
+         return entityGeometry;
     }
 
     public boolean getPosition() {
