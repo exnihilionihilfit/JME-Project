@@ -45,6 +45,8 @@ import view.HUD;
  *
  * @author normenhansen
  */
+
+
 public class Main extends SimpleApplication {
 
     private static Main mainApplication = null;
