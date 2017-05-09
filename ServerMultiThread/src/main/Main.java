@@ -95,7 +95,7 @@ public class Main extends SimpleApplication {
         }
 
         players = new Players();
-        Map map = new Map(500, 50);
+        Map map = new Map(1000, 300);
 
     }
 

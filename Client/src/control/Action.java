@@ -40,8 +40,8 @@ public class Action {
         sendNetworkMessage.sendEntityPositionMessage(entity, position);
     }
 
-    public static void sendCreateEntity(SendNetworkMessage sendNetworkMessage, String name, EntityTypes type) {
-        sendNetworkMessage.sendCreateEntityMessage(name, type);
+    public static void sendCreateEntity(SendNetworkMessage sendNetworkMessage, String name, EntityTypes type, Vector3f position) {
+        sendNetworkMessage.sendCreateEntityMessage(name, type,position);
     }
 
     /*

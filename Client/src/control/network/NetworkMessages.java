@@ -85,16 +85,18 @@ public class NetworkMessages {
         long playerId;
         EntityTypes type;
         String name;
+        Vector3f position;
 
         public CreateEntityMessage() {
 
         }
 
-        public CreateEntityMessage(long playerId, boolean isNewEntity, String name, EntityTypes type) {
+        public CreateEntityMessage(long playerId, boolean isNewEntity, String name, EntityTypes type, Vector3f position) {
             this.playerId = playerId;
             this.isNewEntity = isNewEntity;
             this.name = name;
             this.type = type;
+            this.position = position;
         }
     }
 

@@ -125,7 +125,9 @@ public class NetworkMessageHandling {
 
             if (player != null) {
                 int tmp = Entities.getNewEntityId();
-                EntityContainer entity = new EntityContainer(playerId, tmp, createEntityMessage.name, createEntityMessage.type, new Vector3f(0, 0, 0));
+                
+                // should check new position first !
+                EntityContainer entity = new EntityContainer(playerId, tmp, createEntityMessage.name, createEntityMessage.type, createEntityMessage.position);
                 
                 PropertiesHandler.setProperties(entity);
                                 
