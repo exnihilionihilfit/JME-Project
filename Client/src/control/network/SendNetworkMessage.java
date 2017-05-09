@@ -35,8 +35,8 @@ public class SendNetworkMessage {
         client.send(pingMessage);
     }
 
-    public void sendCreateEntityMessage(String name, EntityTypes type) {
-        NetworkMessages.CreateEntityMessage createEntityMessage = new NetworkMessages.CreateEntityMessage(Player.getPlayerId(), true, name, type);
+    public void sendCreateEntityMessage(String name, EntityTypes type, Vector3f position) {
+        NetworkMessages.CreateEntityMessage createEntityMessage = new NetworkMessages.CreateEntityMessage(Player.getPlayerId(), true, name, type,position);
 
         client.send(createEntityMessage);
         System.out.println("send create entity message");

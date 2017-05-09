@@ -46,6 +46,8 @@ public class GameState {
     private EntityTypes TO_BUILD_ENTITY_TYPE = EntityTypes.NOT_DEFINED;
     private boolean IS_BUILDING_SET;
     private Node buildingPlacementHull;
+    private boolean MOVE_PLACEMENT_HULL;
+    private Target placementTarget;
 
     public GameState(Main main, InputManager inputManager, Node rootNode, Camera cam) {
         GameState.main = main;
@@ -66,34 +68,12 @@ public class GameState {
 
                     // deselct
                     if (IS_ENTITY_SELECTED) {
-                        
+
                         /**
-                         * Deselection 
+                         * Deselection
                          */
                         if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
-                            if (selectedEntity != null) {
-                                selectedEntity.removeHighLight();
-                            }
-
-                            IS_ENTITY_SELECTED = false;
-                            SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
-
-                            target = null;
-                            entityID = -1;
-                            // InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
-                            // InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
-                            selectedEntity = null;
-                            // for building structures
-                            HUD.IS_BUILDABLE = false;
-                            IS_BUILDING_SET = false;
-                            
-                            if(buildingPlacementHull != null)
-                            {
-                                 main.getRootNode().detachChild(buildingPlacementHull);
-                            }
-                           
-                            buildingPlacementHull = null;
-                            TO_BUILD_ENTITY_TYPE = EntityTypes.NOT_DEFINED;
+                            reset();
                             System.out.println("deselect");
                         }
                     }
@@ -160,19 +140,33 @@ public class GameState {
                             }
 
                             if (HUD.IS_BUILDABLE && TO_BUILD_ENTITY_TYPE.equals(EntityTypes.NOT_DEFINED)) {
-                                checkWhatToBuild();                              
+                                checkWhatToBuild();
                             }
                             if (!TO_BUILD_ENTITY_TYPE.equals(EntityTypes.NOT_DEFINED)) {
-                                
-                                if ( buildingPlacementHull == null) {
-                                   
-                                    buildingPlacementHull = CreateEntityGeometry.getEntityNode( TO_BUILD_ENTITY_TYPE, -2, main.getAssetManager());
-                                    main.getRootNode().attachChild(buildingPlacementHull);                                  
+
+                                if (buildingPlacementHull == null) {
+
+                                    buildingPlacementHull = CreateEntityGeometry.getEntityNode(TO_BUILD_ENTITY_TYPE, -2, main.getAssetManager());
+                                    main.getRootNode().attachChild(buildingPlacementHull);
+                                    MOVE_PLACEMENT_HULL = true;
+                                }
+
+                                if (MOVE_PLACEMENT_HULL) {
+                                    placementTarget = Action.selectTargetPositionOnFloor(main.getInputManager(), main.getCamera(), main.getRootNode());
+                                    placementTarget.getPointOnFloor().y = 0f;
+                                    buildingPlacementHull.setLocalTranslation(placementTarget.getPointOnFloor());
+
+                                    if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
+                                        IS_BUILDING_SET = true;
+                                    }
+
                                 }
 
                                 if (buildingPlacementHull != null) {
                                     if (IS_BUILDING_SET) {
-                                        Action.sendCreateEntity(main.sendNetworkMessage, TO_BUILD_ENTITY_TYPE.name(), TO_BUILD_ENTITY_TYPE);
+                                        Action.sendCreateEntity(main.sendNetworkMessage, TO_BUILD_ENTITY_TYPE.name(), TO_BUILD_ENTITY_TYPE,placementTarget.getPointOnFloor() );
+                                        System.out.println("new building placed");
+                                        reset();
                                     }
                                 }
 
@@ -260,7 +254,7 @@ public class GameState {
         }
 
         if (shipType != null) {
-            Action.sendCreateEntity(main.sendNetworkMessage, "USS" + shipType, shipType);
+            Action.sendCreateEntity(main.sendNetworkMessage, "USS" + shipType, shipType,new Vector3f());
         }
 
     }
@@ -315,7 +309,7 @@ public class GameState {
     private void checkWhatToBuild() {
 
         System.out.println(HUD.IS_BUILD_EXCHANGE_STATION);
-        
+
         if (HUD.IS_BUILD_EXCHANGE_STATION) {
             TO_BUILD_ENTITY_TYPE = EntityTypes.EXCHANGE_STATION;
         } else if (HUD.IS_BUILD_SENSOR_STATION) {
@@ -325,5 +319,33 @@ public class GameState {
         } else {
             TO_BUILD_ENTITY_TYPE = EntityTypes.NOT_DEFINED;
         }
+    }
+
+    private void reset() {
+        if (selectedEntity != null) {
+            selectedEntity.removeHighLight();
+        }
+
+        InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
+        InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
+        
+        IS_ENTITY_SELECTED = false;
+        SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
+
+        target = null;
+        entityID = -1;
+        // InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
+        // InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
+        selectedEntity = null;
+        // for building structures
+        HUD.IS_BUILDABLE = false;
+        IS_BUILDING_SET = false;
+
+        if (buildingPlacementHull != null) {
+            main.getRootNode().detachChild(buildingPlacementHull);
+        }
+        MOVE_PLACEMENT_HULL = false;
+        buildingPlacementHull = null;
+        TO_BUILD_ENTITY_TYPE = EntityTypes.NOT_DEFINED;
     }
 }
