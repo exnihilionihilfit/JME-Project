@@ -12,7 +12,10 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.network.Client;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.ssao.SSAOFilter;
 import com.jme3.renderer.RenderManager;
+import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeContext;
 import control.GameState;
@@ -45,8 +48,6 @@ import view.HUD;
  *
  * @author normenhansen
  */
-
-
 public class Main extends SimpleApplication {
 
     private static Main mainApplication = null;
@@ -94,6 +95,7 @@ public class Main extends SimpleApplication {
         mainApplication.start(JmeContext.Type.Display); // standard display type
 
     }
+    private FilterPostProcessor fpp;
 
     public int getScreenWidth() {
         return screenWidth;
@@ -125,11 +127,24 @@ public class Main extends SimpleApplication {
 
         inputManager.setCursorVisible(true);
         flyCam.setEnabled(false);
+        getCamera().setFrustumFar(9999);
 
         // We must add a light to make the model visible
         DirectionalLight sun = new DirectionalLight();
-        sun.setDirection(new Vector3f(-0.1f, -1.7f, -1.0f));
+        sun.setDirection(new Vector3f(-0.1f, -0.2f, -1.0f));
         rootNode.addLight(sun);
+
+        /* this shadow needs a directional light */
+        DirectionalLightShadowRenderer dlsr = new DirectionalLightShadowRenderer(assetManager, 1024, 2);
+        dlsr.setLight(sun);
+        viewPort.addProcessor(dlsr);
+        dlsr.setEdgesThickness(5);
+        
+        fpp = new FilterPostProcessor(assetManager);
+        viewPort.addProcessor(fpp);
+        SSAOFilter ssaoFilter = new SSAOFilter(12.94f, 43.93f, 0.33f, 0.60f);
+        
+        fpp.addFilter(ssaoFilter);
 
         screenWidth = Math.max(Display.getWidth(), 1);
         screenHeight = Math.max(Display.getHeight(), 1);
@@ -149,7 +164,7 @@ public class Main extends SimpleApplication {
     public void simpleUpdate(float tpf) {
 
         checkIfDisplayIsResized();
-        
+
         if (HUD.IS_SERVER_ADRESS_ENTERD) {
             connectToServer();
             if (client != null) {
@@ -195,8 +210,6 @@ public class Main extends SimpleApplication {
             // Handle messages from server 
             NetworkMessageHandling.handlePingMessage();
             NetworkMessageHandling.handleEntitiesListMessage(this);
-
-            
 
         }
     }
@@ -292,8 +305,6 @@ public class Main extends SimpleApplication {
     public void setEntitiesPositionFromServerList(ArrayList<EntityContainer> containerEntities) {
 
         boolean found = false;
-        
-        
 
         for (EntityContainer entityContainer : containerEntities) {
             for (Entity entity : Main.ENTITIES) {
@@ -306,18 +317,14 @@ public class Main extends SimpleApplication {
                     found = true;
                     break;
                 }
-                
-                
+
             }
             if (!found) {
-                
-            
-                if(entityContainer.entityId >= -1)
-                {
-                    System.out.println("create new Entity geometry "+entityContainer.type);
-                createEntity(entityContainer);
-               
-                
+
+                if (entityContainer.entityId >= -1) {
+                    System.out.println("create new Entity geometry " + entityContainer.type);
+                    createEntity(entityContainer);
+
                 }
             }
 
@@ -328,21 +335,16 @@ public class Main extends SimpleApplication {
     private void createEntity(EntityContainer entityContainer) {
 
         Entity entity = new Entity(mainApplication, assetManager, entityContainer);
-        
-        
 
         entity.setPosition(entityContainer.position);
-       if(entity.getEntityNode() != null){
-             rootNode.attachChild(entity.getEntityNode());
+        if (entity.getEntityNode() != null) {
+            rootNode.attachChild(entity.getEntityNode());
 
             ENTITIES.add(entity);
-       }
-       else
-       {
-           System.out.println("Crete new Entity failed for type: "+entityContainer.type);
-       }
-          
-        
+        } else {
+            System.out.println("Crete new Entity failed for type: " + entityContainer.type);
+        }
+
     }
 
     private void initSendNetworkMessage() {
@@ -383,11 +385,17 @@ public class Main extends SimpleApplication {
             screenWidth = Math.max(Display.getWidth(), 1);
             screenHeight = Math.max(Display.getHeight(), 1);
             HUD.UPDATE_GUI = true;
+            
+            viewPort.removeProcessor(fpp);
+            fpp = new FilterPostProcessor(assetManager);
+            viewPort.addProcessor(fpp);
+            
+            
             reshape(screenWidth, screenHeight);
+            
         }
-        
-        if(HUD.UPDATE_GUI)
-        {
+
+        if (HUD.UPDATE_GUI) {
             hud.updateMenu(guiNode);
         }
     }

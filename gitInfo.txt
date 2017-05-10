@@ -1,0 +1,32 @@
+
+
+GET DELETED BRANCH BAG
+ $ git reflog
+
+
+1ed7510 HEAD@{1}: checkout: moving from develop to 1ed7510
+3970d09 HEAD@{2}: checkout: moving from b-fix-build to develop
+1ed7510 HEAD@{3}: commit: got everything working the way I want
+70b3696 HEAD@{4}: commit: upgrade rails, do some refactoring
+98f2fc2 HEAD@{5}: commit: a couple code cleanups
+d09f35e HEAD@{6}: commit: remove test method - it served it's purpose and now it must go
+d586a93 HEAD@{10}: commit: aha! that is why I'm so fail
+4644046 HEAD@{11}: commit: cleaning up the initial migration for dev/test environments
+323df37 HEAD@{15}: commit: bump ruby version
+eab861c HEAD@{16}: commit: bundle update EVERYTHING
+2b544c4 HEAD@{17}: commit: fixing what few tests actually exist - a.k.a., wow! does this app even work?
+3970d09 HEAD@{18}: checkout: moving from develop to b-fix-build
+3970d09 HEAD@{19}: pull: Fast-forward
+
+Once you find the commit you're looking for, create a new branch from it and you're done!
+
+$ git checkout -b branch-name 70b3696
+Switched to a new branch 'branch-name'
+
+
+MERGE TO MASTER BRANCH
+
+git checkout master
+git pull origin master
+git merge test
+git push origin master

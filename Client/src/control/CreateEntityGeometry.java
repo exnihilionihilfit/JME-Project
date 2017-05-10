@@ -60,7 +60,7 @@ public class CreateEntityGeometry {
                     entity.scale(5);
                     break;
                 case SKIFF:
-                    entity = (Node) assetManager.loadModel("Models/building/building.j3o");
+                    entity = (Node) assetManager.loadModel("Models/skiff/skiff.j3o");
                     entity.setName("entity");
                     entity.setUserData("id", entityID);
                     entity.scale(5);

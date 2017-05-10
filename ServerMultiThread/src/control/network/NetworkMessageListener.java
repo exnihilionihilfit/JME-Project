@@ -61,6 +61,7 @@ public class NetworkMessageListener {
 
                 NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(Entities.ENTITY_CONTAINER);
 
+                /// should send junck by junck ! else it crashs ;)
                 source.send(entitiesListMessage);
 
             }
@@ -68,7 +69,6 @@ public class NetworkMessageListener {
                 // do something with the message
                 NetworkMessages.PingMessage pingMessage = (NetworkMessages.PingMessage) message;
                 System.out.println("Server received '" + pingMessage.hello + "' from client #" + source.getId());
-
             }
 
             if (message instanceof NetworkMessages.CreateEntityMessage) {
