@@ -107,7 +107,7 @@ public class Main extends SimpleApplication {
             NetworkMessageHandling.handleCreateEntityMessage();
             NetworkMessageHandling.handleEntityPositionMessage();
 
-            Thread sendClientMessages = new Thread(new SendMessageToClient());
+            Thread sendClientMessages = new Thread(new SendMessageToClient(true, null));
             
             sendClientMessages.start();
 

@@ -8,9 +8,12 @@ package control.network;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
+import control.SendMessageToClient;
 import java.util.LinkedList;
 import java.util.Queue;
 import model.Entities;
+import model.Player;
+import model.Players;
 
 /**
  *
@@ -63,6 +66,17 @@ public class NetworkMessageListener {
 
                 /// should send junck by junck ! else it crashs ;)
                 source.send(entitiesListMessage);
+                
+                Player player = Players.checkListOfPlayersContains(registerOnServerMessage.playerId);
+                
+                
+                if(player != null)
+                {
+                     Thread sendClientMessages = new Thread(new SendMessageToClient(true, player));
+            
+            sendClientMessages.start();
+                }
+                 
 
             }
             if (message instanceof NetworkMessages.PingMessage) {
