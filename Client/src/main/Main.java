@@ -302,7 +302,7 @@ public class Main extends SimpleApplication {
      *
      * @param containerEntities
      */
-    public void setEntitiesPositionFromServerList(ArrayList<EntityContainer> containerEntities) {
+    public void setEntitiesPositionFromServerList(List<EntityContainer> containerEntities) {
 
         boolean found = false;
 

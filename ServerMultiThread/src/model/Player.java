@@ -19,6 +19,7 @@ public class Player {
     private final List<EntityContainer> shipList;
     private HostedConnection connection;
     private long playerId;
+    public boolean isNew = true;
 
     public Player(long credits, HostedConnection connection, long playerId) {
         this.credits = credits;

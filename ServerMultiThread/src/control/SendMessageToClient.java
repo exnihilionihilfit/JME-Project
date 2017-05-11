@@ -8,6 +8,7 @@ package control;
 import control.network.NetworkMessages;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import model.Entities;
 import model.EntityContainer;
@@ -25,15 +26,15 @@ public class SendMessageToClient implements Runnable {
     private final Queue<EntityContainer> CLIENT_MESSAGES = new LinkedList<>();
 
     private final int maxMessageSize = 20;
-    
-    private Player player;
-    private boolean toAll;
-    
-    
-    public SendMessageToClient(boolean toAll, Player player)
-    {
-        this.player = player;
-        this.toAll = toAll;
+
+    private boolean sendMessages = true;
+
+    public void setSendMessages(boolean value) {
+        this.sendMessages = value;
+    }
+
+    public SendMessageToClient() {
+
     }
 
     private void sendMessagesToAll() {
@@ -55,37 +56,54 @@ public class SendMessageToClient implements Runnable {
         synchronized (Players.getPlayerList()) {
             for (Player player_ : Players.getPlayerList()) {
                 if (player_.getConnection() != null) {
-                    player_.getConnection().send(entitiesListMessage);
+
+                    if (player_.isNew) {
+                        sendToSinglePlayer(player_);
+                    } else {
+                        player_.getConnection().send(entitiesListMessage);
+                    }
+
                 }
             }
         }
     }
-    
-    private void sendMessagesToPlayer(Player player)
-    {
-        prepareMessages();
-          NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(filteredEntityContainers);
 
-           if (player.getConnection() != null) {
-                    player.getConnection().send(entitiesListMessage);
-                }
+    private void sendToSinglePlayer(Player player) {
+
+        NetworkMessages.EntitiesListMessage entitiesListMessageUnfilterd;
+
+        int entitiesListSize = Entities.ENTITY_CONTAINER.size();
+        ArrayList<EntityContainer> chunkedList = new ArrayList<>();
+        int counter = 0;
+System.out.println("send client gamestate start");
+        for (int i = 0; i < entitiesListSize; i++) {
+            chunkedList.add(Entities.ENTITY_CONTAINER.get(i));
+
+            if (i % maxMessageSize == 0 || i +1 == entitiesListSize) {
+                entitiesListMessageUnfilterd = new NetworkMessages.EntitiesListMessage(chunkedList);
+                player.getConnection().send(entitiesListMessageUnfilterd);
+                chunkedList.clear();
+            }
+           
+            
+
+        }
+System.out.println("send client gamestate finished");
+        player.isNew = false;
     }
 
     @Override
     public void run() {
-        
-        if(toAll){
-        sendMessagesToAll();
-        }
-        else
-        {
-            sendMessagesToPlayer(player);
-        }
 
+     //   while (sendMessages) {
+            sendMessagesToAll();
+      //  }
     }
 
     private void prepareMessages() {
-       //SimpleCollision.resetCollided(Entities.ENTITY_CONTAINER);
+
+   
+
         synchronized (Entities.ENTITY_CONTAINER) {
             for (EntityContainer entityContainer : Entities.ENTITY_CONTAINER) {
 
@@ -101,8 +119,8 @@ public class SendMessageToClient implements Runnable {
                 }
             }
         }
-
-        int i = 0;
+        
+             int i = 0;
         while (i < maxMessageSize) {
             EntityContainer container = CLIENT_MESSAGES.poll();
 
@@ -113,6 +131,7 @@ public class SendMessageToClient implements Runnable {
             }
             i++;
         }
+
     }
 
 }

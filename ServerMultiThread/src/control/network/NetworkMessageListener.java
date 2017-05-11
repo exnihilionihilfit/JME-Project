@@ -63,20 +63,7 @@ public class NetworkMessageListener {
                 NetworkMessageHandling.addPlayer(source, registerOnServerMessage);
 
                 NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(Entities.ENTITY_CONTAINER);
-
-                /// should send junck by junck ! else it crashs ;)
-                source.send(entitiesListMessage);
-                
-                Player player = Players.checkListOfPlayersContains(registerOnServerMessage.playerId);
-                
-                
-                if(player != null)
-                {
-                     Thread sendClientMessages = new Thread(new SendMessageToClient(true, player));
             
-            sendClientMessages.start();
-                }
-                 
 
             }
             if (message instanceof NetworkMessages.PingMessage) {

@@ -14,6 +14,7 @@ import model.EntityContainer;
 import model.Player;
 import model.Players;
 import control.PropertiesHandler;
+import control.SendMessageToClient;
 
 /**
  *
@@ -107,6 +108,7 @@ public class NetworkMessageHandling {
         if (player != null) {
             registerOnServerMessage.playerId = player.getPlayerId();
             connection.send(registerOnServerMessage);
+                    
 
             System.out.println(" registered client \n name: " + registerOnServerMessage.clienUserName + " id: " + registerOnServerMessage.playerId);
         } else {
