@@ -28,12 +28,13 @@ public class Entities {
 
     public static EntityContainer getEntityById(int entityId) {
 
-        for (EntityContainer entity : ENTITY_CONTAINER) {
-            if (entityId == entity.entityId) {
-                return entity;
+        synchronized (ENTITY_CONTAINER) {
+            for (EntityContainer entity : ENTITY_CONTAINER) {
+                if (entityId == entity.entityId) {
+                    return entity;
+                }
             }
         }
-
         return null;
     }
 }

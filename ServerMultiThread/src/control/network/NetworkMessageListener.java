@@ -8,7 +8,7 @@ package control.network;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
-import control.SendMessageToClient;
+import control.EntityHandling;
 import java.util.LinkedList;
 import java.util.Queue;
 import model.Entities;
@@ -62,8 +62,7 @@ public class NetworkMessageListener {
 
                 NetworkMessageHandling.addPlayer(source, registerOnServerMessage);
 
-                NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(Entities.ENTITY_CONTAINER);
-            
+               
 
             }
             if (message instanceof NetworkMessages.PingMessage) {

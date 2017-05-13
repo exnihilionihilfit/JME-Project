@@ -5,24 +5,17 @@ import com.jme3.network.Network;
 import com.jme3.network.Server;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.system.JmeContext;
-import control.EntityAction;
 import control.Map;
 import control.network.NetworkMessageHandling;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Player;
 import control.network.NetworkMessageListener;
 import control.network.NetworkMessages;
-import control.SimpleCollision;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import model.Entities;
 import model.EntityContainer;
 import model.Players;
 import control.PropertiesHandler;
-import control.SendMessageToClient;
+import control.EntityHandling;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -95,6 +88,10 @@ public class Main extends SimpleApplication {
 
         players = new Players();
         Map map = new Map(1000, 300);
+        
+        Thread sendClientMessages = new Thread(new EntityHandling());
+            
+        sendClientMessages.start();
 
     }
 
@@ -106,10 +103,6 @@ public class Main extends SimpleApplication {
 
             NetworkMessageHandling.handleCreateEntityMessage();
             NetworkMessageHandling.handleEntityPositionMessage();
-
-            Thread sendClientMessages = new Thread(new SendMessageToClient());
-            
-            sendClientMessages.start();
 
         }
 
