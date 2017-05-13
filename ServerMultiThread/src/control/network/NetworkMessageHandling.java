@@ -78,7 +78,6 @@ public class NetworkMessageHandling {
      *
      * @param connection is a client server connection
      * @param registerOnServerMessage
-     * @param source
      */
     public static void addPlayer(HostedConnection connection, NetworkMessages.RegisterOnServerMessage registerOnServerMessage) {
 

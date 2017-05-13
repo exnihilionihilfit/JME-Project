@@ -8,6 +8,7 @@ package control;
 import com.jme3.asset.AssetManager;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.control.LodControl;
 import model.EntityTypes;
 
 /**
@@ -45,6 +46,8 @@ public class CreateEntityGeometry {
                     entity = (Node) assetManager.loadModel("Models/asteroid/asteroid.j3o");
                     entity.setName("entity");
                     entity.setUserData("id", entityID);
+                    LodControl lc = new LodControl();
+                    
                     entity.scale(10);
                     break;
                 case EXCHANGE_STATION:

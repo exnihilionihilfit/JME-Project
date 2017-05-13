@@ -2,25 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/network/NetworkMessages.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/model/Players.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/SimpleCollision.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/PropertiesHandler.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/EntityAction.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/model/EntityContainer.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/network/NetworkMessageHandling.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/model/EntityProperties.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/model/Entities.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/Map.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/main/Main.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/Entity.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/model/Player.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/model/EntityTypes.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/SendMessageToClient.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/GameOptions.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/CollisionTypes.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/ServerMultiThread/src/control/network/NetworkMessageListener.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
