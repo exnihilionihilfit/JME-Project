@@ -8,6 +8,8 @@ package control.network;
 import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import control.GameOptions;
+import control.Order;
+import control.OrderTypes;
 import java.util.UUID;
 import model.Entities;
 import model.EntityContainer;
@@ -61,13 +63,14 @@ public class NetworkMessageHandling {
 
             // Player player = Players.checkListOfPlayersContains(playerId);
             EntityContainer entityContainer = Entities.getEntityById(entityPositionMessage.entityID);
-
-            entityContainer.destination = newPositionMessage.position;
-            entityContainer.lastMoveUpdate = System.currentTimeMillis();
-            entityContainer.moveToPositon = true;
-            entityContainer.playerId = entityPositionMessage.payerId;
-
-        }
+            
+            // create MoveOrder
+            if(entityContainer.isMoveable){
+                entityContainer.activeOrder = new Order(entityPositionMessage.payerId, entityPositionMessage.entityID, newPositionMessage.position, newDirection, OrderTypes.MOVE);
+            }else{
+                System.out.println("Try to move unmoveable Object [" + entityID + "]");                
+            }
+        }    
     }
 
     /**

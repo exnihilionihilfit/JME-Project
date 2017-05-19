@@ -22,6 +22,7 @@ import control.GameState;
 import control.InputListener;
 import control.InputServerData;
 import control.Map;
+import control.Order;
 import control.UpdateEntity;
 import control.network.NetworkMessageHandling;
 import control.network.NetworkMessageListener;
@@ -263,7 +264,8 @@ public class Main extends SimpleApplication {
                     NetworkMessages.EntityPositionMessage.class,
                     NetworkMessages.RegisterOnServerMessage.class,
                     NetworkMessages.EntitiesListMessage.class,
-                    EntityContainer.class);
+                    EntityContainer.class,
+                    Order.class);
 
             client.addMessageListener(networkMessageListener.new ClientMoveOrderListener(),
                     NetworkMessages.EntityPositionMessage.class);
@@ -302,7 +304,7 @@ public class Main extends SimpleApplication {
      *
      * @param containerEntities
      */
-    public void setEntitiesPositionFromServerList(List<EntityContainer> containerEntities) {
+    public void setEntitiesPositionFromServerList(ArrayList<EntityContainer> containerEntities) {
 
         boolean found = false;
 

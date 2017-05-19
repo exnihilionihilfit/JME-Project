@@ -106,12 +106,12 @@ System.out.println("send client gamestate finished");
 
         synchronized (Entities.ENTITY_CONTAINER) {
             for (EntityContainer entityContainer : Entities.ENTITY_CONTAINER) {
-
-                EntityAction.moveEntityToPosition(entityContainer);
+                EntityAction.executeOrder(entityContainer);
+                //EntityAction.moveEntityToPosition(entityContainer);
 
                 SimpleCollision.checkCollision(entityContainer, Entities.ENTITY_CONTAINER);
 
-                if (entityContainer.collided || entityContainer.moveToPositon || entityContainer.isNewCreated) {
+                if (entityContainer.collided || entityContainer.activeOrder.isActive() || entityContainer.isNewCreated) {
                     CLIENT_MESSAGES.add(entityContainer);
                     entityContainer.isNewCreated = false;
                     entityContainer.collided = false;
