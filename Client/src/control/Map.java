@@ -40,6 +40,8 @@ public class Map {
         floor.setMaterial(mat);
         return floor;
     }
+    
+   
 
     public void initSky(AssetManager assetManager, Node rootNode) {
         Texture westTex = assetManager.loadTexture("Textures/background/west.png");

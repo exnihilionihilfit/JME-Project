@@ -154,6 +154,7 @@ public class GameState {
                                 if (MOVE_PLACEMENT_HULL) {
                                     placementTarget = Action.selectTargetPositionOnFloor(main.getInputManager(), main.getCamera(), main.getRootNode());
                                     placementTarget.getPointOnFloor().y = 0f;
+                                    
                                     buildingPlacementHull.setLocalTranslation(placementTarget.getPointOnFloor());
 
                                     if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
@@ -327,7 +328,7 @@ public class GameState {
         }
 
         InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
-        InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
+        //InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
         
         IS_ENTITY_SELECTED = false;
         SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;

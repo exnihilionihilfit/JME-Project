@@ -25,7 +25,7 @@ public class CreateEntityGeometry {
 
             switch (type) {
                 case BATTLESHIP:
-                    entity = (Node) assetManager.loadModel("Models/shuttle_final/shuttle_final.j3o");
+                    entity = (Node) assetManager.loadModel("Models/shuttle_small _engine_merged_normal/shuttle_small _engine_merged_normal.j3o");
                     entity.setName("entity");
                     entity.setUserData("id", entityID);
                     entity.lookAt(Vector3f.UNIT_X, Vector3f.UNIT_Y);

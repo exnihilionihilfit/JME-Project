@@ -408,5 +408,10 @@ public class Main extends SimpleApplication {
         }
 
     }
+    
+    public Map getMap()
+    {
+        return this.map;
+    }
 
 }

@@ -67,6 +67,8 @@ public class Action {
              *
              */
             Vector3f pointOnFloor = FLOOR_PLANE.getClosestPoint(contactPoint);
+            
+
 
             if (contactPoint != null) {
 
