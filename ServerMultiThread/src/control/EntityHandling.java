@@ -123,7 +123,7 @@ public class EntityHandling implements Runnable {
 
                 SimpleCollision.checkCollision(entityContainer, cloned);
 
-                if (entityContainer.collided || entityContainer.moveToPositon || entityContainer.isNewCreated) {
+                if (entityContainer.collided || (entityContainer.activeOrder.type == OrderTypes.MOVE) || entityContainer.isNewCreated) {
                     CLIENT_MESSAGES.add(entityContainer);
                     entityContainer.isNewCreated = false;
                     entityContainer.collided = false;

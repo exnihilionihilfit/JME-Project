@@ -68,10 +68,10 @@ public class NetworkMessageHandling {
 
             synchronized (entityContainer) 
             {
-                entityContainer.destination = newPositionMessage.position;
-                entityContainer.lastMoveUpdate = System.currentTimeMillis();
-                entityContainer.moveToPositon = true;
-                entityContainer.playerId = entityPositionMessage.payerId;
+                entityContainer.activeOrder.destination = newPositionMessage.position;
+                entityContainer.activeOrder.lastExecution = System.currentTimeMillis();
+                entityContainer.activeOrder.type= OrderTypes.MOVE;
+                entityContainer.activeOrder.payerId = entityPositionMessage.payerId;
             }
         }
     }
