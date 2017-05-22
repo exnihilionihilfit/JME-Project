@@ -8,6 +8,8 @@ package model;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 import control.CollisionTypes;
+import control.Order;
+import control.OrderTypes;
 
 @Serializable
 public class EntityContainer {
@@ -17,10 +19,7 @@ public class EntityContainer {
     public int entityId;
     public long playerId = 0;
     public Vector3f destination = new Vector3f(0, 0, 0);
-    
     public float speed = 15.0f;
-    public long lastMoveUpdate;
-    public boolean moveToPositon;
     public Vector3f direction = new Vector3f(1, 0, 0);
     public boolean isNewCreated = true;
     public boolean collided = false;
@@ -31,7 +30,8 @@ public class EntityContainer {
     public CollisionTypes collisionTypes = CollisionTypes.MOVEABLE;
     public boolean isBuildable = false;
     public boolean isMoveable = true;
-
+    public Order activeOrder = new Order(playerId, entityId, position, OrderTypes.STAY); 
+    
     public EntityContainer() {
 
     }
@@ -42,7 +42,7 @@ public class EntityContainer {
         this.position = position;
         this.type = type;
         this.name = name;
-
+        this.activeOrder = new Order(playerId, entityId, position, OrderTypes.STAY);
     }
 
 }

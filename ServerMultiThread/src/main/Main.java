@@ -6,6 +6,7 @@ import com.jme3.network.Server;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.system.JmeContext;
 import control.Map;
+import control.Order;
 import control.network.NetworkMessageHandling;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -55,6 +56,7 @@ public class Main extends SimpleApplication {
             Serializer.registerClass(NetworkMessages.RegisterOnServerMessage.class);
             Serializer.registerClass(NetworkMessages.EntitiesListMessage.class);
             Serializer.registerClass(EntityContainer.class);
+            Serializer.registerClass(Order.class);
 
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -70,7 +72,8 @@ public class Main extends SimpleApplication {
                 NetworkMessages.PingMessage.class,
                 NetworkMessages.RegisterOnServerMessage.class,
                 NetworkMessages.EntitiesListMessage.class,
-                EntityContainer.class);
+                EntityContainer.class,
+                Order.class);
 
         server.addMessageListener(networkMessageListener.new ServerMoveOrderListener(),
                 NetworkMessages.EntityPositionMessage.class);

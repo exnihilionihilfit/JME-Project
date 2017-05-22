@@ -8,6 +8,7 @@ package control;
 import control.network.NetworkMessages;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,6 +43,15 @@ public class EntityHandling implements Runnable {
 
         prepareMessages();
 
+        /**
+         * move each entity and only the entities which are moved will be send
+         * to reduce traffic. After all any change should set a flag to send it
+         * for now only movement will do so Also all other playerId's should set
+         * to -1 so nobody could mess with all id's around ;) PROBLEM:
+         * java.util.ConcurrentModificationException ^^ should be realy
+         * multy-threaded ;) AND: A reconnected player would get the whole list
+         * of entities !
+         */
         // should be filtedEntities but we need to set proper flags and send client at start all entities once !
         NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(filteredEntityContainers);
 
@@ -78,6 +88,8 @@ public class EntityHandling implements Runnable {
                 player.getConnection().send(entitiesListMessageUnfilterd);
                 chunkedList.clear();
             }
+           
+            
 
         }
         System.out.println("send client gamestate finished");
@@ -98,6 +110,8 @@ public class EntityHandling implements Runnable {
     }
 
     private void prepareMessages() {
+
+   
 
         synchronized (Entities.ENTITY_CONTAINER) {
             

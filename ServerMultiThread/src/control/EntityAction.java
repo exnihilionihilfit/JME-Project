@@ -16,11 +16,11 @@ public class EntityAction {
 
     public static void moveEntityToPosition(EntityContainer entity) {
 
-        if (entity.moveToPositon) {
+        if (entity.activeOrder.type == OrderTypes.MOVE) {
             // get node data
-            Vector3f destination = entity.destination;
+            Vector3f destination = entity.activeOrder.destination;
             float speed = entity.speed;
-            long updateTime = entity.lastMoveUpdate;
+            long updateTime = entity.activeOrder.lastExecution;
             entity.lastPosition = entity.position;
 
             if (destination != null && speed != 0f) {
@@ -29,7 +29,7 @@ public class EntityAction {
                 float timePassedInSeconds = ((float) (System.currentTimeMillis() - updateTime)) / 1000.0f;
 
                 // rotate to new direction
-                Vector3f distanceToTarget = destination.subtract(entity.position);
+                Vector3f distanceToTarget = destination.subtract(entity.lastPosition);
                 Vector3f directionToTarget = distanceToTarget.normalize();
 
                 float distanceToTargetAsNumber = distanceToTarget.length();
@@ -42,19 +42,35 @@ public class EntityAction {
                 // check if near and check if next step goes further then the target, because length is allways positiv
                 if (0.01 > distanceToTargetAsNumber || distanceToTargetAsNumber - flyedLengthSinceLastUpdate < 0) {
                     entity.position = destination;
-                    entity.moveToPositon = false;
+                    entity.activeOrder.orderDone(OrderTypes.MOVE);
 
                     System.out.println(" arrived ");
                 } else {
                     entity.position = entity.position.add(newPositionOnTheWay);
-                    entity.direction = entity.position.subtract(entity.lastPosition).normalize();
-
+                    entity.direction = directionToTarget;
                 }
 
-                entity.lastMoveUpdate = System.currentTimeMillis();
+                entity.activeOrder.lastExecution = System.currentTimeMillis();
             } else {
                 System.out.println("destination: " + destination);
             }
+        }
+    }
+    
+    public static void executeOrder(EntityContainer entity) {
+        switch (entity.activeOrder.type){
+            case STAY:
+                break;
+            case MOVE:
+                moveEntityToPosition(entity);
+                break;
+            case NOT_DEFINED:
+                System.out.println("undefined Order ");
+                entity.activeOrder = new Order(entity.playerId, entity.entityId, entity.position, OrderTypes.STAY);
+                break;
+            default:
+                System.out.println("hit defaultState execute Order");
+                break;
         }
     }
 }
