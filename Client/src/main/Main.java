@@ -246,7 +246,7 @@ public class Main extends SimpleApplication {
     @Override
     public void destroy() {
 
-        if (client != null) {
+        if (client != null && client.isConnected() && client.isStarted()) {
             client.close();
         }
 

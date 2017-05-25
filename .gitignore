@@ -21,3 +21,7 @@ private.properties
 /ServerMultiThread/dist/
 /ServerMultiThread/nbproject/private/private.properties/
 
+/ServerMultiThread/nbproject/private/private.xml
+/ServerMultiThread/nbproject/private/private.properties
+
+

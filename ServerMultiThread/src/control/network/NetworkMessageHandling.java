@@ -16,7 +16,7 @@ import model.EntityContainer;
 import model.Player;
 import model.Players;
 import control.PropertiesHandler;
-import control.EntityHandling;
+import control.entity.EntityHandling;
 
 /**
  *
@@ -52,8 +52,7 @@ public class NetworkMessageHandling {
         NetworkMessages.EntityPositionMessage entityPositionMessage = NetworkMessageListener.ENTITY_POSITION_MESSAGE.poll();
 
         if (entityPositionMessage != null) {
-
-            // just send the position back without check ... for now ...
+         
             Vector3f newPositonVector = entityPositionMessage.position;
             Vector3f newDirection = entityPositionMessage.direction;
             int entityID = entityPositionMessage.entityID;
@@ -62,8 +61,7 @@ public class NetworkMessageHandling {
             System.out.println("Client [" + entityID + "] Validate position: " + newPositonVector);
 
             NetworkMessages.EntityPositionMessage newPositionMessage = new NetworkMessages.EntityPositionMessage(playerId, entityID, newPositonVector, newDirection);
-
-            // Player player = Players.checkListOfPlayersContains(playerId);
+        
             EntityContainer entityContainer = Entities.getEntityById(entityPositionMessage.entityID);
 
             synchronized (entityContainer) 

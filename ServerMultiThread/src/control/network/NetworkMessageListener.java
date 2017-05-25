@@ -8,7 +8,7 @@ package control.network;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
-import control.EntityHandling;
+import control.entity.EntityHandling;
 import java.util.LinkedList;
 import java.util.Queue;
 import model.Entities;

@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package control;
+package control.entity;
 
+import control.OrderTypes;
+import control.SimpleCollision;
 import control.network.NetworkMessages;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -27,13 +29,10 @@ public class EntityHandling implements Runnable {
     private final Queue<EntityContainer> CLIENT_MESSAGES = new LinkedList<>();
 
     private final int maxMessageSize = 20;
+    
+    private boolean isRunning = true;
 
-    private boolean sendMessages = true;
-
-    public void setSendMessages(boolean value) {
-        this.sendMessages = value;
-    }
-
+ 
     public EntityHandling() {
 
     }
@@ -42,6 +41,15 @@ public class EntityHandling implements Runnable {
 
         prepareMessages();
 
+        /**
+         * move each entity and only the entities which are moved will be send
+         * to reduce traffic. After all any change should set a flag to send it
+         * for now only movement will do so Also all other playerId's should set
+         * to -1 so nobody could mess with all id's around ;) PROBLEM:
+         * java.util.ConcurrentModificationException ^^ should be realy
+         * multy-threaded ;) AND: A reconnected player would get the whole list
+         * of entities !
+         */
         // should be filtedEntities but we need to set proper flags and send client at start all entities once !
         NetworkMessages.EntitiesListMessage entitiesListMessage = new NetworkMessages.EntitiesListMessage(filteredEntityContainers);
 
@@ -78,6 +86,8 @@ public class EntityHandling implements Runnable {
                 player.getConnection().send(entitiesListMessageUnfilterd);
                 chunkedList.clear();
             }
+           
+            
 
         }
         System.out.println("send client gamestate finished");
@@ -87,7 +97,7 @@ public class EntityHandling implements Runnable {
     @Override
     public void run() {
 
-        while (sendMessages) {
+        while (isRunning) {
             sendMessagesToAll();
             try {
                 Thread.sleep(50);
@@ -99,23 +109,19 @@ public class EntityHandling implements Runnable {
 
     private void prepareMessages() {
 
+   
+
         synchronized (Entities.ENTITY_CONTAINER) {
-<<<<<<< HEAD:ServerMultiThread/src/control/EntityHandling.java
             
             ArrayList<EntityContainer> cloned = (ArrayList<EntityContainer>) Entities.ENTITY_CONTAINER.clone();
            
             for (EntityContainer entityContainer : cloned) {
 
                 EntityAction.moveEntityToPosition(entityContainer);
-=======
-            for (EntityContainer entityContainer : Entities.ENTITY_CONTAINER) {
-                EntityAction.executeOrder(entityContainer);
-                //EntityAction.moveEntityToPosition(entityContainer);
->>>>>>> origin/antarius:ServerMultiThread/src/control/SendMessageToClient.java
 
                 SimpleCollision.checkCollision(entityContainer, cloned);
 
-                if (entityContainer.collided || entityContainer.activeOrder.isActive() || entityContainer.isNewCreated) {
+                if (entityContainer.collided || (entityContainer.activeOrder.type == OrderTypes.MOVE) || entityContainer.isNewCreated) {
                     CLIENT_MESSAGES.add(entityContainer);
                     entityContainer.isNewCreated = false;
                     entityContainer.collided = false;
@@ -136,6 +142,10 @@ public class EntityHandling implements Runnable {
             i++;
         }
 
+    }
+
+    public void stop() {
+        this.isRunning = false;
     }
 
 }

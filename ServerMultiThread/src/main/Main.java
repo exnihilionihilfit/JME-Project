@@ -16,7 +16,9 @@ import control.network.NetworkMessages;
 import model.EntityContainer;
 import model.Players;
 import control.PropertiesHandler;
-import control.EntityHandling;
+import control.entity.EntityHandling;
+import control.server.Actions;
+import model.Player;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -40,6 +42,8 @@ public class Main extends SimpleApplication {
         Main app = new Main();
         app.start(JmeContext.Type.Headless); // headless type for servers!
     }
+    private Actions serverActionsControl;
+    private EntityHandling entityHandling;
 
     @Override
     public void simpleInitApp() {
@@ -92,15 +96,28 @@ public class Main extends SimpleApplication {
         players = new Players();
         Map map = new Map(1000, 300);
         
-        Thread sendClientMessages = new Thread(new EntityHandling());
-            
+        entityHandling = new EntityHandling();
+        Thread sendClientMessages = new Thread(entityHandling );            
         sendClientMessages.start();
+        
+        
+        serverActionsControl = new Actions();
+        Thread serverAction = new Thread(serverActionsControl);
+        serverAction.start();
 
     }
 
     @Override
     public void simpleUpdate(float tpf) {
 
+        if(serverActionsControl.isPaused())
+        {
+            // pausing
+           
+        }
+        else if(serverActionsControl.isRunning())
+        {
+        
         if ((lastTime + timeInterval) < System.currentTimeMillis()) {
             lastTime = System.currentTimeMillis();
 
@@ -108,7 +125,29 @@ public class Main extends SimpleApplication {
             NetworkMessageHandling.handleEntityPositionMessage();
 
         }
-
+        }
+        else if(serverActionsControl.isShutdown())
+        {
+            Players.getPlayerList().forEach((player) -> {
+                player.getConnection().close("server shutdown");
+            });
+                      
+            try{
+                 entityHandling.stop();
+                 serverActionsControl.stop();   
+                 if(server.isRunning())
+                 {
+                    server.close(); 
+                 }
+                 
+            }catch(Exception e)
+            {
+                System.out.print("error during shutdown");
+            }
+            
+            System.exit(0);
+           
+        }
     }
 
 }
