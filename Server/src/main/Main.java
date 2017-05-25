@@ -18,7 +18,6 @@ import model.Players;
 import control.PropertiesHandler;
 import control.entity.EntityHandling;
 import control.server.Actions;
-import model.Player;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.

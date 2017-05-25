@@ -118,7 +118,7 @@ public class Main extends SimpleApplication {
         //   bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, 0, 0));
 
         getCamera().lookAtDirection(new Vector3f(0, -1, 0.70f), Vector3f.UNIT_Z);
-        getCamera().setLocation(this.CAMERA_START_POSITION);
+        getCamera().setLocation(Main.CAMERA_START_POSITION);
 
         // Make the main window resizable
         Display.setResizable(true);
@@ -178,6 +178,7 @@ public class Main extends SimpleApplication {
                     registerOnServer();
                     System.out.println("try to register on server");
                     try {
+                       
                         Thread.sleep(REGISTER_ON_SERVER_DELAY);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

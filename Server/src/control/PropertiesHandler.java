@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import model.EntityContainer;
 import model.EntityProperties;
 import model.EntityTypes;
+import org.json.simple.JSONObject;
 
 /**
  *
