@@ -10,19 +10,13 @@ private.properties
 /Client/nbproject/private/private.properties/
 
 
-/Picking/nbproject/private/
-/Picking/build/
-/Picking/dist/
-/Picking/nbproject/private/private.properties/
+/Server/nbproject/private/
+/Server/build/
+/Server/dist/
+/Server/nbproject/private/private.properties/
 
-
-/ServerMultiThread/nbproject/private/
-/ServerMultiThread/build/
-/ServerMultiThread/dist/
-/ServerMultiThread/nbproject/private/private.properties/
-
-/ServerMultiThread/nbproject/private/private.xml
-/ServerMultiThread/nbproject/private/private.properties
+/Server/nbproject/private/private.xml
+/Server/nbproject/private/private.properties
 
 
 /Server/dist/
