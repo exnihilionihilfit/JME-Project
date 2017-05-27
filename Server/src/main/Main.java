@@ -35,14 +35,16 @@ public class Main extends SimpleApplication {
     int maxMessageSize = 50;
     private static Players players;
 
+    private Actions serverActionsControl;
+    private EntityHandling entityHandling;
+    private Thread entityHandlingThread;
+    private Thread serverActionControlThread;
 
     public static void main(String[] args) {
 
         Main app = new Main();
         app.start(JmeContext.Type.Headless); // headless type for servers!
     }
-    private Actions serverActionsControl;
-    private EntityHandling entityHandling;
 
     @Override
     public void simpleInitApp() {
@@ -80,7 +82,7 @@ public class Main extends SimpleApplication {
 
         server.addMessageListener(networkMessageListener.new ServerMoveOrderListener(),
                 NetworkMessages.EntityPositionMessage.class);
-        
+
         // load all entity properties
         PropertiesHandler.load();
 
@@ -94,58 +96,63 @@ public class Main extends SimpleApplication {
 
         players = new Players();
         Map map = new Map(1000, 300);
-        
+
         entityHandling = new EntityHandling();
-        Thread sendClientMessages = new Thread(entityHandling );            
-        sendClientMessages.start();
-        
-        
+        entityHandlingThread = new Thread(entityHandling);
+        entityHandlingThread.start();
+
         serverActionsControl = new Actions();
-        Thread serverAction = new Thread(serverActionsControl);
-        serverAction.start();
+        serverActionControlThread = new Thread(serverActionsControl);
+        serverActionControlThread.start();
 
     }
 
     @Override
     public void simpleUpdate(float tpf) {
 
-        if(serverActionsControl.isPaused())
-        {
+        if (serverActionsControl.isPaused()) {
             // pausing
-           
-        }
-        else if(serverActionsControl.isRunning())
-        {
-        
-        if ((lastTime + timeInterval) < System.currentTimeMillis()) {
-            lastTime = System.currentTimeMillis();
 
-            NetworkMessageHandling.handleCreateEntityMessage();
-            NetworkMessageHandling.handleEntityPositionMessage();
+        } else if (serverActionsControl.isRunning()) {
 
-        }
-        }
-        else if(serverActionsControl.isShutdown())
-        {
+            if ((lastTime + timeInterval) < System.currentTimeMillis()) {
+                lastTime = System.currentTimeMillis();
+
+                NetworkMessageHandling.handleCreateEntityMessage();
+                NetworkMessageHandling.handleEntityPositionMessage();
+
+            }
+        } else if (serverActionsControl.isShutdown()) {
+            
             Players.getPlayerList().forEach((player) -> {
                 player.getConnection().close("server shutdown");
             });
-                      
-            try{
-                 entityHandling.stop();
-                 serverActionsControl.stop();   
-                 if(server.isRunning())
-                 {
-                    server.close(); 
-                 }
-                 
-            }catch(Exception e)
-            {
+
+            try {
+                entityHandling.stop();
+
+                while (entityHandlingThread.isAlive()) {
+                    System.out.print(".");
+                    Thread.sleep(1000);
+                }
+
+                serverActionsControl.stop();
+
+                while (serverActionControlThread.isAlive()) {
+                    System.out.print(".");
+                    Thread.sleep(1000);
+                }
+
+                if (server.isRunning()) {
+                    server.close();
+                }
+
+            } catch (Exception e) {
                 System.out.print("error during shutdown");
             }
-            
+
             System.exit(0);
-           
+
         }
     }
 

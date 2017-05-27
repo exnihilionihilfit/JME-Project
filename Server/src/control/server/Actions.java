@@ -21,7 +21,6 @@ public class Actions implements Runnable {
             + " \n \t restart \t restart the server"
             + " \n \t shutdown \t shutdown the server";
 
-
     private boolean isRunning = true;
 
     public boolean isPaused() {
@@ -58,53 +57,58 @@ public class Actions implements Runnable {
     }
 
     private void checkForInput() {
-        Scanner reader = new Scanner(System.in);  // Reading from System.in
 
-        String input = reader.next();
-        String answer = "";
+        if (this.isRunning) {
+            Scanner reader = new Scanner(System.in);  // Reading from System.in
 
-        switch (input) {
-            case "start":
-                if (SERVER_STATE.equals(ServerState.IS_RUNNING)) {
-                    answer = "server is allready running";
-                } else {
-                    SERVER_STATE = ServerState.IS_RUNNING;
-                    answer = "starting server";
-                }
+            String input = reader.next();
 
-                break;
-            case "pause":
-                if (SERVER_STATE.equals(ServerState.IS_PAUSED)) {
-                    answer = "server is allready paused";
-                } else {
-                    SERVER_STATE = ServerState.IS_PAUSED;
-                    answer = "starting server";
-                }
-                break;
-            case "restart":
-                if (SERVER_STATE.equals(ServerState.IS_RESTARTING)) {
-                    answer = "server is allready restarting";
-                } else {
-                    SERVER_STATE = ServerState.IS_RESTARTING;
-                    answer = "restarting server";
-                }
-                break;
-            case "shutdown":
-                if (SERVER_STATE.equals(ServerState.IS_SHUTDOWN)) {
-                    answer = "server is allready shutting down";
-                } else {
-                    SERVER_STATE = ServerState.IS_SHUTDOWN;
-                    answer = "shutdown server";
-                }
-                break;
-            case "help":
-                answer = this.helpInformation;
-                break;
+            String answer = "";
 
+            switch (input) {
+                case "start":
+                    if (SERVER_STATE.equals(ServerState.IS_RUNNING)) {
+                        answer = "server is allready running";
+                    } else {
+                        SERVER_STATE = ServerState.IS_RUNNING;
+                        answer = "starting server";
+                    }
+
+                    break;
+                case "pause":
+                    if (SERVER_STATE.equals(ServerState.IS_PAUSED)) {
+                        answer = "server is allready paused";
+                    } else {
+                        SERVER_STATE = ServerState.IS_PAUSED;
+                        answer = "starting server";
+                    }
+                    break;
+                case "restart":
+                    if (SERVER_STATE.equals(ServerState.IS_RESTARTING)) {
+                        answer = "server is allready restarting";
+                    } else {
+                        SERVER_STATE = ServerState.IS_RESTARTING;
+                        answer = "restarting server";
+                    }
+                    break;
+                case "shutdown":
+                    if (SERVER_STATE.equals(ServerState.IS_SHUTDOWN)) {
+                        answer = "server is allready shutting down";
+                        stop();
+                    } else {
+                        SERVER_STATE = ServerState.IS_SHUTDOWN;
+                        answer = "shutdown server";
+                        stop();
+                    }
+                    break;
+                case "help":
+                    answer = this.helpInformation;
+                    break;
+
+            }
+
+            System.out.println("server: " + answer);
         }
-
-        System.out.println("server: " + answer);
-
     }
 
 }
