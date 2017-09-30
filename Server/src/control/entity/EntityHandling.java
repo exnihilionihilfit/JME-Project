@@ -87,8 +87,6 @@ public class EntityHandling implements Runnable {
                 chunkedList.clear();
             }
            
-            
-
         }
         System.out.println("send client gamestate finished");
         player.isNew = false;
