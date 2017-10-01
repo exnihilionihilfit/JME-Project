@@ -3,31 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package control.state;
+package control.state.enums;
 
 /**
  *
  * @author novo
  */
-public final class StatesEnum {
-    
+public enum StatesEnum {
 
+    PROGRAM_STARTUP(),
+    PROGRAM_RUNNING(),
+    PROGRAM_PAUSE(),
+    PROGRAM_SHUTDOWN(),
+    PROGRAM_ERROR(),
     
-   public enum Program {
-        STARTUP(),
-        RUNNING(),
-        PAUSE(),
-        SHUTDOWN(),
-        ERROR();
-      
-        
-    }
+    GAME_IDLE(),
+    GAME_HUD(),
+    GAME_FIELD();
 
- public enum Game{
-            IDLE(),
-            HUD(),
-            FIELD();
-        }
-    
-    
 }

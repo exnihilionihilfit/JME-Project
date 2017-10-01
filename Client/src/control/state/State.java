@@ -5,7 +5,12 @@
  */
 package control.state;
 
+import com.jme3.input.InputManager;
+import com.jme3.renderer.Camera;
+import com.jme3.scene.Node;
+import control.state.enums.StatesEnum;
 import control.state.interfaces.StateHandling;
+import main.Main;
 
 
 
@@ -13,10 +18,18 @@ import control.state.interfaces.StateHandling;
  *
  * @author novo
  */
-public class State implements StateHandling{
+public abstract class State implements StateHandling{
+    
+    protected Main main;
+    protected InputManager inputManager;
+    protected Camera camera;
+    protected Node rootNode;
+    
+    
+
 
     @Override
-    public boolean changeState(StatesEnum.Program RUNNING) {
+    public boolean changeState(StatesEnum state) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -6,7 +6,7 @@
 package control.state.interfaces;
 
 
-import control.state.StatesEnum.Program;
+import control.state.enums.StatesEnum;
 
 /**
  *
@@ -14,7 +14,7 @@ import control.state.StatesEnum.Program;
  */
 public interface StateHandling {
     
-    boolean changeState(Program RUNNING);
+    boolean changeState(StatesEnum state);    
     boolean execute();
     
     
