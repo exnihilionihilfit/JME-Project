@@ -5,53 +5,18 @@
  */
 package control.finateStateMachine;
 
+import com.jme3.math.Vector3f;
+import control.Action;
+import static control.GameState.SEND_ENTITY_MOVE_ACTION_TO_SERVER;
+import control.InputListener;
 import model.Entity;
-import model.Player;
+import model.Target;
 
 /**
  *
  * @author novo
  */
 public class StateEntity {
-
-   
-
-    public static final State SELECTED = new State("SELECTED") {
-        @Override
-        protected void update(float tpf, StackFSM stackFSM) {
-//      
-        }
-
-        @Override
-        protected void enter(StackFSM stackFSM) {
-            
-            Entity entity = (Entity) stackFSM.getT();
-            
-            if (entity != null) {
-                entity.addHighlight(Player.getPlayerId());
-
-                System.out.println("Entity selected \n name: " + entity.getName()
-                        + " playerId: " + entity.getPlayerId()
-                        + " entityId: " + entity.getID());
-            }
-
-        }
-
-        @Override
-        protected void leave(StackFSM stackFSM) {
-            Entity entity = (Entity) stackFSM.getT();
-        
-            if (entity != null) {
-             
-
-                    entity.removeHighLight();
-                    stackFSM.popState();
-
-                
-            }
-        }
-
-    };
 
     /**
      *
@@ -63,7 +28,26 @@ public class StateEntity {
 
         @Override
         protected void enter(StackFSM stackFSM) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+            Entity entity = (Entity) stackFSM.getT();
+            
+            if(entity.isMoveable()){
+
+            Target target = Action.selectTargetPositionOnFloor(stackFSM.getMain().getInputManager(), stackFSM.getMain().getCamera(), stackFSM.getMain().getRootNode());
+            InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
+
+            if (target != null) {
+
+                    Vector3f entityPositionTarget = target.getPointOnFloor();
+                    Action.sendEntityMoveAction(stackFSM.getMain().sendNetworkMessage, entity, entityPositionTarget);
+
+                    System.out.println("ENTIY " + entity);
+                    System.out.println("target found!" + target.getContactPoint());
+                 
+                }
+            
+            }
+            stackFSM.popState();
         }
 
         @Override

@@ -53,6 +53,7 @@ public class Entity {
     private final EntityTypes type;
     private final EntityContainer entityContainer;
     private final StackFSM fSM;
+    private boolean isSelected;
 
     public Entity(Main mainApp, AssetManager assetManager, EntityContainer entityContainer) {
         this.mainApp = mainApp;
@@ -63,12 +64,14 @@ public class Entity {
         this.type =  entityContainer.type;
         this.entityContainer = entityContainer;
         
-        fSM = new StackFSM(this);
+        fSM = new StackFSM(this,mainApp);
         
         fSM.pushState(StateEntity.HOLD);
         
 
     }
+    
+    
     
     public EntityContainer getEntityContainer()
     {
@@ -217,14 +220,14 @@ public class Entity {
         return this.type;
     }
 
-    public void addHighlight(long playerId) {
-        if(playerId == this.entityID)
+    public void addHighlight() {
+        if(this.playerId != Player.getPlayerId())
         {
-        getEntityNode().addLight(Main.highLightOwnEnitity);
+            getEntityNode().addLight(Main.highLightNeutral);
         }
         else
         {
-           getEntityNode().addLight(Main.highLightNeutral);  
+            getEntityNode().addLight(Main.highLightOwnEnitity);  
         }
     }
     
@@ -237,6 +240,19 @@ public class Entity {
     public void changeState(State SELECTED) {
         
         fSM.changeState(SELECTED);
+    }
+
+    public void setSelected(boolean b) {
+        this.isSelected = b;
+        
+        if(b)
+        {
+            addHighlight();
+        }
+        else
+        {
+            removeHighLight();
+        }
     }
 
   

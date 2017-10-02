@@ -8,19 +8,27 @@ package control.finateStateMachine;
 import static control.finateStateMachine.State.NULL_STATE;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import main.Main;
 
 public class StackFSM <T>{
     private final Deque<State> stack ;
     private final T t;
+    private final Main main;
     
     public T getT()
     {
         return t;
     }
  
-    public StackFSM(T t) {
+    public StackFSM(T t, Main main) {
         this.stack = new ArrayDeque<>();
         this.t = t;
+        this.main = main;
+    }
+    
+    public Main getMain()
+    {
+        return this.main;
     }
  
     public void update(float tpf) {

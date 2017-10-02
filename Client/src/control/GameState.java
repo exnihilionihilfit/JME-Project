@@ -9,12 +9,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-import control.Action;
-import control.CreateEntityGeometry;
-import control.Helper;
-import control.InputListener;
-import static control.finateStateMachine.StateEntity.HOLD;
-import static control.finateStateMachine.StateEntity.SELECTED;
+import static control.finateStateMachine.StateEntity.MOVE;
 import main.Main;
 import model.Entity;
 import model.EntityTypes;
@@ -100,7 +95,7 @@ public class GameState {
                             InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
                             IS_ENTITY_SELECTED = true;
                         
-                            selectedEntity.changeState(SELECTED);
+                            selectedEntity.setSelected(true);
                             
                         }                     
                     }               
@@ -159,43 +154,10 @@ public class GameState {
                             }
 
                         }
-                        /**
-                         * try to get an target we need the target center point
-                         * pick point and target id if an entity was picked. To
-                         * do so we use a target object to gather all needed
-                         * info
-                         */
-                        if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
-                            target = Action.selectTargetPositionOnFloor(inputManager, cam, rootNode);
-                            InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
-
-                            if (target != null) {
-                                SEND_ENTITY_MOVE_ACTION_TO_SERVER = true;
-
-                            }
-                            if (SEND_ENTITY_MOVE_ACTION_TO_SERVER) {
-
-                                Vector3f entityPositionTarget = target.getPointOnFloor();
-
-                                System.out.println("ENTIY " + selectedEntity);
-
-                                Action.sendEntityMoveAction(main.sendNetworkMessage, selectedEntity, entityPositionTarget);
-
-                                System.out.println("target found!" + target.getContactPoint());
-
-                                // IS_ENTITY_SELECTED = false;
-                                SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
-                                //  selectedEntity = null;
-                                target = null;
-
-                            } else {
-                                System.out.println("no target found");
-                            }
+                       
+                        if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {             
+                            selectedEntity.changeState(MOVE);                            
                         }
-                    } else // if its a neutral or entity from another player
-                    {
-                        //TODO
-
                     }
 
                 }
@@ -310,8 +272,8 @@ public class GameState {
     }
 
     private void reset() {
-        
-        selectedEntity.changeState(HOLD);
+        selectedEntity.setSelected(false);
+        //selectedEntity.changeState(HOLD);
         InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
         //InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
 
@@ -325,6 +287,7 @@ public class GameState {
         selectedEntity = null;
         // for building structures
         HUD.IS_BUILDABLE = false;
+        HUD.IS_BUILDABLE(false);
         IS_BUILDING_SET = false;
 
         if (buildingPlacementHull != null) {

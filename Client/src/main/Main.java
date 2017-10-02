@@ -2,6 +2,7 @@ package main;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
@@ -105,6 +106,8 @@ public class Main extends SimpleApplication {
     public int getScreenHeight() {
         return screenHeight;
     }
+    
+   
 
     @Override
     public void simpleInitApp() {

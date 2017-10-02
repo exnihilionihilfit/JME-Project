@@ -6,12 +6,17 @@
             <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/control/PropertiesHandler.java</file>
             <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/control/entity/EntityHandling.java</file>
             <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/control/Order.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/main/Main.java</file>
+            <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/control/network/NetworkMessages.java</file>
             <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/control/server/Actions.java</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/control/server/ServerState.java</file>
             <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/game_properties/properties.json</file>
-            <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/model/Player.java</file>
             <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/model/EntityTypes.java</file>
+            <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/control/network/NetworkMessageListener.java</file>
+            <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/control/entity/Entity.java</file>
+            <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/main/Main.java</file>
+            <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/control/network/NetworkMessageHandling.java</file>
+            <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/control/server/ServerState.java</file>
+            <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/model/Player.java</file>
+            <file>file:/home/novo/jmeWorkspace/JME-Project/Server/src/control/entity/EntityAction.java</file>
         </group>
     </open-files>
 </project-private>
