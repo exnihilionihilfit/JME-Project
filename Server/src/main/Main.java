@@ -16,7 +16,7 @@ import control.network.NetworkMessages;
 import model.EntityContainer;
 import model.Players;
 import control.PropertiesHandler;
-import control.entity.EntityHandling;
+import control.entity.HandleEntityCondition;
 import control.server.Actions;
 
 /**
@@ -36,7 +36,7 @@ public class Main extends SimpleApplication {
     private static Players players;
 
     private Actions serverActionsControl;
-    private EntityHandling entityHandling;
+    private HandleEntityCondition entityHandling;
     private Thread entityHandlingThread;
     private Thread serverActionControlThread;
 
@@ -97,7 +97,7 @@ public class Main extends SimpleApplication {
         players = new Players();
         Map map = new Map(1000, 300);
 
-        entityHandling = new EntityHandling();
+        entityHandling = new HandleEntityCondition();
         entityHandlingThread = new Thread(entityHandling);
         entityHandlingThread.start();
 
@@ -147,7 +147,7 @@ public class Main extends SimpleApplication {
                     server.close();
                 }
 
-            } catch (Exception e) {
+            } catch (InterruptedException e) {
                 System.out.print("error during shutdown");
             }
 

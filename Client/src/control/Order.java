@@ -26,6 +26,8 @@ public class Order {
         type = OrderTypes.NOT_DEFINED;
     }
     
+    
+    
     // ToDo - direction could be cut out
     //      - check for Ordertype by creation
     

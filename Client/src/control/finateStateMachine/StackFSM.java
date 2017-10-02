@@ -15,10 +15,20 @@ public class StackFSM <T>{
     private final T t;
     private final Main main;
     
+    /**
+     * To be able to use the StackFiniteStateMachine with
+     * any object. Mainly used with Entities
+     * @return object with generic type <t>
+     */
     public T getT()
     {
         return t;
     }
+    /**
+     * 
+     * @param t
+     * @param main 
+     */
  
     public StackFSM(T t, Main main) {
         this.stack = new ArrayDeque<>();

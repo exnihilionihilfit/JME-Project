@@ -35,18 +35,20 @@ public abstract class State {
     /**
      * Called by the StateMachine when enter this State.
      *
+     * @param stackFSM
      */
     protected abstract void enter(StackFSM stackFSM);
 
     /**
      * Called by the StateMachine when leave this State.
+     * @param stackFSM
      */
     protected abstract void leave(StackFSM stackFSM);
     
     
 
     /**
-     * 
+     * A NULL-Object to prevent a null pointer exception.
      */
     public static final State NULL_STATE = new State("NULL_STATE") {
         @Override
@@ -60,7 +62,7 @@ public abstract class State {
 
         @Override
         protected void enter(StackFSM stackFSM) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            throw new UnsupportedOperationException("NULL_STATE"); //To change body of generated methods, choose Tools | Templates.
         }
     };
 

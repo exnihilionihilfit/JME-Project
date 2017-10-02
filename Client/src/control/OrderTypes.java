@@ -5,8 +5,6 @@
  */
 package control;
 
-import com.jme3.network.serializing.Serializable;
-
 /**
  * all different Types of Orders a Player can execute
  * default is stay Order, doing nothing

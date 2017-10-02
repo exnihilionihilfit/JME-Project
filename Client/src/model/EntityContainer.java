@@ -31,6 +31,7 @@ public class EntityContainer {
     public boolean isBuildable = false;
     public boolean isMoveable = true;
     public Order activeOrder = new Order(playerId, entityId, position, OrderTypes.STAY); 
+    public boolean isMoving = false;
     
     public EntityContainer() {
 

@@ -258,7 +258,7 @@ public class GameState {
 
     private void checkWhatToBuild() {
 
-        System.out.println(HUD.IS_BUILD_EXCHANGE_STATION);
+       
 
         if (HUD.IS_BUILD_EXCHANGE_STATION) {
             TO_BUILD_ENTITY_TYPE = EntityTypes.EXCHANGE_STATION;

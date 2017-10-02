@@ -22,7 +22,7 @@ import model.Players;
  *
  * @author novo
  */
-public class EntityHandling implements Runnable {
+public class HandleEntityCondition implements Runnable {
 
     private final ArrayList<EntityContainer> filteredEntityContainers = new ArrayList<>();
 
@@ -33,7 +33,7 @@ public class EntityHandling implements Runnable {
     private boolean isRunning = true;
 
  
-    public EntityHandling() {
+    public HandleEntityCondition() {
 
     }
 
@@ -100,7 +100,7 @@ public class EntityHandling implements Runnable {
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ex) {
-                Logger.getLogger(EntityHandling.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(HandleEntityCondition.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

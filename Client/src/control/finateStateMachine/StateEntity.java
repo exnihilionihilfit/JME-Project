@@ -7,8 +7,8 @@ package control.finateStateMachine;
 
 import com.jme3.math.Vector3f;
 import control.Action;
-import static control.GameState.SEND_ENTITY_MOVE_ACTION_TO_SERVER;
 import control.InputListener;
+import control.OrderTypes;
 import model.Entity;
 import model.Target;
 
@@ -24,6 +24,11 @@ public class StateEntity {
     public static final State MOVE = new State("MOVE") {
         @Override
         public void update(float tpf, StackFSM stackFSM) {
+            Entity entity = (Entity) stackFSM.getT();
+            
+            if(entity.getEntityContainer().activeOrder.type == OrderTypes.STAY ){
+                stackFSM.popState();
+            }
         }
 
         @Override
@@ -47,12 +52,12 @@ public class StateEntity {
                 }
             
             }
-            stackFSM.popState();
+            
         }
 
         @Override
         protected void leave(StackFSM stackFSM) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+           
         }
     };
 
