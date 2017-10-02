@@ -78,8 +78,8 @@ public class Main extends SimpleApplication {
     private HUD hud;
     private final long REGISTER_ON_SERVER_DELAY = 1000;
 
-    public static AmbientLight entityHighLightLight = new AmbientLight(ColorRGBA.Green);
-    public static AmbientLight entityNeutralHighLightLight = new AmbientLight(ColorRGBA.Orange);
+    public static AmbientLight highLightOwnEnitity = new AmbientLight(ColorRGBA.Green);
+    public static AmbientLight highLightNeutral = new AmbientLight(ColorRGBA.Orange);
 
     public static void main(String[] args) {
 
@@ -157,7 +157,7 @@ public class Main extends SimpleApplication {
         initHUD();
         initMap();
 
-        isRunning = true;
+        
 
     }
 

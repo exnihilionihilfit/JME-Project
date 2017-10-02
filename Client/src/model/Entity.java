@@ -12,6 +12,9 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import control.CreateEntityGeometry;
+import control.finateStateMachine.StackFSM;
+import control.finateStateMachine.State;
+import control.finateStateMachine.StateEntity;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import main.Main;
@@ -44,11 +47,12 @@ public class Entity {
     private boolean isMoveable = true;
     private Node entityGeometry;
 
-    private boolean isSelected = false;
+
     private long playerId;
     private Vector3f direction = new Vector3f(1, 0, 1);
     private final EntityTypes type;
     private final EntityContainer entityContainer;
+    private final StackFSM fSM;
 
     public Entity(Main mainApp, AssetManager assetManager, EntityContainer entityContainer) {
         this.mainApp = mainApp;
@@ -58,6 +62,11 @@ public class Entity {
         this.playerId =  entityContainer.playerId;
         this.type =  entityContainer.type;
         this.entityContainer = entityContainer;
+        
+        fSM = new StackFSM(this);
+        
+        fSM.pushState(StateEntity.HOLD);
+        
 
     }
     
@@ -74,27 +83,7 @@ public class Entity {
         return this.playerId;
     }
 
-    public void addHighlight() {
-        getEntityNode().addLight(Main.entityHighLightLight);
-    }
 
-    public void removeHighLight() {
-        getEntityNode().removeLight(Main.entityHighLightLight);
-        getEntityNode().removeLight(Main.entityNeutralHighLightLight);
-    }
-
-    public void addNeutralHighlight() {
-        getEntityNode().addLight(Main.entityNeutralHighLightLight);
-    }
-
-    public boolean isSelected() {
-        return this.isSelected;
-
-    }
-
-    public void setSelected(boolean value) {
-        this.isSelected = value;
-    }
 
     public boolean isMoveable() {
         return isMoveable;
@@ -171,49 +160,10 @@ public class Entity {
 
     };
 
-    public void update(float tpf) {
+    public void updateState(float tpf) {
+      
+        fSM.update(tpf);
 
-        /*
-        if (reseavedNewPositionMessage) {
-            try {
-                
-                if (future == null) {
-                    //set the desired location vector, after that we should not modify it anymore
-                    //because it's being accessed on the other thread!
-                    desiredLocation.set(getGoodNextLocation());
-                    //start the callable on the executor
-
-                    future = mainApp.executor.submit(newPosition);    //  Thread starts!
-                    // System.out.println(findWay);
-                } //If we have started a callable already, we check the status
-                else if (future != null) {
-                   
-
-                    if (future.isDone()) {
-                        wayList = (MyWayList) future.get();
-                        future = null;
-                    } else if (future.isCancelled()) {
-                        //Set future to null. Maybe we succeed next time...
-                        future = null;
-                    }
-
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                System.out.println("Exception" + e);
-            }
-            reseavedNewPositionMessage = false;
-        }
-
-        if (wayList != null) {
-
-            if (wayList.getNewLocation() != null) {     //   System.out.println("set new Location"+wayList.getNewLocation());
-                getEntity().setLocalTranslation(wayList.getNewLocation());
-                wayList = null;
-
-            }
-
-        }
-         */
     }
 
     private Vector3f getLocalTranslation() {
@@ -266,5 +216,31 @@ public class Entity {
     public EntityTypes getType() {
         return this.type;
     }
+
+    public void addHighlight(long playerId) {
+        if(playerId == this.entityID)
+        {
+        getEntityNode().addLight(Main.highLightOwnEnitity);
+        }
+        else
+        {
+           getEntityNode().addLight(Main.highLightNeutral);  
+        }
+    }
+    
+    
+    public void removeHighLight() {
+        getEntityNode().removeLight(Main.highLightOwnEnitity);
+        getEntityNode().removeLight(Main.highLightNeutral);
+    }
+
+    public void changeState(State SELECTED) {
+        
+        fSM.changeState(SELECTED);
+    }
+
+  
+
+
 
 }

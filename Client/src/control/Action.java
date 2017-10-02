@@ -28,7 +28,7 @@ public class Action {
     /*
     get the pick point and the geometry if one is there (-1 indicates that the transparent floor is hit)
      */
-    public static int selectEntity(InputManager inputManager, Camera cam, Node rootNode) {
+    public static int getEnityOnMouseClickPoint(InputManager inputManager, Camera cam, Node rootNode) {
         CollisionResults results = PickCollision.getCollisionResults(inputManager, cam, rootNode);
         return getEntityIDFromSelection(results);
     }
@@ -98,9 +98,9 @@ public class Action {
                 Node node = result.getGeometry().getParent();
 
                 while (node != null) {
-                    System.out.println(node.getName());
+                   // System.out.println(node.getName());
                     if (node.getName().equals("entity")) {
-                        System.out.println(node.getName());
+                     //   System.out.println(node.getName());
                         return node.getUserData("id");
                     }
                     node = node.getParent();

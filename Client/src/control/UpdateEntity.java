@@ -14,7 +14,7 @@ public class UpdateEntity {
 
     public static void update(List<Entity> entities, float tpf) {
         entities.forEach((entity) -> {
-            entity.update(tpf);
+            entity.updateState(tpf);
         });
     }
 

@@ -13,6 +13,8 @@ import control.Action;
 import control.CreateEntityGeometry;
 import control.Helper;
 import control.InputListener;
+import static control.finateStateMachine.StateEntity.HOLD;
+import static control.finateStateMachine.StateEntity.SELECTED;
 import main.Main;
 import model.Entity;
 import model.EntityTypes;
@@ -64,161 +66,142 @@ public class GameState {
 
         if (IS_CLIENT_CONNECTED) {
 
-            if (IS_RUNNING) {
+            if (IS_PAUSED) {
+                // pause
+            } else {
 
-                if (IS_PAUSED) {
-                    // pause
-                } else {
+                // deselct
+                if (IS_ENTITY_SELECTED) {
 
-                    // deselct
-                    if (IS_ENTITY_SELECTED) {
-
-                        /**
-                         * Deselection
-                         */
-                        if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
-                            reset();
-                            System.out.println("deselect");
-                        }
-                    }
                     /**
-                     * check start condition If the entityID > -1 an entity was
-                     * found if so start EntityAction cancle with rightMouse
-                     *
-                     * Note: the id is a fild set in enty and binde to the node
-                     * we got the geometry wich is a child of the entity node so
-                     * we have to "getParent" as long as we finde the node with
-                     * the id entry
+                     * Deselection
                      */
-                    if (IS_ENTITY_SELECTED == false) {
+                    if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
+                        reset();
+                        System.out.println("deselect");
+                    }
+                }
+                /**
+                 * check start condition If the entityID > -1 an entity was
+                 * found if so start EntityAction cancle with rightMouse
+                 *
+                 * Note: the id is a fild set in enty and binde to the node we
+                 * got the geometry wich is a child of the entity node so we
+                 * have to "getParent" as long as we finde the node with the id
+                 * entry
+                 */
+                if (IS_ENTITY_SELECTED == false) {
 
-                        if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
-                            entityID = Action.selectEntity(inputManager, cam, rootNode);
+                    if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
+                        entityID = Action.getEnityOnMouseClickPoint(inputManager, cam, rootNode);
+                        selectedEntity = Helper.getEntityByID(entityID);
 
-                        }
+                        if (selectedEntity != null) {
+                            InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
+                            IS_ENTITY_SELECTED = true;
+                        
+                            selectedEntity.changeState(SELECTED);
+                            
+                        }                     
+                    }               
+
+                }
+
+                if (IS_ENTITY_SELECTED) {
+
+                    // if its players entity
+                    if (selectedEntity.getPlayerId() == Player.getPlayerId()) {
 
                         /**
-                         * get entity with id
+                         * This is for building structures first check if the
+                         * selected entity could build buildings then check if
+                         * one building is selected by button
+                         *
+                         * then create a geometry and add it to the rootNode as
+                         * indicator for building
                          */
-                        if (selectedEntity == null) {
-                            selectedEntity = Helper.getEntityByID(entityID);
+                        if (selectedEntity.getEntityContainer().isBuildable) {
+                            HUD.IS_BUILDABLE(true);
+                        } else {
+                            HUD.IS_BUILDABLE(false);
+                        }
 
-                            if (selectedEntity != null) {
+                        if (HUD.IS_BUILDABLE && TO_BUILD_ENTITY_TYPE.equals(EntityTypes.NOT_DEFINED)) {
+                            checkWhatToBuild();
+                        }
+                        if (!TO_BUILD_ENTITY_TYPE.equals(EntityTypes.NOT_DEFINED)) {
 
-                                InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
+                            if (buildingPlacementHull == null) {
 
-                                if (selectedEntity.getPlayerId() == Player.getPlayerId()) {
-                                    selectedEntity.addHighlight();
+                                buildingPlacementHull = CreateEntityGeometry.getEntityNode(TO_BUILD_ENTITY_TYPE, -2, main.getAssetManager());
+                                main.getRootNode().attachChild(buildingPlacementHull);
+                                MOVE_PLACEMENT_HULL = true;
+                            }
 
-                                } else {
-                                    selectedEntity.addNeutralHighlight();
+                            if (MOVE_PLACEMENT_HULL) {
+                                placementTarget = Action.selectTargetPositionOnFloor(main.getInputManager(), main.getCamera(), main.getRootNode());
+                                placementTarget.getPointOnFloor().y = 0f;
 
+                                buildingPlacementHull.setLocalTranslation(placementTarget.getPointOnFloor());
+
+                                if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
+                                    IS_BUILDING_SET = true;
                                 }
 
-                                IS_ENTITY_SELECTED = true;
-                                System.out.println("Entity selected \n name: " + selectedEntity.getName()
-                                        + " playerId: " + selectedEntity.getPlayerId()
-                                        + " entityId: " + entityID);
+                            }
+
+                            if (buildingPlacementHull != null) {
+                                if (IS_BUILDING_SET) {
+                                    Action.sendCreateEntity(main.sendNetworkMessage, TO_BUILD_ENTITY_TYPE.name(), TO_BUILD_ENTITY_TYPE, placementTarget.getPointOnFloor());
+                                    System.out.println("new building placed");
+                                    reset();
+                                }
+                            }
+
+                        }
+                        /**
+                         * try to get an target we need the target center point
+                         * pick point and target id if an entity was picked. To
+                         * do so we use a target object to gather all needed
+                         * info
+                         */
+                        if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
+                            target = Action.selectTargetPositionOnFloor(inputManager, cam, rootNode);
+                            InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
+
+                            if (target != null) {
+                                SEND_ENTITY_MOVE_ACTION_TO_SERVER = true;
 
                             }
-                        }
-                    }
+                            if (SEND_ENTITY_MOVE_ACTION_TO_SERVER) {
 
-                    if (IS_ENTITY_SELECTED) {
+                                Vector3f entityPositionTarget = target.getPointOnFloor();
 
-                        // if its players entity
-                        if (selectedEntity.getPlayerId() == Player.getPlayerId()) {
+                                System.out.println("ENTIY " + selectedEntity);
 
-                            /**
-                             * This is for building structures first check if
-                             * the selected entity could build buildings then
-                             * check if one building is selected by button
-                             *
-                             * then create a geometry and add it to the rootNode
-                             * as indicator for building
-                             */
-                            if (selectedEntity.getEntityContainer().isBuildable) {
-                                HUD.IS_BUILDABLE(true);
+                                Action.sendEntityMoveAction(main.sendNetworkMessage, selectedEntity, entityPositionTarget);
+
+                                System.out.println("target found!" + target.getContactPoint());
+
+                                // IS_ENTITY_SELECTED = false;
+                                SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
+                                //  selectedEntity = null;
+                                target = null;
+
                             } else {
-                                HUD.IS_BUILDABLE(false);
+                                System.out.println("no target found");
                             }
-
-                            if (HUD.IS_BUILDABLE && TO_BUILD_ENTITY_TYPE.equals(EntityTypes.NOT_DEFINED)) {
-                                checkWhatToBuild();
-                            }
-                            if (!TO_BUILD_ENTITY_TYPE.equals(EntityTypes.NOT_DEFINED)) {
-
-                                if (buildingPlacementHull == null) {
-
-                                    buildingPlacementHull = CreateEntityGeometry.getEntityNode(TO_BUILD_ENTITY_TYPE, -2, main.getAssetManager());
-                                    main.getRootNode().attachChild(buildingPlacementHull);
-                                    MOVE_PLACEMENT_HULL = true;
-                                }
-
-                                if (MOVE_PLACEMENT_HULL) {
-                                    placementTarget = Action.selectTargetPositionOnFloor(main.getInputManager(), main.getCamera(), main.getRootNode());
-                                    placementTarget.getPointOnFloor().y = 0f;
-                                    
-                                    buildingPlacementHull.setLocalTranslation(placementTarget.getPointOnFloor());
-
-                                    if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
-                                        IS_BUILDING_SET = true;
-                                    }
-
-                                }
-
-                                if (buildingPlacementHull != null) {
-                                    if (IS_BUILDING_SET) {
-                                        Action.sendCreateEntity(main.sendNetworkMessage, TO_BUILD_ENTITY_TYPE.name(), TO_BUILD_ENTITY_TYPE,placementTarget.getPointOnFloor() );
-                                        System.out.println("new building placed");
-                                        reset();
-                                    }
-                                }
-
-                            }
-                            /**
-                             * try to get an target we need the target center
-                             * point pick point and target id if an entity was
-                             * picked. To do so we use a target object to gather
-                             * all needed info
-                             */
-                            if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
-                                target = Action.selectTargetPositionOnFloor(inputManager, cam, rootNode);
-                                InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
-
-                                if (target != null) {
-                                    SEND_ENTITY_MOVE_ACTION_TO_SERVER = true;
-
-                                }
-                                if (SEND_ENTITY_MOVE_ACTION_TO_SERVER) {
-
-                                    Vector3f entityPositionTarget = target.getPointOnFloor();
-
-                                    System.out.println("ENTIY " + selectedEntity);
-
-                                    Action.sendEntityMoveAction(main.sendNetworkMessage, selectedEntity, entityPositionTarget);
-
-                                    System.out.println("target found!" + target.getContactPoint());
-
-                                    // IS_ENTITY_SELECTED = false;
-                                    SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
-                                    //  selectedEntity = null;
-                                    target = null;
-
-                                } else {
-                                    System.out.println("no target found");
-                                }
-                            }
-                        } else // if its a neutral or entity from another player
-                        {
-                            //TODO
-
                         }
+                    } else // if its a neutral or entity from another player
+                    {
+                        //TODO
 
                     }
 
                 }
+
             }
+
         }
     }
 
@@ -259,7 +242,7 @@ public class GameState {
         }
 
         if (shipType != null) {
-            Action.sendCreateEntity(main.sendNetworkMessage, "USS" + shipType, shipType,new Vector3f());
+            Action.sendCreateEntity(main.sendNetworkMessage, "USS" + shipType, shipType, new Vector3f());
         }
 
     }
@@ -327,13 +310,11 @@ public class GameState {
     }
 
     private void reset() {
-        if (selectedEntity != null) {
-            selectedEntity.removeHighLight();
-        }
-
+        
+        selectedEntity.changeState(HOLD);
         InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED = false;
         //InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
-        
+
         IS_ENTITY_SELECTED = false;
         SEND_ENTITY_MOVE_ACTION_TO_SERVER = false;
 
