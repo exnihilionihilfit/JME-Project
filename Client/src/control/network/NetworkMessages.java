@@ -9,6 +9,7 @@ package control.network;
 import com.jme3.math.Vector3f;
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
+import control.Order;
 import java.util.ArrayList;
 import model.EntityContainer;
 import model.EntityTypes;
@@ -65,16 +66,18 @@ public class NetworkMessages {
         int entityID;
         long payerId;
         Vector3f direction;
+        Order order;
 
         public EntityPositionMessage() {
 
         }
 
-        public EntityPositionMessage(long playerId, int entityID, Vector3f position, Vector3f direction) {
+        public EntityPositionMessage(long playerId, int entityID, Vector3f position, Vector3f direction,Order order) {
             this.payerId = playerId;
             this.position = position;
             this.entityID = entityID;
             this.direction = direction;
+            this.order = order;
         }
     }
 

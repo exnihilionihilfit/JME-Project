@@ -255,6 +255,31 @@ public class Entity {
         }
     }
 
+    public void updateFromServer(EntityContainer entityContainer) {
+                setDirection(entityContainer.direction);
+                setPosition(entityContainer.position);
+                           
+                
+                 this.entityContainer.position =entityContainer.position;
+                 this.entityContainer.type = entityContainer.type;
+                 //this.entityContainer.entityId;
+                 this.entityContainer.playerId = entityContainer.playerId;
+                 this.entityContainer.destination = entityContainer.destination;
+                 this.entityContainer.speed = entityContainer.speed;
+                 this.entityContainer.direction = entityContainer.direction;
+                 this.entityContainer.isNewCreated = entityContainer.isNewCreated;
+                 this.entityContainer.collided = entityContainer.collided;
+                 this.entityContainer.lastPosition = entityContainer.lastPosition;
+                 this.entityContainer.name = entityContainer.name;
+                this.entityContainer.size = entityContainer.size;
+                this.entityContainer.hasStaticPosition = entityContainer.hasStaticPosition;
+                this.entityContainer.collisionTypes = entityContainer.collisionTypes;
+                this.entityContainer.isBuildable = entityContainer.isBuildable;
+                this.entityContainer.isMoveable = entityContainer.isMoveable;
+                this.entityContainer.activeOrder = entityContainer.activeOrder; 
+                this.entityContainer.isMoving = entityContainer.isMoving;
+    }
+
   
 
 

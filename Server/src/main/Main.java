@@ -49,6 +49,8 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
 
+        setShowSettings(false); 
+        
         System.out.println("start server ... ");
         System.out.println(" register network messages ");
 

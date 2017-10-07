@@ -47,27 +47,24 @@ public class NetworkMessageHandling {
     public static void handleEntityPositionMessage()
     {
         
-        NetworkMessages.EntityPositionMessage entityPositionMessage = NetworkMessageListener.ENTITY_POSITION_MESSAGE.poll();
+        NetworkMessages.EntityPositionMessage ePM = NetworkMessageListener.ENTITY_POSITION_MESSAGE.poll();
 
-        if (entityPositionMessage != null) {
+        if (ePM != null) {
          
-            Vector3f newPositonVector = entityPositionMessage.position;
-            Vector3f newDirection = entityPositionMessage.direction;
-            int entityID = entityPositionMessage.entityID;
-            long playerId = entityPositionMessage.payerId;
+            System.out.println("Client [" + ePM.entityID+ "] Validate position: " + ePM.position);
 
-            System.out.println("Client [" + entityID + "] Validate position: " + newPositonVector);
-
-            NetworkMessages.EntityPositionMessage newPositionMessage = new NetworkMessages.EntityPositionMessage(playerId, entityID, newPositonVector, newDirection);
+            NetworkMessages.EntityPositionMessage newPositionMessage = new NetworkMessages.EntityPositionMessage(ePM.payerId, ePM.entityID, ePM.position, ePM.direction, ePM.order);
         
-            EntityContainer entityContainer = Entities.getEntityById(entityPositionMessage.entityID);
+            EntityContainer entityContainer = Entities.getEntityById(ePM.entityID);
 
             synchronized (entityContainer) 
             {
                 entityContainer.activeOrder.destination = newPositionMessage.position;
                 entityContainer.activeOrder.lastExecution = System.currentTimeMillis();
-                entityContainer.activeOrder.type= OrderTypes.MOVE;
-                entityContainer.activeOrder.payerId = entityPositionMessage.payerId;
+                entityContainer.activeOrder.type = newPositionMessage.order.type;
+                entityContainer.activeOrder.payerId = ePM.payerId;
+                
+         
             }
         }
     }

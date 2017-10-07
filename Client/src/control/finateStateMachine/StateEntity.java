@@ -29,6 +29,8 @@ public class StateEntity {
             if(entity.getEntityContainer().activeOrder.type == OrderTypes.STAY ){
                 stackFSM.popState();
             }
+            
+            System.out.println(entity.getEntityContainer().activeOrder.type);
         }
 
         @Override

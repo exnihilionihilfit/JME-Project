@@ -2,7 +2,6 @@ package main;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
@@ -48,7 +47,7 @@ import view.HUD;
  * This is the Main Class of your Game. You should only do initialization here.
  * Move your Logic into AppStates or Controls
  *
- * @author normenhansen
+ * @author 
  */
 public class Main extends SimpleApplication {
 
@@ -107,8 +106,6 @@ public class Main extends SimpleApplication {
         return screenHeight;
     }
     
-   
-
     @Override
     public void simpleInitApp() {
 //stateManager.detach( stateManager.getState(FlyCamAppState.class) );
@@ -318,8 +315,7 @@ public class Main extends SimpleApplication {
 
                 if (entity.getID() == entityContainer.entityId) {
 
-                    entity.setDirection(entityContainer.direction);
-                    entity.setPosition(entityContainer.position);
+                    entity.updateFromServer(entityContainer);
                     found = true;
                     break;
                 }

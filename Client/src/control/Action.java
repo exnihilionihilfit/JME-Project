@@ -37,6 +37,7 @@ public class Action {
     sends the entity and the picked position to the server to validate it and the server will send it back
      */
     public static void sendEntityMoveAction(SendNetworkMessage sendNetworkMessage, Entity entity, Vector3f position) {
+        entity.getEntityContainer().activeOrder.type = OrderTypes.MOVE;
         sendNetworkMessage.sendEntityPositionMessage(entity, position);
     }
 

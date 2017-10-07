@@ -8,9 +8,10 @@ package control.entity;
 import control.OrderTypes;
 import control.SimpleCollision;
 import control.network.NetworkMessages;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Entities;
@@ -26,7 +27,7 @@ public class HandleEntityCondition implements Runnable {
 
     private final ArrayList<EntityContainer> filteredEntityContainers = new ArrayList<>();
 
-    private final Queue<EntityContainer> CLIENT_MESSAGES = new LinkedList<>();
+    private final Deque<EntityContainer> CLIENT_MESSAGES = new ArrayDeque<>();
 
     private final int maxMessageSize = 20;
     
@@ -60,8 +61,11 @@ public class HandleEntityCondition implements Runnable {
                     if (player_.isNew) {
                         sendToSinglePlayer(player_);
                     } else {
-                        
-                        player_.getConnection().send(entitiesListMessage);
+                        if(player_.getConnection().getServer().isRunning())
+                        {
+                           player_.getConnection().send(entitiesListMessage);  
+                        }
+                       
                     }
 
                 }
@@ -119,18 +123,19 @@ public class HandleEntityCondition implements Runnable {
 
                 SimpleCollision.checkCollision(entityContainer, cloned);
 
-                if (entityContainer.collided || (entityContainer.activeOrder.type == OrderTypes.MOVE) || entityContainer.isNewCreated) {
+             //   if (entityContainer.collided || (entityContainer.activeOrder.type == OrderTypes.MOVE) || entityContainer.isNewCreated) {
                     CLIENT_MESSAGES.add(entityContainer);
                     entityContainer.isNewCreated = false;
                     entityContainer.collided = false;
 
-                }
+              //  }
             }
         }
 
         int i = 0;
+        
         while (i < maxMessageSize) {
-            EntityContainer container = CLIENT_MESSAGES.poll();
+            EntityContainer container = CLIENT_MESSAGES.pollLast();
 
             if (container != null) {
                 filteredEntityContainers.add(container);

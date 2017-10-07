@@ -46,7 +46,7 @@ public class EntityAction {
                     entity.position = destination;
                     entity.activeOrder.orderDone(OrderTypes.MOVE);
 
-                    System.out.println(" arrived ");
+                    System.out.println(" arrived "+entity.activeOrder.type);
                 } else {
                     entity.position = entity.position.add(newPositionOnTheWay);
                     entity.direction = directionToTarget;
