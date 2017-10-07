@@ -59,10 +59,10 @@ public class NetworkMessageHandling {
 
             synchronized (entityContainer) 
             {
-                entityContainer.activeOrder.destination = newPositionMessage.position;
-                entityContainer.activeOrder.lastExecution = System.currentTimeMillis();
-                entityContainer.activeOrder.type = newPositionMessage.order.type;
-                entityContainer.activeOrder.payerId = ePM.payerId;
+                entityContainer.getActiveOrder().destination = newPositionMessage.position;
+                entityContainer.getActiveOrder().lastExecution = System.currentTimeMillis();
+                entityContainer.getActiveOrder().type = newPositionMessage.order.type;
+                entityContainer.getActiveOrder().payerId = ePM.payerId;
                 
          
             }

@@ -51,17 +51,17 @@ public class Entity {
     private long playerId;
     private Vector3f direction = new Vector3f(1, 0, 1);
     private final EntityTypes type;
-    private final EntityContainer entityContainer;
+    private EntityContainer entityContainer;
     private final StackFSM fSM;
     private boolean isSelected;
 
     public Entity(Main mainApp, AssetManager assetManager, EntityContainer entityContainer) {
         this.mainApp = mainApp;
-        this.name =  entityContainer.name;
+        this.name =  entityContainer.getName();
         this.assetManager = assetManager;
-        this.entityID =  entityContainer.entityId;
-        this.playerId =  entityContainer.playerId;
-        this.type =  entityContainer.type;
+        this.entityID =  entityContainer.getEntityId();
+        this.playerId =  entityContainer.getPlayerId();
+        this.type =  entityContainer.getType();
         this.entityContainer = entityContainer;
         
         fSM = new StackFSM(this,mainApp);
@@ -256,28 +256,11 @@ public class Entity {
     }
 
     public void updateFromServer(EntityContainer entityContainer) {
-                setDirection(entityContainer.direction);
-                setPosition(entityContainer.position);
+                setDirection(entityContainer.getDestination());
+                setPosition(entityContainer.getPosition());
                            
                 
-                 this.entityContainer.position =entityContainer.position;
-                 this.entityContainer.type = entityContainer.type;
-                 //this.entityContainer.entityId;
-                 this.entityContainer.playerId = entityContainer.playerId;
-                 this.entityContainer.destination = entityContainer.destination;
-                 this.entityContainer.speed = entityContainer.speed;
-                 this.entityContainer.direction = entityContainer.direction;
-                 this.entityContainer.isNewCreated = entityContainer.isNewCreated;
-                 this.entityContainer.collided = entityContainer.collided;
-                 this.entityContainer.lastPosition = entityContainer.lastPosition;
-                 this.entityContainer.name = entityContainer.name;
-                this.entityContainer.size = entityContainer.size;
-                this.entityContainer.hasStaticPosition = entityContainer.hasStaticPosition;
-                this.entityContainer.collisionTypes = entityContainer.collisionTypes;
-                this.entityContainer.isBuildable = entityContainer.isBuildable;
-                this.entityContainer.isMoveable = entityContainer.isMoveable;
-                this.entityContainer.activeOrder = entityContainer.activeOrder; 
-                this.entityContainer.isMoving = entityContainer.isMoving;
+                 this.entityContainer = entityContainer;
     }
 
   

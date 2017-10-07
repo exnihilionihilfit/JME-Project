@@ -30,7 +30,7 @@ public class Entities {
 
         synchronized (ENTITY_CONTAINER) {
             for (EntityContainer entity : ENTITY_CONTAINER) {
-                if (entityId == entity.entityId) {
+                if (entityId == entity.getEntityId()) {
                     return entity;
                 }
             }

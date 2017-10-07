@@ -5,13 +5,11 @@
  */
 package control.entity;
 
-import control.OrderTypes;
 import control.SimpleCollision;
 import control.network.NetworkMessages;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Entities;
@@ -123,12 +121,11 @@ public class HandleEntityCondition implements Runnable {
 
                 SimpleCollision.checkCollision(entityContainer, cloned);
 
-             //   if (entityContainer.collided || (entityContainer.activeOrder.type == OrderTypes.MOVE) || entityContainer.isNewCreated) {
+               if (entityContainer.isChanged()) {
                     CLIENT_MESSAGES.add(entityContainer);
-                    entityContainer.isNewCreated = false;
-                    entityContainer.collided = false;
+                    entityContainer.confirmeChanges();
 
-              //  }
+               }
             }
         }
 

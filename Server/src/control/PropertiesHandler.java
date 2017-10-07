@@ -53,10 +53,10 @@ public class PropertiesHandler {
         
         for(EntityProperties entityPropertie:ENTITY_PROPERTIES)
         {
-            if(entityPropertie.getEntityType().equals(entityContainer.type))
+            if(entityPropertie.getEntityType().equals(entityContainer.getType()))
             {
-                entityContainer.isBuildable = entityPropertie.isBuildable();
-                entityContainer.isMoveable = entityPropertie.isMoveable();
+                entityContainer.setIsBuildable(entityPropertie.isBuildable());
+                entityContainer.setIsMoveable(entityPropertie.isMoveable());
             }
         }
 

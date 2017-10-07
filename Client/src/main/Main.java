@@ -313,7 +313,7 @@ public class Main extends SimpleApplication {
             for (Entity entity : Main.ENTITIES) {
                 found = false;
 
-                if (entity.getID() == entityContainer.entityId) {
+                if (entity.getID() == entityContainer.getEntityId()) {
 
                     entity.updateFromServer(entityContainer);
                     found = true;
@@ -323,8 +323,8 @@ public class Main extends SimpleApplication {
             }
             if (!found) {
 
-                if (entityContainer.entityId >= -1) {
-                    System.out.println("create new Entity geometry " + entityContainer.type);
+                if (entityContainer.getEntityId() >= -1) {
+                    System.out.println("create new Entity geometry " + entityContainer.getType());
                     createEntity(entityContainer);
 
                 }
@@ -338,13 +338,13 @@ public class Main extends SimpleApplication {
 
         Entity entity = new Entity(mainApplication, assetManager, entityContainer);
 
-        entity.setPosition(entityContainer.position);
+        entity.setPosition(entityContainer.getPosition());
         if (entity.getEntityNode() != null) {
             rootNode.attachChild(entity.getEntityNode());
 
             ENTITIES.add(entity);
         } else {
-            System.out.println("Crete new Entity failed for type: " + entityContainer.type);
+            System.out.println("Crete new Entity failed for type: " + entityContainer.getType());
         }
 
     }

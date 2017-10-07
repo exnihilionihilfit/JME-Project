@@ -17,20 +17,20 @@ public class SimpleCollision {
 
     public static void resetCollided(ArrayList<EntityContainer> enityContainers) {
         for (EntityContainer entityContainer : enityContainers) {
-            entityContainer.collided = false;
+            entityContainer.setCollided(false);
         }
     }
 
     public static boolean checkCollision(EntityContainer container, ArrayList<EntityContainer> enityContainers) {
 
         for (EntityContainer entityContainerCopy : enityContainers) {
-            if (container.entityId != entityContainerCopy.entityId) {
-                Vector3f tmp = container.position.subtract(entityContainerCopy.position);
+            if (container.getEntityId() != entityContainerCopy.getEntityId()) {
+                Vector3f tmp = container.getPosition().subtract(entityContainerCopy.getPosition());
 
                 float distance = tmp.length();
 
-                if (distance < container.size) {
-                    if (container.collisionTypes.equals(CollisionTypes.MOVEABLE)) {
+                if (distance < container.getSize()) {
+                    if (container.getCollisionTypes().equals(CollisionTypes.MOVEABLE)) {
                         primitiveReactOnCollision(container, entityContainerCopy, tmp);                       
                         return true;
                     }
@@ -49,25 +49,25 @@ public class SimpleCollision {
         ///a.position = a.lastPosition;       
         float distance = vectorAminusB.length();
 
-        if (distance < a.size) {
+        if (distance < a.getSize()) {
             Vector3f direction = vectorAminusB.normalize();
 
             if (direction.equals(Vector3f.ZERO)) {
                 direction = Vector3f.UNIT_X;
             }
 
-            float closeness = (a.size - distance) /*  / 2 +1   */; //still problems with 3rd dimention
+            float closeness = (a.getSize() - distance) /*  / 2 +1   */; //still problems with 3rd dimention
             Vector3f setBack = direction.mult(closeness);
             setBack.y = 0;
 
-            a.position.addLocal(setBack);
-            a.collided = true;
+            a.getPosition().addLocal(setBack);
+            a.setCollided(true);
             
             // only if the entity is moveable the collision will be set to 
             // trigger a reset to client and update position
-           if (b.collisionTypes.equals(CollisionTypes.MOVEABLE)) {
-            b.position.addLocal(setBack.negate());
-            b.collided = true;
+           if (b.getCollisionTypes().equals(CollisionTypes.MOVEABLE)) {
+            b.getPosition().addLocal(setBack.negate());
+            b.setCollided(true);
            }
         }
 

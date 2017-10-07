@@ -115,7 +115,7 @@ public class GameState {
                          * then create a geometry and add it to the rootNode as
                          * indicator for building
                          */
-                        if (selectedEntity.getEntityContainer().isBuildable) {
+                        if (selectedEntity.getEntityContainer().isIsBuildable()) {
                             HUD.IS_BUILDABLE(true);
                         } else {
                             HUD.IS_BUILDABLE(false);

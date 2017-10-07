@@ -26,11 +26,11 @@ public class StateEntity {
         public void update(float tpf, StackFSM stackFSM) {
             Entity entity = (Entity) stackFSM.getT();
             
-            if(entity.getEntityContainer().activeOrder.type == OrderTypes.STAY ){
+            if(entity.getEntityContainer().getActiveOrder().type == OrderTypes.STAY ){
                 stackFSM.popState();
             }
             
-            System.out.println(entity.getEntityContainer().activeOrder.type);
+            System.out.println(entity.getEntityContainer().getActiveOrder().type);
         }
 
         @Override
