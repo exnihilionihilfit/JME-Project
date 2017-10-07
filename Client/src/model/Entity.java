@@ -256,7 +256,8 @@ public class Entity {
     }
 
     public void updateFromServer(EntityContainer entityContainer) {
-                setDirection(entityContainer.getDestination());
+        
+                setDirection(entityContainer.getDirection());
                 setPosition(entityContainer.getPosition());
                            
                 

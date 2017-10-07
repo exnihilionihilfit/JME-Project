@@ -24,13 +24,8 @@ public class StateEntity {
     public static final State MOVE = new State("MOVE") {
         @Override
         public void update(float tpf, StackFSM stackFSM) {
-            Entity entity = (Entity) stackFSM.getT();
-            
-            if(entity.getEntityContainer().getActiveOrder().type == OrderTypes.STAY ){
-                stackFSM.popState();
-            }
-            
-            System.out.println(entity.getEntityContainer().getActiveOrder().type);
+            Entity entity = (Entity) stackFSM.getT();   
+            stackFSM.popState();
         }
 
         @Override

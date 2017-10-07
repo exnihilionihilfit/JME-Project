@@ -109,8 +109,6 @@ public class HandleEntityCondition implements Runnable {
 
     private void prepareMessages() {
 
-   
-
         synchronized (Entities.ENTITY_CONTAINER) {
             
             ArrayList<EntityContainer> cloned = (ArrayList<EntityContainer>) Entities.ENTITY_CONTAINER.clone();
@@ -124,13 +122,11 @@ public class HandleEntityCondition implements Runnable {
                if (entityContainer.isChanged()) {
                     CLIENT_MESSAGES.add(entityContainer);
                     entityContainer.confirmeChanges();
-
                }
             }
         }
 
-        int i = 0;
-        
+        int i = 0;        
         while (i < maxMessageSize) {
             EntityContainer container = CLIENT_MESSAGES.pollLast();
 
@@ -141,11 +137,9 @@ public class HandleEntityCondition implements Runnable {
             }
             i++;
         }
-
     }
 
     public void stop() {
         this.isRunning = false;
     }
-
 }

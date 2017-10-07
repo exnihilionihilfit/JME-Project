@@ -49,6 +49,7 @@ public class EntityAction {
                     System.out.println(" arrived "+entity.getActiveOrder().type);
                 } else {
                     entity.setPosition(entity.getPosition().add(newPositionOnTheWay));
+             
                     entity.setDirection(directionToTarget);
                 }
 

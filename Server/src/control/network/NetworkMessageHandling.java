@@ -5,10 +5,8 @@
  */
 package control.network;
 
-import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import control.GameOptions;
-import control.OrderTypes;
 import java.util.UUID;
 import model.Entities;
 import model.EntityContainer;
