@@ -27,7 +27,7 @@ import main.Main;
  * @author chasma
  */
 public class Entity {
-    //The vector to store the desired location in:
+//The vector to store the desired location in:
 
 //The MyWayList object that contains the result waylist:
     private MyWayList wayList = null;
@@ -36,7 +36,6 @@ public class Entity {
     private long lastTime;
 
     private Main mainApp = null;
-
     private String name = null;
     private final AssetManager assetManager;
     private Node entityNode;
@@ -44,16 +43,17 @@ public class Entity {
     private boolean recevedNewPositionMessage = false;
     private boolean reseavedNewPositionMessage = false;
     private final int entityID;
-    private boolean isMoveable = true;
+    
     private Node entityGeometry;
 
-
     private long playerId;
-    private Vector3f direction = new Vector3f(1, 0, 1);
+
     private final EntityTypes type;
     private EntityContainer entityContainer;
-    private final StackFSM fSM;
+    private final StackFSM mapFiniteStateMachine;
+    private final StackFSM buildFinitStateMachine;
     private boolean isSelected;
+  
 
     public Entity(Main mainApp, AssetManager assetManager, EntityContainer entityContainer) {
         this.mainApp = mainApp;
@@ -64,14 +64,12 @@ public class Entity {
         this.type =  entityContainer.getType();
         this.entityContainer = entityContainer;
         
-        fSM = new StackFSM(this,mainApp);
+        mapFiniteStateMachine = new StackFSM(this,mainApp);        
+        mapFiniteStateMachine.pushState(StateEntity.HOLD);  
         
-        fSM.pushState(StateEntity.HOLD);
-        
-
+        buildFinitStateMachine= new StackFSM(this,mainApp);
+        buildFinitStateMachine.pushState(State.NULL_STATE);
     }
-    
-    
     
     public EntityContainer getEntityContainer()
     {
@@ -85,15 +83,13 @@ public class Entity {
     public long getPlayerId() {
         return this.playerId;
     }
-
-
-
+    
     public boolean isMoveable() {
-        return isMoveable;
+        return this.entityContainer.isIsMoveable();
     }
 
     public void setMoveable(boolean value) {
-        this.isMoveable = value;
+       this.entityContainer.setIsMoveable(value);
     }
 
     public String getName() {
@@ -163,10 +159,9 @@ public class Entity {
 
     };
 
-    public void updateState(float tpf) {
-      
-        fSM.update(tpf);
-
+    public void updateState(float tpf) {      
+        mapFiniteStateMachine.update(tpf);
+        buildFinitStateMachine.update(tpf);
     }
 
     private Vector3f getLocalTranslation() {
@@ -197,7 +192,7 @@ public class Entity {
     }
 
     public Vector3f getDirection() {
-        return this.direction;
+        return this.entityContainer.getDirection();
     }
 
     public void setPosition(Vector3f position) {
@@ -210,7 +205,7 @@ public class Entity {
     }
 
     public void setDirection(Vector3f newDirection) {
-        this.direction = newDirection;
+        this.entityContainer.setDirection(newDirection);
         // to make sure 
         newDirection = newDirection.mult(5f).add(getEntityNode().getLocalTranslation());
         getEntityNode().lookAt(newDirection, Vector3f.UNIT_Y);
@@ -237,10 +232,7 @@ public class Entity {
         getEntityNode().removeLight(Main.highLightNeutral);
     }
 
-    public void changeState(State SELECTED) {
-        
-        fSM.changeState(SELECTED);
-    }
+
 
     public void setSelected(boolean b) {
         this.isSelected = b;
@@ -262,6 +254,15 @@ public class Entity {
                            
                 
                  this.entityContainer = entityContainer;
+    }
+    
+    
+    public void changeState(State state) {        
+        mapFiniteStateMachine.changeState(state);
+    }
+    
+    public void changeBuildState(State state) {
+        buildFinitStateMachine.changeState(state);
     }
 
   

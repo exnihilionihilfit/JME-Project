@@ -57,12 +57,12 @@ public abstract class State {
 
         @Override
         protected void leave(StackFSM stackFSM) {
-            throw new UnsupportedOperationException("NULL_STATE"); //To change body of generated methods, choose Tools | Templates.
+            
         }
 
         @Override
         protected void enter(StackFSM stackFSM) {
-            throw new UnsupportedOperationException("NULL_STATE"); //To change body of generated methods, choose Tools | Templates.
+           
         }
     };
 

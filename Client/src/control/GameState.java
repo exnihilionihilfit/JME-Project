@@ -10,6 +10,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import static control.finateStateMachine.StateEntity.MOVE;
+import static control.finateStateMachine.StateEntity.SHOW_MENU;
 import main.Main;
 import model.Entity;
 import model.EntityTypes;
@@ -107,54 +108,11 @@ public class GameState {
                     // if its players entity
                     if (selectedEntity.getPlayerId() == Player.getPlayerId()) {
 
-                        /**
-                         * This is for building structures first check if the
-                         * selected entity could build buildings then check if
-                         * one building is selected by button
-                         *
-                         * then create a geometry and add it to the rootNode as
-                         * indicator for building
-                         */
-                        if (selectedEntity.getEntityContainer().isIsBuildable()) {
-                            HUD.IS_BUILDABLE(true);
-                        } else {
-                            HUD.IS_BUILDABLE(false);
+                        if(selectedEntity.getEntityContainer().isIsBuildable())
+                        {
+                            selectedEntity.changeBuildState(SHOW_MENU);
                         }
-
-                        if (HUD.IS_BUILDABLE && TO_BUILD_ENTITY_TYPE.equals(EntityTypes.NOT_DEFINED)) {
-                            checkWhatToBuild();
-                        }
-                        if (!TO_BUILD_ENTITY_TYPE.equals(EntityTypes.NOT_DEFINED)) {
-
-                            if (buildingPlacementHull == null) {
-
-                                buildingPlacementHull = CreateEntityGeometry.getEntityNode(TO_BUILD_ENTITY_TYPE, -2, main.getAssetManager());
-                                main.getRootNode().attachChild(buildingPlacementHull);
-                                MOVE_PLACEMENT_HULL = true;
-                            }
-
-                            if (MOVE_PLACEMENT_HULL) {
-                                placementTarget = Action.selectTargetPositionOnFloor(main.getInputManager(), main.getCamera(), main.getRootNode());
-                                placementTarget.getPointOnFloor().y = 0f;
-
-                                buildingPlacementHull.setLocalTranslation(placementTarget.getPointOnFloor());
-
-                                if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
-                                    IS_BUILDING_SET = true;
-                                }
-
-                            }
-
-                            if (buildingPlacementHull != null) {
-                                if (IS_BUILDING_SET) {
-                                    Action.sendCreateEntity(main.sendNetworkMessage, TO_BUILD_ENTITY_TYPE.name(), TO_BUILD_ENTITY_TYPE, placementTarget.getPointOnFloor());
-                                    System.out.println("new building placed");
-                                    reset();
-                                }
-                            }
-
-                        }
-                       
+               
                         if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {             
                             selectedEntity.changeState(MOVE);                            
                         }
@@ -256,20 +214,7 @@ public class GameState {
 
     }
 
-    private void checkWhatToBuild() {
-
-       
-
-        if (HUD.IS_BUILD_EXCHANGE_STATION) {
-            TO_BUILD_ENTITY_TYPE = EntityTypes.EXCHANGE_STATION;
-        } else if (HUD.IS_BUILD_SENSOR_STATION) {
-            TO_BUILD_ENTITY_TYPE = EntityTypes.SENSOR_STATION;
-        } else if (HUD.IS_BUILD_SKIFF) {
-            TO_BUILD_ENTITY_TYPE = EntityTypes.SKIFF;
-        } else {
-            TO_BUILD_ENTITY_TYPE = EntityTypes.NOT_DEFINED;
-        }
-    }
+ 
 
     private void reset() {
         selectedEntity.setSelected(false);
