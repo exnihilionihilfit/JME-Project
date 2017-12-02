@@ -188,7 +188,7 @@ public final class HUD {
         return IS_CREATE_BATTLESHIP_BUTTON_PRESSED;
     }
 
-    private void resetIsCreateEntityButtonPressed() {
+    public static void resetIsCreateEntityButtonPressed() {
         IS_CREATE_BATTLESHIP_BUTTON_PRESSED = false;
         IS_CREATE_BATTLESHIP_BUTTON_PRESSED = false;
         IS_CREATE_DRONE_BUTTON_PRESSED = false;

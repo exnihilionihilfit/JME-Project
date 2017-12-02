@@ -51,7 +51,7 @@ public class Entity {
     private final EntityTypes type;
     private EntityContainer entityContainer;
     private final StackFSM mapFiniteStateMachine;
-    private final StackFSM buildFinitStateMachine;
+ 
     private boolean isSelected;
   
 
@@ -67,8 +67,7 @@ public class Entity {
         mapFiniteStateMachine = new StackFSM(this,mainApp);        
         mapFiniteStateMachine.pushState(StateEntity.HOLD);  
         
-        buildFinitStateMachine= new StackFSM(this,mainApp);
-        buildFinitStateMachine.pushState(State.NULL_STATE);
+ 
     }
     
     public EntityContainer getEntityContainer()
@@ -161,7 +160,7 @@ public class Entity {
 
     public void updateState(float tpf) {      
         mapFiniteStateMachine.update(tpf);
-        buildFinitStateMachine.update(tpf);
+      
     }
 
     private Vector3f getLocalTranslation() {
@@ -261,9 +260,11 @@ public class Entity {
         mapFiniteStateMachine.changeState(state);
     }
     
-    public void changeBuildState(State state) {
-        buildFinitStateMachine.changeState(state);
+    public State getState()
+    {
+        return mapFiniteStateMachine.getCurrentState();
     }
+    
 
   
 

@@ -22,6 +22,8 @@ import view.HUD;
  * @author novo
  */
 public class StateEntity {
+    
+   private static EntityTypes TO_BUILD_ENTITY_TYPE = EntityTypes.NOT_DEFINED;
 
     /**
      *
@@ -83,6 +85,57 @@ public class StateEntity {
 
         }
     };
+    
+    public static final State PLACE_BUILDING = new State("PLACE_BUILDING"){
+        
+        Node buildingPlacementHull = null;
+        boolean MOVE_PLACEMENT_HULL = false;
+        Target placementTarget;
+        
+        @Override
+        protected void update(float tpf, StackFSM stackFSM) 
+        {
+                        System.out.println(" . ");
+                if (buildingPlacementHull == null) {
+
+                    buildingPlacementHull = CreateEntityGeometry.getEntityNode(TO_BUILD_ENTITY_TYPE, -2, stackFSM.getMain().getAssetManager());
+                    stackFSM.getMain().getRootNode().attachChild(buildingPlacementHull);
+                    MOVE_PLACEMENT_HULL = true;
+                }
+
+                if (MOVE_PLACEMENT_HULL) {
+                    placementTarget = Action.selectTargetPositionOnFloor(stackFSM.getMain().getInputManager(), stackFSM.getMain().getCamera(), stackFSM.getMain().getRootNode());
+                    placementTarget.getPointOnFloor().y = 0f;
+
+                    buildingPlacementHull.setLocalTranslation(placementTarget.getPointOnFloor());
+
+                    if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {
+                        Action.sendCreateEntity(stackFSM.getMain().sendNetworkMessage, TO_BUILD_ENTITY_TYPE.name(), TO_BUILD_ENTITY_TYPE, placementTarget.getPointOnFloor());
+                        System.out.println("new building placed");
+                        this.leave(stackFSM);
+                        stackFSM.popState();
+                    }
+
+                }
+        }
+
+        @Override
+        protected void enter(StackFSM stackFSM) {
+            System.out.println("...");
+            HUD.IS_BUILDABLE(true);
+        }
+
+        @Override
+        protected void leave(StackFSM stackFSM) {
+                      if (buildingPlacementHull != null) {
+                stackFSM.getMain().getRootNode().detachChild(buildingPlacementHull);
+            }
+                System.out.println("leave state "+this.getName());       
+            TO_BUILD_ENTITY_TYPE = EntityTypes.NOT_DEFINED;
+            buildingPlacementHull = null;
+        }
+        
+    };
     /**
      * This is for building structures first check if the selected entity could
      * build buildings then check if one building is selected by button
@@ -93,10 +146,8 @@ public class StateEntity {
 
     public static final State SHOW_MENU = new State("SHOW_MENU") {
 
-        EntityTypes TO_BUILD_ENTITY_TYPE = EntityTypes.NOT_DEFINED;
-        Node buildingPlacementHull = null;
-        boolean MOVE_PLACEMENT_HULL = false;
-        Target placementTarget;
+        
+
 
         @Override
         protected void update(float tpf, StackFSM stackFSM) {
@@ -112,27 +163,10 @@ public class StateEntity {
                     TO_BUILD_ENTITY_TYPE = EntityTypes.NOT_DEFINED;
                 }
             } else {
-
-                if (buildingPlacementHull == null) {
-
-                    buildingPlacementHull = CreateEntityGeometry.getEntityNode(TO_BUILD_ENTITY_TYPE, -2, stackFSM.getMain().getAssetManager());
-                    stackFSM.getMain().getRootNode().attachChild(buildingPlacementHull);
-                    MOVE_PLACEMENT_HULL = true;
-                }
-
-                if (MOVE_PLACEMENT_HULL) {
-                    placementTarget = Action.selectTargetPositionOnFloor(stackFSM.getMain().getInputManager(), stackFSM.getMain().getCamera(), stackFSM.getMain().getRootNode());
-                    placementTarget.getPointOnFloor().y = 0f;
-
-                    buildingPlacementHull.setLocalTranslation(placementTarget.getPointOnFloor());
-
-                    if (InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED) {
-                        Action.sendCreateEntity(stackFSM.getMain().sendNetworkMessage, TO_BUILD_ENTITY_TYPE.name(), TO_BUILD_ENTITY_TYPE, placementTarget.getPointOnFloor());
-                        System.out.println("new building placed");
-                        stackFSM.popState();
-                    }
-
-                }
+             
+                stackFSM.changeState(PLACE_BUILDING);
+                
+               // System.out.println("Place Building "+stackFSM.getCurrentState().getName());
 
             }
         }
@@ -148,12 +182,8 @@ public class StateEntity {
         @Override
         protected void leave(StackFSM stackFSM) {
 
-            if (buildingPlacementHull != null) {
-                stackFSM.getMain().getRootNode().detachChild(buildingPlacementHull);
-            }
+            System.out.println(" leave state SHOW_HUD");
            
-            buildingPlacementHull = null;
-            TO_BUILD_ENTITY_TYPE = EntityTypes.NOT_DEFINED;
         }
 
     };

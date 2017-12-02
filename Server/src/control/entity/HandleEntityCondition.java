@@ -59,7 +59,7 @@ public class HandleEntityCondition implements Runnable {
                     if (player_.isNew) {
                         sendToSinglePlayer(player_);
                     } else {
-                        if(player_.getConnection().getServer().isRunning())
+                        if(player_.getConnection() != null)
                         {
                            player_.getConnection().send(entitiesListMessage);  
                         }

@@ -50,12 +50,14 @@ public class StackFSM <T>{
     }
      
     public State popState() {
+      
         return stack.pop();
     }
  
     public void pushState(State state) {
         if (getCurrentState() != state) {
             stack.push(state);
+            
         }
     }
     

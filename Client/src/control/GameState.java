@@ -10,6 +10,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import static control.finateStateMachine.StateEntity.MOVE;
+import static control.finateStateMachine.StateEntity.PLACE_BUILDING;
 import static control.finateStateMachine.StateEntity.SHOW_MENU;
 import main.Main;
 import model.Entity;
@@ -108,12 +109,13 @@ public class GameState {
                     // if its players entity
                     if (selectedEntity.getPlayerId() == Player.getPlayerId()) {
 
-                        if(selectedEntity.getEntityContainer().isIsBuildable())
+                        if(selectedEntity.getEntityContainer().isIsBuildable() && !selectedEntity.getState().equals(PLACE_BUILDING))
                         {
-                            selectedEntity.changeBuildState(SHOW_MENU);
+                            selectedEntity.changeState(SHOW_MENU);
                         }
                
-                        if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED) {             
+                        if (InputListener.IS_RIGHT_MOUSE_BUTTON_PRESSED && !selectedEntity.getState().equals(PLACE_BUILDING)) { 
+                            
                             selectedEntity.changeState(MOVE);                            
                         }
                     }
@@ -231,8 +233,8 @@ public class GameState {
         // InputListener.IS_LEFT_MOUSE_BUTTON_PRESSED = false;
         selectedEntity = null;
         // for building structures
-        HUD.IS_BUILDABLE = false;
-        HUD.IS_BUILDABLE(false);
+       
+        
         IS_BUILDING_SET = false;
 
         if (buildingPlacementHull != null) {
