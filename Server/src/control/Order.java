@@ -7,6 +7,7 @@ package control;
 
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,6 +17,7 @@ import com.jme3.network.serializing.Serializable;
 public class Order {
     public OrderTypes type = OrderTypes.NOT_DEFINED;
     public Vector3f destination = new Vector3f(1, 0, 0);
+    public ArrayList<Vector3f> path = new ArrayList<>();
     public int entityID = -1;
     public int targetEntityID = -1;
     public long payerId = -1;

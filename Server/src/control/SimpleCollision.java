@@ -24,6 +24,9 @@ public class SimpleCollision {
     public static boolean checkCollision(EntityContainer container, ArrayList<EntityContainer> enityContainers) {
 
         for (EntityContainer entityContainerCopy : enityContainers) {
+
+        
+            
             if (container.getEntityId() != entityContainerCopy.getEntityId()) {
                 Vector3f tmp = container.getPosition().subtract(entityContainerCopy.getPosition());
 
@@ -72,5 +75,7 @@ public class SimpleCollision {
         }
 
     }
+
+  
 
 }

@@ -10,15 +10,16 @@ import com.jme3.network.serializing.Serializable;
 import control.CollisionTypes;
 import control.Order;
 import control.OrderTypes;
+import java.util.ArrayList;
 
 @Serializable
 public class EntityContainer {
 
-    private Vector3f position = new Vector3f(1, 0, 0);
+    private Vector3f position = new Vector3f(50, 0, 50);
     private EntityTypes type = EntityTypes.NOT_DEFINED;
     private int entityId;
     private long playerId = 0;
-    private Vector3f destination = new Vector3f(0, 0, 0);
+
     private float speed = 15.0f;
     private Vector3f direction = new Vector3f(1, 0, 0);
     private boolean isNewCreated = true;
@@ -45,11 +46,16 @@ public class EntityContainer {
         this.type = type;
         this.name = name;
         this.activeOrder = new Order(playerId, entityId, position, OrderTypes.STAY);
+ 
     }
     
     public void confirmeChanges()
     {
         this.isChanged = false;
+    }
+    
+    public boolean isChanged(){
+        return this.isChanged;
     }
 
     public void setPosition(Vector3f position) {
@@ -72,9 +78,9 @@ public class EntityContainer {
         this.playerId = playerId;
     }
 
-    public void setDestination(Vector3f destination) {
+    public void setDestination(ArrayList<Vector3f> destination) {
         this.isChanged = true;
-        this.destination = destination;
+ 
     }
 
     public void setSpeed(float speed) {
@@ -158,9 +164,9 @@ public class EntityContainer {
         return playerId;
     }
 
-    public Vector3f getDestination() {
-        return destination;
-    }
+
+    
+  
 
     public float getSpeed() {
         return speed;

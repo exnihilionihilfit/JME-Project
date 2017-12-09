@@ -17,7 +17,9 @@ import model.EntityContainer;
 import model.Players;
 import control.PropertiesHandler;
 import control.entity.HandleEntityCondition;
+import control.pathfinding.Pathfinding;
 import control.server.Actions;
+import java.awt.Rectangle;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -45,6 +47,7 @@ public class Main extends SimpleApplication {
         Main app = new Main();
         app.start(JmeContext.Type.Headless); // headless type for servers!
     }
+    private Pathfinding path;
 
     @Override
     public void simpleInitApp() {
@@ -107,6 +110,7 @@ public class Main extends SimpleApplication {
         serverActionControlThread = new Thread(serverActionsControl);
         serverActionControlThread.start();
 
+    
     }
 
     @Override

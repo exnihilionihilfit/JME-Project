@@ -7,6 +7,7 @@ package control;
 
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,18 +16,17 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class Order {
     public OrderTypes type = OrderTypes.NOT_DEFINED;
-    Vector3f destination = new Vector3f(1, 0, 0);
-    int entityID = -1;
-    int targetEntityID = -1;
-    long payerId = -1;
-    Vector3f orientation = new Vector3f(1, 0, 0);
-    long lastExecution = -1;
+    public Vector3f destination = new Vector3f(1, 0, 0);
+    public ArrayList<Vector3f> path = new ArrayList<>();
+    public int entityID = -1;
+    public int targetEntityID = -1;
+    public long payerId = -1;
+    public Vector3f orientation = new Vector3f(1, 0, 0);
+    public long lastExecution = -1;
     
     public Order() {
         type = OrderTypes.NOT_DEFINED;
     }
-    
-    
     
     // ToDo - direction could be cut out
     //      - check for Ordertype by creation

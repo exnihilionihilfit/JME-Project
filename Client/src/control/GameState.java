@@ -164,7 +164,7 @@ public class GameState {
         }
 
         if (shipType != null) {
-            Action.sendCreateEntity(main.sendNetworkMessage, "USS" + shipType, shipType, new Vector3f());
+            Action.sendCreateEntity(main.sendNetworkMessage, "USS" + shipType, shipType, new Vector3f(50,0,50));
         }
 
     }
