@@ -7,8 +7,8 @@ import control.pathfinding.Pathfinding.Node;
 
 public class TestPathfinding {
 
-	   Vector3f startPos = new Vector3f (1,0,1);
-	Vector3f  goalPos = new Vector3f (5, 0,5);
+	   Vector3f startPos = new Vector3f (10,0,10);
+	Vector3f  goalPos = new Vector3f (50, 0,50);
 	
 
 	
@@ -16,7 +16,7 @@ public class TestPathfinding {
 	public TestPathfinding() {
 	System.out.println(goalPos.subtract(startPos).length());
 		
-		Pathfinding         path = new Pathfinding(new Vector3f(0,0,0),new Vector3f(500,0,500), 1);
+		Pathfinding         path = new Pathfinding(new Vector3f(0,0,0),new Vector3f(500,0,500), 10);
                
 	path.setMap();
 		
@@ -35,6 +35,11 @@ public class TestPathfinding {
 
 		
 		System.out.println(path.aStar(startPos, goalPos).size());
+		for(Node n:path.aStar(startPos, goalPos)){
+			System.out.println("test"+n.position);
+		}
+                
+                	System.out.println(path.aStar(startPos, goalPos).size());
 		for(Node n:path.aStar(startPos, goalPos)){
 			System.out.println("test"+n.position);
 		}

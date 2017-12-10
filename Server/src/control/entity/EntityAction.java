@@ -32,10 +32,10 @@ public class EntityAction {
 
                 List<Pathfinding.Node> tmp = Map.getPathfinding().aStar(entity.getPosition(), entity.getActiveOrder().destination);
                 entity.getActiveOrder().path.clear();
-                System.out.println(tmp.size()+" "+entity.getPosition()+" "+entity.getActiveOrder().destination);
+               // System.out.println(tmp.size()+" "+entity.getPosition()+" "+entity.getActiveOrder().destination);
                 tmp.forEach((node) -> {
                     entity.getActiveOrder().path.add(node.position);
-                    System.out.println(node.position);
+            
                 });
             }
 
@@ -75,7 +75,6 @@ public class EntityAction {
                         System.out.println(" arrived " + entity.getActiveOrder().type);
                     } else {
                         entity.setPosition(entity.getPosition().add(newPositionOnTheWay));
-
                         entity.setDirection(directionToTarget);
                     }
 

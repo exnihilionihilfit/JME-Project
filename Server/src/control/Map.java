@@ -20,7 +20,7 @@ public class Map {
 
     private final float mapSize;
     private final int numberOfAsteroids;
-    private static final Pathfinding path = new Pathfinding(new Vector3f(0, 0, 0),new Vector3f(1000,0,1000), 1);;
+    private static final Pathfinding path = new Pathfinding(new Vector3f(0, 0, 0),new Vector3f(1000,0,1000), 10);;
 
     public Map(float mapSize, int numberOfAsteroids) {
         this.mapSize = mapSize;

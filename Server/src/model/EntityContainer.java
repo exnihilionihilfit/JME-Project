@@ -80,7 +80,7 @@ public class EntityContainer {
 
     public void setDestination(ArrayList<Vector3f> destination) {
         this.isChanged = true;
- 
+        
     }
 
     public void setSpeed(float speed) {

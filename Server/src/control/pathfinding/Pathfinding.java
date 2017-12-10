@@ -18,7 +18,7 @@ public class Pathfinding {
 
     private final Vector3f minPoint;
     private final Vector3f maxPoint;
-    private final Boarder border;
+    private final Border border;
 
 	public class Node implements Comparable<Node> {
 
@@ -31,6 +31,7 @@ public class Pathfinding {
 		// for Nodes which are temporal unpassable
 		boolean isTempBlocked = false;
 		boolean isVisited = false;
+          
 
 		List<Node> neighbor;
 		Node NW, N, NE, W, E, SW, S, SE = null;
@@ -39,6 +40,7 @@ public class Pathfinding {
 		public Node(Vector3f position, int fScore) {
 			this.position = position;
 			this.neighbor = new ArrayList<>();
+             
 
 		}
 
@@ -115,6 +117,8 @@ public class Pathfinding {
 		private Pathfinding getOuterType() {
 			return Pathfinding.this;
 		}
+         
+         
 
 	}
 
@@ -128,39 +132,42 @@ public class Pathfinding {
 	private int WIDTH;
 	private int HEIGHT;
 	private Node[] nodeMap;
-	private double i ;
+	private float  nodeDistance;
 
         /**
          * 
          * @param minPoint of the map (left bottom)
          * @param maxPoint of the map (right up)
-         * @param i scale factor to encrease node distance
+         * @param nodeDistance scale factor to encrease node distance
          */
-	public Pathfinding(Vector3f minPoint, Vector3f maxPoint, int i) {
-		this.i = i;
-		this.minPoint = minPoint;
-                this.maxPoint = maxPoint;
-                this.border = new Boarder(this.minPoint, this.maxPoint);
+	public Pathfinding(Vector3f minPoint, Vector3f maxPoint, int nodeDistance) {
+		this.nodeDistance=nodeDistance;
+	this.minPoint = minPoint.multLocal((1.0f/(float)nodeDistance));
+         this.maxPoint = maxPoint.multLocal((1.0f/(float)nodeDistance));
+                this.border = new Border(this.minPoint, this.maxPoint, (int) this.nodeDistance);
                 
-		this.border.width /= i;
-		this.border.height/= i;
+	
+	
 		this.WIDTH = (int) border.getWidth();
 		this.HEIGHT = (int) border.getHeight();
 		this.nodeMap = new Node[this.WIDTH * this.HEIGHT];
 
 	}
         
-        private class Boarder{
+        private class Border{
             float width;
             float height;
             Vector3f minPoint;
             Vector3f maxPoint;
             
-            public Boarder(Vector3f minPoint, Vector3f maxPoint)
+            public Border(Vector3f minPoint, Vector3f maxPoint,int nodeDistance)
             {
                 this.minPoint = minPoint;
                 this.maxPoint = maxPoint;
-                this.width =Math.abs( minPoint.x - maxPoint.x);
+              
+              
+             
+                this.width =Math.abs( minPoint.x - maxPoint.x) ;
                 this.height = Math.abs(minPoint.z - maxPoint.z);
             }
             
@@ -219,10 +226,14 @@ public class Pathfinding {
 		if (nodePos != null) {
 			int x = (int) nodePos.x;
 			int z = (int) nodePos.z;
+                        
+                        
 			int index = x + z * this.WIDTH;
+                        
+                      
 
 			if (x >= 0 && z >= 0 && x < this.WIDTH && z < this.HEIGHT) {
-				if (index > 0 && index < (this.WIDTH * this.HEIGHT)) {
+				if (index >= 0 && index < (this.WIDTH * this.HEIGHT)) {
 
 					return nodeMap[index];
 				}
@@ -238,10 +249,10 @@ public class Pathfinding {
 
 	public void setBlockedNodes(Rectangle rec) {
 
-		rec.x /= i;
-		rec.y /= i;
-		rec.width /= i;
-		rec.height /= i;
+		rec.x /= nodeDistance;
+		rec.y /= nodeDistance;
+		rec.width /= nodeDistance;
+		rec.height /=nodeDistance;
 		
 		for (int z = (int) rec.getMinY(); z < rec.getMaxY(); z++) {
 			Node tmp;
@@ -285,9 +296,9 @@ public class Pathfinding {
 		// setting up nodes
 		for (int z = this.border.getMinZ(); z < this.border.getMaxZ(); z++) {
 			for (int x = this.border.getMinX(); x < this.border.getMaxX(); x++) {
-				index = (x + z * (int) this.border.getMaxX());
+				index = (x + z * (int) this.border.getMaxX() );
 
-				this.nodeMap[index] = new Node(new Vector3f((float)(x*this.i),0,(float)( z*this.i)), 1);
+				this.nodeMap[index] = new Node(new Vector3f((float)(x*this.nodeDistance),0,(float)( z*this.nodeDistance)), 1);
 
 			}
 		}
@@ -300,50 +311,50 @@ public class Pathfinding {
 				mainIndex = (int) ((x) + (z) * this.border.getMaxX());
 
 				index = (int) ((x - 1) + (z - 1) * this.border.getMaxX());
-				if (x - 1 > 0 && x - 1 < this.WIDTH && z - 1 > 0
+				if (x - 1 >= 0 && x - 1 < this.WIDTH && z - 1 >= 0
 						&& z - 1 < this.HEIGHT) {
 
 					this.nodeMap[mainIndex].NW = this.nodeMap[index];
 				}
 
 				index = (int) ((x) + (z - 1) * this.border.getMaxX());
-				if (x > 0 && x < this.WIDTH && z - 1 > 0 && z - 1 < this.HEIGHT) {
+				if (x >= 0 && x < this.WIDTH && z - 1 >= 0 && z - 1 < this.HEIGHT) {
 
 					this.nodeMap[mainIndex].N = this.nodeMap[index];
 				}
 
 				index = (int) ((x + 1) + (z - 1) * this.border.getMaxX());
-				if (x + 1 > 0 && x + 1 < this.WIDTH && z - 1 > 0
+				if (x + 1 >= 0 && x + 1 < this.WIDTH && z - 1 >= 0
 						&& z - 1 < this.HEIGHT) {
 
 					this.nodeMap[mainIndex].NE = this.nodeMap[index];
 				}
 
 				index = (int) ((x + 1) + (z) * this.border.getMaxX());
-				if (x + 1 > 0 && x + 1 < this.WIDTH && z > 0 && z < this.HEIGHT) {
+				if (x + 1 >= 0 && x + 1 < this.WIDTH && z >= 0 && z < this.HEIGHT) {
 
 					this.nodeMap[mainIndex].E = this.nodeMap[index];
 				}
 
 				index = (int) ((x + 1) + (z + 1) * this.border.getMaxX());
-				if (x + 1 > 0 && x + 1 < this.WIDTH && z + 1 > 0
+				if (x + 1 >= 0 && x + 1 < this.WIDTH && z + 1 >= 0
 						&& z + 1 < this.HEIGHT) {
 					this.nodeMap[mainIndex].SE = this.nodeMap[index];
 				}
 
 				index = (int) ((x) + (z + 1) * this.border.getMaxX());
-				if (x > 0 && x < this.WIDTH && z + 1 > 0 && z + 1 < this.HEIGHT) {
+				if (x >= 0 && x < this.WIDTH && z + 1 >= 0 && z + 1 < this.HEIGHT) {
 					this.nodeMap[mainIndex].S = this.nodeMap[index];
 				}
 
 				index = (int) ((x - 1) + (z + 1) * this.border.getMaxX());
-				if (x - 1 > 0 && x - 1 < this.WIDTH && z + 1 > 0
+				if (x - 1 >= 0 && x - 1 < this.WIDTH && z + 1 >= 0
 						&& z + 1 < this.HEIGHT) {
 					this.nodeMap[mainIndex].SW = this.nodeMap[index];
 				}
 
 				index = (int) ((x - 1) + (z) * this.border.getMaxX());
-				if (x + -1 > 0 && x - 1 < this.WIDTH && z > 0
+				if (x + -1 >= 0 && x - 1 < this.WIDTH && z >= 0
 						&& z < this.HEIGHT) {
 					this.nodeMap[mainIndex].W = this.nodeMap[index];
 				}
@@ -375,9 +386,8 @@ public class Pathfinding {
 		this.closedList = new ArrayList<>();
 		this.openList   = new ArrayList<>();
 
-		this.start = this.getNode(startPos.multLocal((float) (1.0f/i),0,(float) (1.0f/i)));
-		this.goal = this.getNode(goalPos.multLocal((float) (1.0f/i),0,(float) (1.0f/i)));
-		
+		this.start = this.getNode(startPos.mult((float) (1.0f/this.nodeDistance)));
+		this.goal = this.getNode(goalPos.mult((float) (1.0f/this.nodeDistance)));
 		
 		
 	
@@ -393,18 +403,22 @@ public class Pathfinding {
 			this.openList.add(this.start);
 
 			Node current;
+                        
+                       
 
 			while (!this.openList.isEmpty()) {
 		
 				current = Collections.min(this.openList);
-
+                                
+                            
+ 
 				if (current.equals(goal)) {
 					return this.reconstructPath();
 				}
 
 				this.openList.remove(current);
 				this.closedList.add(current);
-
+    System.out.println(current.position+" "+current.getNeighbor().size());
 				for (Node n : current.getNeighbor()) {
 
 					if (n != null && !n.isBlocked) {
@@ -461,7 +475,7 @@ public class Pathfinding {
 	 */
 
 	private int estimatedCost(Node start, Node goal) {
-		return (int) (10 * (Math.abs(start.position.z
+		return (int) (1 * (Math.abs(start.position.z
 				- goal.position.z) + Math.abs(start.position.x
 				- goal.position.x)));
 	}
